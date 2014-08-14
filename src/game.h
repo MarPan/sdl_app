@@ -2,8 +2,7 @@
 #define GAME_H
 
 #include <world.h>
-#include <SDL2/SDL_events.h>
-class SDL_Renderer;
+#include <SDL2/SDL.h>
 
 class Game
 {
@@ -26,6 +25,7 @@ private:
   SDL_Window* window;                     // holds window properties
   SDL_Renderer* _renderer;                 // holds rendering surface properties
   SDL_Event event;
+  SDL_Texture* background;
 };
 
 #endif // GAME_H

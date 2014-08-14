@@ -1,6 +1,32 @@
-
 #include "utilities.hpp"
 #include <SDL2/SDL.h>
+
+void logSDLError(std::ostream &os, const std::string &msg)
+{
+  os << msg << " error: " << SDL_GetError() << std::endl;
+}
+
+SDL_Texture* loadTexturePlease(const std::string &file, SDL_Renderer *ren)
+{
+  SDL_Texture *texture = nullptr;
+  SDL_Surface *loadedImage = SDL_LoadBMP(file.c_str());
+  //If the loading went ok, convert to texture and return the texture
+  if (loadedImage != nullptr)
+  {
+    texture = SDL_CreateTextureFromSurface(ren, loadedImage);
+    SDL_FreeSurface(loadedImage);
+    //Make sure converting went ok too
+    if (texture == nullptr)
+    {
+      logSDLError(std::cout, "CreateTextureFromSurface");
+    }
+  }
+  else
+  {
+    logSDLError(std::cout, "LoadBMP");
+  }
+  return texture;
+}
 
 void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, SDL_Rect dst, SDL_Rect *clip) {
     SDL_RenderCopy(ren, tex, clip, &dst);

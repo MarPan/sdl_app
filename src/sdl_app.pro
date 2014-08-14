@@ -6,7 +6,7 @@ CONFIG -= qt
 SOURCES += *.cpp \
 
 HEADERS += \
-    *.h \ *.hpp
+    *.h
 
 LIBS += -lSDL2 -lSDL2_ttf -lSDL2_mixer `sdl2-config --libs`
 

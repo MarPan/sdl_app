@@ -1,8 +1,11 @@
-#include "game.h"
 #include <SDL2/SDL.h>
+#include "utilities.hpp"
+#include "game.h"
 
 Game::Game()
-  : _windowSize(std::pair<int, int>(640, 480))
+  : _windowSize(std::pair<int, int>(640, 480)),
+    _exit(false),
+    _world(new World())
 {
 }
 
@@ -42,6 +45,7 @@ void Game::init()
 //  SDL_RenderClear(_renderer);
 //  SDL_RenderCopy(_renderer, tex, NULL, NULL);
 //  SDL_RenderPresent(_renderer);
+  background = loadTexturePlease("../resources/board.bmp", _renderer);
 
   // Game status
   _exit = false;
@@ -50,27 +54,31 @@ void Game::init()
 
 void Game::run(void)
 {
-  while(!exit) {
+  printf("STARTING LOOP:\n");
+  while (_exit == false) {
       // At the start of a frame we want to start our FPS timer
       float deltaTime = (float)(SDL_GetTicks() - _lastTime) / 1000;
+//      printf("%f\n", deltaTime);
 
       input();
       update(deltaTime);
       draw();
 
       // At the end of a frame we want to reset our frame timer
-      _lastTime = SDL_GetTicks() / 1000;
-      // SDL_Delay(10);  what is this for?
+      _lastTime = SDL_GetTicks();
+       SDL_Delay(10);  // what is this for?
   }
+  printf("THE END\n");
 }
 
 void Game::input()
 {
   while (SDL_PollEvent(&event)) {
     // Clicking 'x' or pressing F4
-    if (event.type == SDL_QUIT)
-       _exit = true;
-
+    if (event.type == SDL_QUIT) {
+      printf("GOT SDL_QUIT\n");
+     _exit = true;
+    }
   }
 }
 
@@ -81,5 +89,8 @@ void Game::update(float deltaTime)
 
 void Game::draw()
 {
+  SDL_RenderClear(_renderer);
+  SDL_RenderCopy(_renderer, background, NULL, NULL);
   _world->draw(_renderer);
+  SDL_RenderPresent(_renderer);
 }
