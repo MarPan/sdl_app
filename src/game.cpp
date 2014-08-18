@@ -26,18 +26,18 @@ void Game::init()
   SDL_ShowCursor(1);      // show cursor
 
   // Create window and renderer
-  window = SDL_CreateWindow("Pong",
+  m_pWindow = SDL_CreateWindow("Pong",
           SDL_WINDOWPOS_UNDEFINED,        // centered window
           SDL_WINDOWPOS_UNDEFINED,        // centered window
           _windowSize.first,
           _windowSize.second,
           SDL_WINDOW_SHOWN);
 
-  if (window == NULL) {
+  if (m_pWindow == NULL) {
     printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
   }
 
-  m_pRenderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+  m_pRenderer = SDL_CreateRenderer( m_pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 
   if (m_pRenderer == NULL) {
     printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
@@ -71,10 +71,24 @@ void Game::run(void)
 void Game::input()
 {
   while (SDL_PollEvent(&event)) {
+    switch (event.type) {
     // Clicking 'x' or pressing F4
-    if (event.type == SDL_QUIT) {
+    case SDL_QUIT:
       printf("GOT SDL_QUIT\n");
      _exit = true;
+     break;
+    case SDL_MOUSEBUTTONDOWN:
+      switch (event.button.button) {
+        case SDL_BUTTON_LEFT:
+            SDL_ShowSimpleMessageBox(0, "Mouse", "Left button was pressed!", m_pWindow);
+            break;
+        case SDL_BUTTON_RIGHT:
+            SDL_ShowSimpleMessageBox(0, "Mouse", "Right button was pressed!", m_pWindow);
+            break;
+        default:
+            SDL_ShowSimpleMessageBox(0, "Mouse", "Some other button was pressed!", m_pWindow);
+            break;
+      }
     }
   }
 }
