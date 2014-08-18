@@ -1,4 +1,4 @@
-#include "utilities.hpp"
+#include "utilities.h"
 #include <SDL2/SDL.h>
 
 void logSDLError(std::ostream &os, const std::string &msg)

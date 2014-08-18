@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
-#include "utilities.hpp"
+#include "utilities.h"
 #include "game.h"
+#include "texturemanager.h"
 
 Game::Game()
   : _windowSize(std::pair<int, int>(640, 480)),
@@ -12,9 +13,8 @@ Game::Game()
 void Game::init()
 {
   // Intialize SDL
-  if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 )
-  {
-      printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+  if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 ) {
+    printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
   }
   SDL_ShowCursor(1);      // show cursor
 
@@ -26,26 +26,18 @@ void Game::init()
           _windowSize.second,
           SDL_WINDOW_SHOWN);
 
-  if (window == NULL)
-  {
+  if (window == NULL) {
     printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
   }
 
   _renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 
-  if (_renderer == NULL)
-  {
+  if (_renderer == NULL) {
     printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
   }
 
-//  SDL_Surface* surface = SDL_GetWindowSurface(window);
-//  SDL_Texture *tex = SDL_CreateTextureFromSurface(_renderer, surface);
-//  SDL_FreeSurface(surface);
-
-//  SDL_RenderClear(_renderer);
-//  SDL_RenderCopy(_renderer, tex, NULL, NULL);
-//  SDL_RenderPresent(_renderer);
-  background = loadTexturePlease("../resources/board.bmp", _renderer);
+  theTextureManager.load("../resources/board.bmp", "board", _renderer);
+  //background = loadTexturePlease("../resources/board.bmp", _renderer);
 
   // Game status
   _exit = false;
@@ -90,7 +82,8 @@ void Game::update(float deltaTime)
 void Game::draw()
 {
   SDL_RenderClear(_renderer);
-  SDL_RenderCopy(_renderer, background, NULL, NULL);
+  theTextureManager.draw("board", 0, 0, _windowSize.first, _windowSize.second, _renderer);
+  //SDL_RenderCopy(_renderer, background, NULL, NULL);
   _world->draw(_renderer);
   SDL_RenderPresent(_renderer);
 }

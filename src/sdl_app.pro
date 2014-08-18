@@ -6,8 +6,8 @@ CONFIG -= qt
 SOURCES += *.cpp \
 
 HEADERS += \
-    *.h
+    *.h \
 
-LIBS += -lSDL2 -lSDL2_ttf -lSDL2_mixer `sdl2-config --libs`
+LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer `sdl2-config --libs`
 
 QMAKE_CXXFLAGS += -std=gnu++11
