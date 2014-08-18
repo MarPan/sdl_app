@@ -7,12 +7,10 @@
 
 #include "game.h"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
+  theGame.init();
+  theGame.run();
 
-    Game game;
-    game.init();
-    game.run();
-
-    return 0;
-
+  return 0;
 }

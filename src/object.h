@@ -10,7 +10,7 @@ public:
   Object();
 
   void update(float dt);
-  void draw(SDL_Renderer *renderer);
+  void draw();
 
 private:
   std::pair<int, int> _position;

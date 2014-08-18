@@ -10,16 +10,8 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
 
 // from http://www.willusher.io/
-/**
-* Loads a BMP image into a texture on the rendering device
-* @param file The BMP image file to load
-* @param ren The renderer to load the texture onto
-* @return the loaded texture, or nullptr if something went wrong.
-*/
-SDL_Texture* loadTexturePlease(const std::string &file, SDL_Renderer *ren);
 /**
 * Log an SDL error with some error message to the output stream of our choice
 * @param os The output stream to write the message to

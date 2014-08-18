@@ -9,9 +9,11 @@ class World
 {
 public:
   World();
+  ~World();
 
   void update(float dt);
-  void draw(SDL_Renderer *renderer);
+  void draw();
+  void add(Object *object);
 
 private:
   std::vector<Object*> _objects;
