@@ -9,12 +9,12 @@ class Object
 public:
   Object();
 
-  void update(float dt);
-  void draw();
+  virtual void update(float dt);
+  virtual void draw();
 
-private:
-  std::pair<int, int> _position;
-  std::pair<float, float> _speed;  // speed per second
+protected:
+  std::pair<int, int> m_position;
+  std::pair<float, float> m_speed;  // speed in pixels per second
 };
 
 #endif // OBJECT_H

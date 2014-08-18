@@ -15,7 +15,21 @@ Board::Board(int rows, int cols)
 
 Board::~Board()
 {
-  for (int i = 0; i < size.first; i++)
-    for (int j = 0; j < size.second; j++)
+  for (int i = 0; i < gems.size(); i++)
+    for (int j = 0; j < gems[i].size(); j++)
       delete gems[i][j];
+}
+
+void Board::update(float dt)
+{
+  for (int i = 0; i < gems.size(); i++)
+    for (int j = 0; j < gems[i].size(); j++)
+      gems[i][j]->update(dt);
+}
+
+void Board::draw()
+{
+  for (int i = 0; i < gems.size(); i++)
+    for (int j = 0; j < gems[i].size(); j++)
+      gems[i][j]->draw();
 }

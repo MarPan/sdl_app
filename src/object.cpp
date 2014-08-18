@@ -10,8 +10,8 @@ Object::Object()
 
 void Object::update(float dt)
 {
-  _position.first += _speed.first * dt;
-  _position.second +=_speed.second * dt;
+  m_position.first += m_speed.first * dt / 1000;
+  m_position.second += m_speed.second * dt / 1000;
 }
 void Object::draw()
 {

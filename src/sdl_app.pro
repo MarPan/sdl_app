@@ -27,7 +27,17 @@ HEADERS += boardanimationstate.h \
             utilities.h \
             world.h \
 
+INCLUDEPATH += ../../include
 
-LIBS += -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer `sdl2-config --libs`
+DEFINES += SDL_MAIN_HANDLED
+
+LIBS += -L../../lib -lSDL2 -lSDL2_image #-lSDL2_ttf -lSDL2_mixer
+
+unix {
+    LIBS += `sdl2-config --libs`
+}
+win32 {
+    LIBS += -lmingw32 -mwindows
+}
 
 QMAKE_CXXFLAGS += -std=gnu++11

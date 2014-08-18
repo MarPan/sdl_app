@@ -12,6 +12,9 @@ public:
   Board(int rows, int cols);
   ~Board();
 
+  void update(float dt);
+  void draw();
+
   std::pair<int, int> size;
   std::vector<std::vector<Gem*>> gems;
 };

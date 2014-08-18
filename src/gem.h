@@ -7,6 +7,8 @@ class Gem : public Object
 {
 public:
   Gem();
+  void update(float dt);
+  void draw();
 };
 
 #endif // GEM_H
