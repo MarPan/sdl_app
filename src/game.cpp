@@ -101,7 +101,7 @@ void Game::update(float deltaTime)
 void Game::draw()
 {
   SDL_RenderClear(m_pRenderer);
-  theTextureManager.draw("board", 0, 0, _windowSize.first, _windowSize.second);
+//  theTextureManager.draw("board", 0, 0, _windowSize.first, _windowSize.second);
   _world->draw();
   SDL_RenderPresent(m_pRenderer);
 }

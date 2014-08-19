@@ -11,6 +11,7 @@ class TextureManager
 public:
   bool load(std::string fileName, std::string id);
   void draw(std::string id, int x, int y, int width, int height);
+  std::pair<int,int> getSize(std::string id);
 
   static TextureManager& getInstance();
 

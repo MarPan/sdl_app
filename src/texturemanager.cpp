@@ -1,5 +1,6 @@
 #include <SDL2/SDL_image.h>
 #include "texturemanager.h"
+#include "utilities.h"
 #include "game.h"
 
 TextureManager::TextureManager()
@@ -31,6 +32,20 @@ bool TextureManager::load(std::string fileName, std::string id)
   return false;
 }
 
+std::pair<int,int> TextureManager::getSize(std::string id)
+{
+  std::pair<int,int> retVal(0,0);
+  int error;
+  if (m_textureMap.count(id)) {
+    error = SDL_QueryTexture(m_textureMap[id], NULL, NULL, &retVal.first, &retVal.second);
+  }
+
+  if (error) {
+    logSDLError(std::cout, "Failed to query texture.");
+  }
+  return retVal;
+}
+
 void TextureManager::draw(std::string id, int x, int y, int width, int height)
 {
   SDL_Rect srcRect;
@@ -41,5 +56,8 @@ void TextureManager::draw(std::string id, int x, int y, int width, int height)
   srcRect.h = destRect.h = height;
   destRect.x = x;
   destRect.y = y;
-  SDL_RenderCopyEx(theGame.getRenderer(), m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
+  int retVal = SDL_RenderCopyEx(theGame.getRenderer(), m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
+  if (retVal != 0) {
+    logSDLError(std::cout, "Drawing texture failed");
+  }
 }
