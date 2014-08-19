@@ -48,14 +48,23 @@ std::pair<int,int> TextureManager::getSize(std::string id)
 
 void TextureManager::draw(std::string id, int x, int y, int width, int height)
 {
-  SDL_Rect srcRect;
   SDL_Rect destRect;
-  srcRect.x = 0;
-  srcRect.y = 0;
-  srcRect.w = destRect.w = width;
-  srcRect.h = destRect.h = height;
+  destRect.w = width;
+  destRect.h = height;
   destRect.x = x;
   destRect.y = y;
+  draw(id, destRect);
+}
+
+void TextureManager::draw(std::string id, const SDL_Rect& rect)
+{
+  SDL_Rect srcRect;
+  const SDL_Rect &destRect = rect;
+  srcRect.x = 0;
+  srcRect.y = 0;
+  srcRect.w = destRect.w;
+  srcRect.h = destRect.h;
+
   int retVal = SDL_RenderCopyEx(theGame.getRenderer(), m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
   if (retVal != 0) {
     logSDLError(std::cout, "Drawing texture failed");

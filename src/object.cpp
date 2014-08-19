@@ -3,6 +3,8 @@
 #include "object.h"
 #include "game.h"
 
+Object::Object()
+{ }
 Object::Object(std::pair<float, float> position)
   : m_position(position)
 { }

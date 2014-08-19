@@ -9,7 +9,7 @@ World::World()
 
 World::~World()
 {
-  for (int i = 0; i < _objects.size(); i++)
+  for (size_t i = 0; i < _objects.size(); i++)
     delete _objects[i];
 }
 

@@ -24,10 +24,10 @@ private:
   void draw();
 
 private:
+  std::pair<int, int> _windowSize;
+  bool _exit;
   World *_world;
   int _lastTime;
-  bool _exit;
-  std::pair<int, int> _windowSize;
   SDL_Window* m_pWindow;                     // holds window properties
   SDL_Renderer* m_pRenderer;                 // holds rendering surface properties
   SDL_Event event;

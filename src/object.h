@@ -8,9 +8,11 @@
 class Object
 {
 public:
+  Object();
   Object(float posX, float posY);
   Object(std::pair<float,float> position);
 
+  virtual ~Object() { }
   virtual void update(float dt);
   virtual void draw();
   void print(std::string str);

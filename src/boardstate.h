@@ -1,7 +1,9 @@
 #ifndef BOARDSTATE_H
 #define BOARDSTATE_H
 
-class BoardState
+#include "state.h"
+
+class BoardState : public State
 {
 public:
   virtual ~BoardState() {}

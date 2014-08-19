@@ -1,9 +1,4 @@
-
-/*
- *  Pong game
- *  Author: Chafic Najjar <chafic.najjar@gmail.com>
- *  Note: Origin of the coordinate system is the upper left corner of the screen
- */
+// no longer a pong game :)
 
 #include "game.h"
 

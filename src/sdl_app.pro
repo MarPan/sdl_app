@@ -14,6 +14,7 @@ SOURCES += boardanimationstate.cpp \
             texturemanager.cpp \
             utilities.cpp \
             world.cpp \
+    state.cpp
 
 
 HEADERS += boardanimationstate.h \
@@ -26,6 +27,7 @@ HEADERS += boardanimationstate.h \
             texturemanager.h \
             utilities.h \
             world.h \
+    state.h
 
 INCLUDEPATH += ../../include
 

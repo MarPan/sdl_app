@@ -2,7 +2,8 @@
 #define GEM_H
 
 #include "object.h"
-
+#include "state.h"
+#include "texturemanager.h"
 
 /*
  *
@@ -13,15 +14,50 @@ Very efficient, and allows you to have fancy exploding bombs and stuff that all 
 You can safely update your table at the start of the animation, as the tiles will be in a "FALLING" state, and the table grid can't update if any tile is not resting
  */
 
+class Gem;
+
+class GemState : public State
+{
+public:
+  GemState() {};
+  void onEnter(Gem &gem);
+  virtual void update(float dt) {};
+  virtual void draw() {
+    theTextureManager.draw(m_texId, m_positionAndSize);
+  };
+private:
+  std::string m_texId;
+  SDL_Rect m_positionAndSize;
+};
+
+class GemIdleState : public GemState
+{
+public:
+  GemIdleState() {}
+};
+
+class GemFallingState : public GemState
+{
+public:
+  GemFallingState() {}
+};
+
 class Gem : public Object
 {
+  friend class GemState;
+
 public:
   Gem(float posX, float posY);
   Gem(std::pair<float, float> position);
   void update(float dt);
   void draw();
+
+  void changeState(GemState *state);
+
+  std::string texId;
 private:
   void init();
+  GemState *m_state;
 };
 
 #endif // GEM_H
