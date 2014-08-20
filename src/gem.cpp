@@ -5,7 +5,7 @@
 
 void GemState::onEnter(Gem &gem)
 {
-  m_texId = gem.texId;
+  m_texId = gem.m_texId;
   m_positionAndSize.x = gem.m_position.first;
   m_positionAndSize.y = gem.m_position.second;
   m_positionAndSize.w = gem.m_size.first;
@@ -33,6 +33,11 @@ void Gem::changeState(GemState *state)
   }
   m_state = state;
   m_state->onEnter(*this);
+}
+
+void Gem::setType(GemType type)
+{
+  m_type = type;
 }
 
 void Gem::update(float dt)

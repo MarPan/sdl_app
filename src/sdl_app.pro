@@ -3,10 +3,8 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-SOURCES += boardanimationstate.cpp \
+SOURCES += \
             board.cpp \
-            boardidlestate.cpp \
-            boardstate.cpp \
             game.cpp \
             gem.cpp \
             main.cpp \
@@ -17,10 +15,8 @@ SOURCES += boardanimationstate.cpp \
     state.cpp
 
 
-HEADERS += boardanimationstate.h \
+HEADERS += \
             board.h \
-            boardidlestate.h \
-            boardstate.h \
             game.h \
             gem.h \
             object.h \

@@ -47,17 +47,33 @@ class Gem : public Object
   friend class GemState;
 
 public:
+
+
+  // or maybe I don't need an enum?
+  // I could differentiate between gems based on their m_texId
+  // it would be cumbersome to generate random gems though...
+  // maybe I should just define somewhere map<GemType, TexId>
+  enum GemType {
+    GT_BLACK_AND_WHITE = 0,
+    GT_BLACK_AND_GREEN,
+    GT_BLACK_AND_BLUE,
+    GT_BLACK_AND_RED,
+    GT_COUNT
+  };
+
   Gem(float posX, float posY);
   Gem(std::pair<float, float> position);
+
   void update(float dt);
   void draw();
 
   void changeState(GemState *state);
-
-  std::string texId;
+  void setType(GemType type);
 private:
   void init();
   GemState *m_state;
+  GemType m_type;
+  std::string m_texId;
 };
 
 #endif // GEM_H
