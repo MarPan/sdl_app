@@ -13,15 +13,17 @@ void GemState::onEnter(Gem &gem)
 }
 
 Gem::Gem(float posX, float posY)
-  : Object(posX, posY)
+  : Object(posX, posY),
+    m_state(nullptr),
+    m_texId("cbw")
 {
   init();
 }
 
 void Gem::init()
 {
-  theTextureManager.load("../resources/chips/chipBlackWhite.png", "cbw");
-  m_size = theTextureManager.getSize("cbw");
+  theTextureManager.load("../resources/chips/chipBlackWhite.png", m_texId);
+  m_size = theTextureManager.getSize(m_texId);
   changeState(new GemIdleState());
 }
 

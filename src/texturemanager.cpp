@@ -67,6 +67,7 @@ void TextureManager::draw(std::string id, const SDL_Rect& rect)
 
   int retVal = SDL_RenderCopyEx(theGame.getRenderer(), m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
   if (retVal != 0) {
-    logSDLError(std::cout, "Drawing texture failed");
+    std::string msg = "Drawing texture " + id + " failed";
+    logSDLError(std::cout, msg);
   }
 }
