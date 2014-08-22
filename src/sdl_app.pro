@@ -12,7 +12,10 @@ SOURCES += \
             texturemanager.cpp \
             utilities.cpp \
             world.cpp \
-    state.cpp
+    state.cpp \
+    statemachine.cpp \
+    gamestate.cpp \
+    playtimestate.cpp
 
 
 HEADERS += \
@@ -23,13 +26,21 @@ HEADERS += \
             texturemanager.h \
             utilities.h \
             world.h \
-    state.h
+    state.h \
+    statemachine.h \
+    gamestate.h \
+    playtimestate.h
 
-INCLUDEPATH += ../../include
+INCLUDEPATH += ../SDL2-bin/include
+INCLUDEPATH += ../SDL2_image-bin/x86_64-w64-mingw32/include
 
 DEFINES += SDL_MAIN_HANDLED
 
-LIBS += -L../../lib -lSDL2 -lSDL2_image #-lSDL2_ttf -lSDL2_mixer
+LIBS += \
+        -L../SDL2_image-bin/i686-w64-mingw32/lib \
+        #-L../SDL2_image-bin/x86_64-w64-mingw32/lib \
+        -L../SDL2-bin/lib/x86 \
+        -lSDL2 -lSDL2_image #-lSDL2_ttf -lSDL2_mixer
 
 unix {
     LIBS += `sdl2-config --libs`

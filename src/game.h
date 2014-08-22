@@ -1,12 +1,15 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <world.h>
-#include <SDL2/SDL.h>
+#include "world.h"
+#include "statemachine.h"
+#include <SDL.h>
 
 #define theGame Game::getInstance()
 
-class Game
+class GameState;
+
+class Game : private StateMachine<GameState*>
 {
 public:
 

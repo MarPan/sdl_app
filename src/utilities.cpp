@@ -1,5 +1,5 @@
 #include "utilities.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 void logSDLError(std::ostream &os, const std::string &msg)
 {

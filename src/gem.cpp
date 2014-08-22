@@ -19,7 +19,6 @@ void GemState::draw()
 
 Gem::Gem(int posX, int posY, int width, GemType type)
   : Object(posX, posY),
-    m_state(nullptr),
     m_type(type)
 {  
   setSize(width);
@@ -46,17 +45,7 @@ void Gem::init()
 
   theTextureManager.load(m_texId, m_texId);
   m_size = theTextureManager.getSize(m_texId);
-  changeState(new GemIdleState());
-}
-
-void Gem::changeState(GemState *state)
-{
-  if (m_state) {
-    m_state->onExit();
-    delete m_state;
-  }
-  m_state = state;
-  m_state->onEnter(*this);
+  setState(new GemIdleState());
 }
 
 void Gem::setType(GemType type)
@@ -66,15 +55,10 @@ void Gem::setType(GemType type)
 
 void Gem::update(float dt)
 {
-  m_state->update(dt);
+  getState()->update(dt);
 }
 
 void Gem::draw()
 {
-  m_state->draw();
-}
-
-std::string Gem::getTexId()
-{
-  return m_texId;
+  getState()->draw();
 }

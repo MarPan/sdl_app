@@ -6,8 +6,10 @@
 Board::Board(int rows, int cols)
   : Object(0.0f,0.0f),
     size(std::pair<int,int>(rows,cols)),
+    m_backgroundPath("../resources/BackGround.jpg"),
     m_tileWidth(64)
 {
+  theTextureManager.load(m_backgroundPath, m_backgroundPath);
   for (int i = 0; i < size.first; i++)
   {
     m_gems.push_back(std::vector<Gem*>());
@@ -50,6 +52,7 @@ void Board::update(float dt)
 
 void Board::draw()
 {
+  theTextureManager.draw(m_backgroundPath, 0, 0, 755, 600);
   for (size_t i = 0; i < m_gems.size(); i++)
     for (size_t j = 0; j < m_gems[i].size(); j++)
       m_gems[i][j]->draw();

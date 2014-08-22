@@ -1,31 +1,30 @@
 #include "world.h"
 #include "board.h"
 
-#include <SDL2/SDL_render.h>
-
 World::World()
 {
+
 }
 
 World::~World()
 {
-  for (size_t i = 0; i < _objects.size(); i++)
-    delete _objects[i];
+  for (size_t i = 0; i < m_objects.size(); i++)
+    delete m_objects[i];
 }
 
 void World::add(Object *object)
 {
-  _objects.push_back(object);
+  m_objects.push_back(object);
 }
 
 void World::update(float dt)
 {
-  for (std::size_t i = 0; i < _objects.size(); i++)
-    _objects.at(i)->update(dt);
+  for (std::size_t i = 0; i < m_objects.size(); i++)
+    m_objects.at(i)->update(dt);
 }
 
 void World::draw()
 {
-  for (std::size_t i = 0; i < _objects.size(); i++)
-    _objects.at(i)->draw();
+  for (std::size_t i = 0; i < m_objects.size(); i++)
+    m_objects.at(i)->draw();
 }

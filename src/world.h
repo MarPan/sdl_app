@@ -2,6 +2,7 @@
 #define WORLD_H
 
 #include <vector>
+#include <string>
 class Object;
 class SDL_Renderer;
 
@@ -16,7 +17,9 @@ public:
   void add(Object *object);
 
 private:
-  std::vector<Object*> _objects;
+  std::vector<Object*> m_objects;
+  std::string m_backgroundPath;
+  std::pair<int, int> boardOrigin;
 };
 
 #endif // WORLD_H

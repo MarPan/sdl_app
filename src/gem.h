@@ -4,15 +4,7 @@
 #include "object.h"
 #include "state.h"
 #include "texturemanager.h"
-
-/*
- *
- *  http://www.reddit.com/r/gamedev/comments/2a9gsq/match3_games_logic_use_a_2d_array_or_store/
- *
-Give each tile a state, RESTING, FALLING, etc, then on your update, run through the tile array and test that they're all in a final position (ie RESTING), then recalculate.
-Very efficient, and allows you to have fancy exploding bombs and stuff that all run at different speeds.
-You can safely update your table at the start of the animation, as the tiles will be in a "FALLING" state, and the table grid can't update if any tile is not resting
- */
+#include "statemachine.h"
 
 class Gem;
 
@@ -40,6 +32,7 @@ public:
 };
 
 class Gem : public Object
+          , private StateMachine<GemState*>
 {
 public:
   // or maybe I don't need an enum?
@@ -59,15 +52,11 @@ public:
   void update(float dt);
   void draw();
 
-  void changeState(GemState *state);
   void setType(GemType type);
-  std::string getTexId();
 
 private:
   void init();
-  GemState *m_state;
   GemType m_type;
-  std::string m_texId;
 };
 
 #endif // GEM_H

@@ -35,7 +35,7 @@ bool TextureManager::load(std::string fileName, std::string id)
 std::pair<int,int> TextureManager::getSize(std::string id)
 {
   std::pair<int,int> retVal(0,0);
-  int error;
+  int error = 0;
   if (m_textureMap.count(id)) {
     error = SDL_QueryTexture(m_textureMap[id], NULL, NULL, &retVal.first, &retVal.second);
   }

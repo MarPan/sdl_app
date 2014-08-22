@@ -3,7 +3,7 @@
 
 #include <utility>
 #include <string>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 class Object
 {
@@ -18,13 +18,17 @@ public:
   void print(std::string str);
 
   std::pair<float,float> getPosition();
-  std::pair<float,float> getSize();
+  std::pair<float,float> getSize();  
+  std::string getTexId();
   void setSize(int width);
+  void setOffset(int offX, int offY);
 
 protected:
   std::pair<float, float> m_position;
   std::pair<float, float> m_speed;  // speed in pixels per second
   std::pair<int, int> m_size;
+  std::pair<int, int> m_offset;
+  std::string m_texId;
 };
 
 #endif // OBJECT_H

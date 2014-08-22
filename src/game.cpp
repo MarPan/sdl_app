@@ -1,14 +1,16 @@
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "utilities.h"
 #include "game.h"
 #include "board.h"
 #include "texturemanager.h"
+#include "playtimestate.h"
 
 Game::Game()
-  : _windowSize(std::pair<int, int>(640, 480)),
+  : _windowSize(std::pair<int, int>(755, 600)),
     _exit(false),
     _world(new World())
 {
+  setState(new PlayTimeState(this));
 }
 
 /*static*/ Game& Game::getInstance()
@@ -81,6 +83,7 @@ void Game::input()
       switch (event.button.button) {
         case SDL_BUTTON_LEFT:
             SDL_ShowSimpleMessageBox(0, "Mouse", "Left button was pressed!", m_pWindow);
+            getState()->onClick(event.button.x, event.button.y); // !!
             break;
         case SDL_BUTTON_RIGHT:
             SDL_ShowSimpleMessageBox(0, "Mouse", "Right button was pressed!", m_pWindow);

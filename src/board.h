@@ -45,7 +45,8 @@ public:
 
 private:
   int m_tileWidth;
-  std::vector<std::vector<Gem*>> m_gems;
+  std::vector<std::vector<Gem*>> m_gems;  
+  std::string m_backgroundPath;
 };
 
 #endif // BOARD_H
