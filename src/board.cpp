@@ -1,53 +1,56 @@
 #include "board.h"
+#include <ctime>
 #include "gem.h"
 
 
 Board::Board(int rows, int cols)
   : Object(0.0f,0.0f),
-    size(std::pair<int,int>(rows,cols))
+    size(std::pair<int,int>(rows,cols)),
+    m_tileWidth(64)
 {
   for (int i = 0; i < size.first; i++)
   {
-    gems.push_back(std::vector<Gem*>());
+    m_gems.push_back(std::vector<Gem*>());
     for (int j = 0; j < size.second; j++)
       {
-      gems[i].push_back(new Gem(i,j));
-      gems[i][j]->setType(Gem::GemType(rand() % Gem::GT_COUNT));
+      m_gems[i].push_back(new Gem(i,j, m_tileWidth, Gem::GemType(rand() % Gem::GT_COUNT)));
       }
   }
+
+  std::srand(std::time(0));
 }
 
 Board::~Board()
 {
-  for (size_t i = 0; i < gems.size(); i++)
-    for (size_t j = 0; j < gems[i].size(); j++)
-      delete gems[i][j];
+  for (size_t i = 0; i < m_gems.size(); i++)
+    for (size_t j = 0; j < m_gems[i].size(); j++)
+      delete m_gems[i][j];
 }
 
 void Board::fillBoard()
 {
-  for (size_t i = 0; i < gems.size(); i++)
-    for (size_t j = 0; j < gems[i].size(); j++)
-      gems[i][j]->setType(Gem::GemType(rand() % Gem::GT_COUNT));
+  for (size_t i = 0; i < m_gems.size(); i++)
+    for (size_t j = 0; j < m_gems[i].size(); j++)
+      m_gems[i][j]->setType(Gem::GemType(rand() % Gem::GT_COUNT));
 }
 
 bool Board::swapGems(std::pair<int,int> gemOne, std::pair<int,int> gemTwo)
 {
-  Gem *tmp = gems[gemOne.first][gemOne.second];
-  gems[gemOne.first][gemOne.second] = gems[gemTwo.first][gemTwo.second];
-  gems[gemTwo.first][gemTwo.second] = tmp;
+  Gem *tmp = m_gems[gemOne.first][gemOne.second];
+  m_gems[gemOne.first][gemOne.second] = m_gems[gemTwo.first][gemTwo.second];
+  m_gems[gemTwo.first][gemTwo.second] = tmp;
 }
 
 void Board::update(float dt)
 {
-  for (size_t i = 0; i < gems.size(); i++)
-    for (size_t j = 0; j < gems[i].size(); j++)
-      gems[i][j]->update(dt);
+  for (size_t i = 0; i < m_gems.size(); i++)
+    for (size_t j = 0; j < m_gems[i].size(); j++)
+      m_gems[i][j]->update(dt);
 }
 
 void Board::draw()
 {
-  for (size_t i = 0; i < gems.size(); i++)
-    for (size_t j = 0; j < gems[i].size(); j++)
-      gems[i][j]->draw();
+  for (size_t i = 0; i < m_gems.size(); i++)
+    for (size_t j = 0; j < m_gems[i].size(); j++)
+      m_gems[i][j]->draw();
 }

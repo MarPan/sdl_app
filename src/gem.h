@@ -22,12 +22,9 @@ public:
   GemState() {};
   void onEnter(Gem &gem);
   virtual void update(float dt) {};
-  virtual void draw() {
-    theTextureManager.draw(m_texId, m_positionAndSize);
-  };
+  virtual void draw();
 private:
-  std::string m_texId;
-  SDL_Rect m_positionAndSize;
+  Gem* m_gem;
 };
 
 class GemIdleState : public GemState
@@ -44,11 +41,7 @@ public:
 
 class Gem : public Object
 {
-  friend class GemState;
-
 public:
-
-
   // or maybe I don't need an enum?
   // I could differentiate between gems based on their m_texId
   // it would be cumbersome to generate random gems though...
@@ -61,14 +54,15 @@ public:
     GT_COUNT
   };
 
-  Gem(float posX, float posY);
-  Gem(std::pair<float, float> position);
+  Gem(int posX, int posY, int width, GemType type);
 
   void update(float dt);
   void draw();
 
   void changeState(GemState *state);
   void setType(GemType type);
+  std::string getTexId();
+
 private:
   void init();
   GemState *m_state;

@@ -5,24 +5,46 @@
 
 void GemState::onEnter(Gem &gem)
 {
-  m_texId = gem.m_texId;
-  m_positionAndSize.x = gem.m_position.first;
-  m_positionAndSize.y = gem.m_position.second;
-  m_positionAndSize.w = gem.m_size.first;
-  m_positionAndSize.h = gem.m_size.second;
+  m_gem = &gem;
 }
 
-Gem::Gem(float posX, float posY)
+void GemState::draw()
+{
+  theTextureManager.draw(m_gem->getTexId(),
+                         m_gem->getPosition().first * m_gem->getSize().first,
+                         m_gem->getPosition().second * m_gem->getSize().second,
+                         m_gem->getSize().first,
+                         m_gem->getSize().second);
+}
+
+Gem::Gem(int posX, int posY, int width, GemType type)
   : Object(posX, posY),
     m_state(nullptr),
-    m_texId("cbw")
-{
+    m_type(type)
+{  
+  setSize(width);
   init();
 }
 
 void Gem::init()
 {
-  theTextureManager.load("../resources/chips/chipBlackWhite.png", m_texId);
+  switch (m_type)
+    {
+    case GT_BLACK_AND_BLUE:
+      m_texId = "../resources/chips/chipBlueWhite.png";
+      break;
+    case GT_BLACK_AND_GREEN:
+      m_texId = "../resources/chips/chipGreenWhite.png";
+      break;
+    case GT_BLACK_AND_RED:
+      m_texId = "../resources/chips/chipRedWhite.png";
+      break;
+    case GT_BLACK_AND_WHITE:
+      m_texId = "../resources/chips/chipBlackWhite.png";
+      break;
+    }
+
+  theTextureManager.load(m_texId, m_texId);
   m_size = theTextureManager.getSize(m_texId);
   changeState(new GemIdleState());
 }
@@ -50,4 +72,9 @@ void Gem::update(float dt)
 void Gem::draw()
 {
   m_state->draw();
+}
+
+std::string Gem::getTexId()
+{
+  return m_texId;
 }

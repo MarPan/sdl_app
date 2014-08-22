@@ -17,6 +17,10 @@ public:
   virtual void draw();
   void print(std::string str);
 
+  std::pair<float,float> getPosition();
+  std::pair<float,float> getSize();
+  void setSize(int width);
+
 protected:
   std::pair<float, float> m_position;
   std::pair<float, float> m_speed;  // speed in pixels per second

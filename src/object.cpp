@@ -27,3 +27,18 @@ void Object::draw()
 {
 
 }
+
+void Object::setSize(int width)
+{
+  m_size = std::pair<float,float>(width, width);
+}
+
+std::pair<float,float> Object::getPosition()
+{
+  return m_position;
+}
+
+std::pair<float,float> Object::getSize()
+{
+  return m_size;
+}
