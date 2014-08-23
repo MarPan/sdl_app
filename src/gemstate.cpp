@@ -18,6 +18,11 @@ void GemState::draw()
                          m_gem->getSize().second);
 }
 
+bool GemState::onClicked()
+{
+  return false;
+}
+
 
 GemSelectedState::GemSelectedState(Gem *gem) 
   : GemState(gem) 
@@ -46,4 +51,13 @@ void GemSelectedState::draw()
                          m_circle.getPosition().second,
                          m_circle.getSize().first,
                          m_circle.getSize().second);
+}
+
+GemIdleState::GemIdleState(Gem *gem)
+  : GemState(gem) 
+{}
+
+bool GemIdleState::onClicked()
+{
+  return true;
 }

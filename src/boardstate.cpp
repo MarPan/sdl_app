@@ -2,30 +2,16 @@
 #include "board.h"
 #include <iostream>
 
-BoardState::BoardState()
-{
-}
-
-BoardState::~BoardState()
-{
-}
-
-IdleState::IdleState(Board *board)
+BoardState::BoardState(Board *board)
   : m_pBoard(board)
 {
-
 }
 
-void IdleState::onClick(int x, int y)
+std::pair<int,int> BoardState::translateToTileCoords(int x, int y)
 {
-  // TODO:
-  // find out which gem is at x, y
-  // and inform it that it's clicked
-
+  auto retVal = std::make_pair(-1, -1);
   x -= m_pBoard->getGemsOffset().first - m_pBoard->getTileWidth() / 2;
   y -= m_pBoard->getGemsOffset().second - m_pBoard->getTileWidth() / 2;
-
-  std::cout << "CLICK " << x << " " << y << std::endl;
 
   if (x > 0 && y > 0 &&
       x < m_pBoard->getSize().first * m_pBoard->getTileWidth() &&
@@ -33,16 +19,54 @@ void IdleState::onClick(int x, int y)
 
     x /= m_pBoard->getTileWidth();
     y /= m_pBoard->getTileWidth();
-    m_pBoard->selectGem(x, y);
+    retVal = std::make_pair(x,y);
   }
+  return retVal;
 }
 
-void IdleState::update(float dt)
+
+BoardState::~BoardState()
+{
+}
+
+BoardState* BoardState::onClick(int x, int y)
+{
+  return nullptr;
+}
+
+void BoardState::update(float dt)
 {
 
 }
 
-void IdleState::draw()
+void BoardState::draw()
 {
 
+}
+
+IdleState::IdleState(Board *board)
+  : BoardState(board)
+{
+}
+
+BoardState* IdleState::onClick(int x, int y)
+{
+  auto coords = translateToTileCoords(x,y);
+  if (coords.first != -1) {
+    if (m_pBoard->getGem(coords.first, coords.second)->onClicked())
+      m_pBoard->setSelectedGem(coords);
+      return new SelectedState(m_pBoard);
+  }
+  return nullptr;
+}
+
+SelectedState::SelectedState(Board* board)
+  : BoardState(board)
+{ }
+
+BoardState* SelectedState::onClick(int x, int y)
+{
+  auto coords = translateToTileCoords(x,y);
+  m_pBoard->swapGems(m_pBoard->getSelectedGem(), coords);
+  return new IdleState(m_pBoard);
 }

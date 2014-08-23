@@ -16,9 +16,14 @@ Gem::Gem(int posX, int posY, GemType type, Board *parent)
   setState(new GemIdleState(this));
 }
 
-void Gem::select()
+// @returns true, if gem became selected
+bool Gem::onClicked()
 {
-  setState(new GemSelectedState(this));
+  if (getState()->onClicked()) {
+    setState(new GemSelectedState(this));
+    return true;
+  }
+  return false;  
 }
 
 void Gem::setType(GemType type)
@@ -52,4 +57,16 @@ void Gem::computeDrawingOrign()
   tileMiddle.second -= m_size.second / 2;
 
   setPosition(tileMiddle);
+}
+
+
+std::pair<int,int>Gem::getLogicalCoords()
+{
+  return m_logicalCoords;
+}
+void Gem::setLogicalCoords(std::pair<int,int> coords)
+{
+  m_logicalCoords = coords;
+  computeDrawingOrign();
+  setState(new GemIdleState(this));
 }

@@ -1,30 +1,37 @@
 #ifndef BOARDSTATE_H
 #define BOARDSTATE_H
 
+#include <utility>
+
 class Board;
 
 class BoardState
 {
 public:
-  BoardState();
+  BoardState(Board *board);
   virtual ~BoardState();
 
-  virtual void onClick( int x, int y) = 0;
-  virtual void update(float dt) = 0;
-  virtual void draw() = 0;
+  virtual BoardState* onClick( int x, int y) = 0;
+  virtual void update(float dt);
+  virtual void draw();  
+protected:
+  std::pair<int,int> translateToTileCoords(int x, int y);
+  Board *m_pBoard;
 };
 
 class IdleState : public BoardState
 {
 public:
   IdleState(Board *board);
-  void onClick(int x, int y);
-  void update(float dt);
-  void draw();
-private:
-  Board *m_pBoard;  // TODO: is this a good idea? maybe we coud move it to BoardStae.
+  BoardState* onClick(int x, int y);
 };
 
+class SelectedState : public BoardState
+{
+public:
+  SelectedState(Board *board);
+  BoardState* onClick(int x, int y);
+};
 
 
 

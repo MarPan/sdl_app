@@ -12,6 +12,7 @@ public:
   GemState(Gem *gem);
   virtual void update(float dt) {};
   virtual void draw();
+  virtual bool onClicked();
 protected:
   Gem* m_gem;
 };
@@ -19,7 +20,8 @@ protected:
 class GemIdleState : public GemState
 {
 public:
-  GemIdleState(Gem *gem) : GemState(gem) {}
+  GemIdleState(Gem *gem);
+  bool onClicked();
 };
 
 class GemSelectedState : public GemState

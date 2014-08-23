@@ -1,5 +1,6 @@
-#include "board.h"
 #include <ctime>
+#include <iostream>
+#include "board.h"
 #include "gem.h"
 
 Board::Board(int rows, int cols)
@@ -62,17 +63,19 @@ void Board::fillBoard()
 
 bool Board::swapGems(std::pair<int,int> gemOne, std::pair<int,int> gemTwo)
 {
+  std::cout << "swapping " << gemOne.first << " " << gemOne.second
+            << " with " << gemTwo.first << " " << gemTwo.second << std::endl;
+  {
+  auto tmp = m_gems[gemOne.first][gemOne.second]->getLogicalCoords();  
+  m_gems[gemOne.first][gemOne.second]->setLogicalCoords(m_gems[gemTwo.first][gemTwo.second]->getLogicalCoords());
+  m_gems[gemTwo.first][gemTwo.second]->setLogicalCoords(tmp);
+  }
+  
   Gem *tmp = m_gems[gemOne.first][gemOne.second];
   m_gems[gemOne.first][gemOne.second] = m_gems[gemTwo.first][gemTwo.second];
   m_gems[gemTwo.first][gemTwo.second] = tmp;
-  //TO DO: are you sure it should return bool?
-  //Currently I added return true for compilation purpose.
-  return true;
-}
 
-void Board::selectGem(int x, int y)
-{
-  m_gems[x][y]->select();
+  return true;
 }
 
 void Board::update(float dt)
@@ -90,9 +93,17 @@ void Board::draw()
       m_gems[i][j]->draw();
 }
 
+Gem *Board::getGem(int x, int y)
+{
+  return m_gems[x][y];
+}
+
 void Board::onClick(int x, int y)
 {
-  getState()->onClick(x,y);
+  BoardState* state = getState()->onClick(x,y);
+  if (state != nullptr) {
+    setState(state);
+  }
 }
 
 std::pair<int,int> Board::getGemsOffset()
@@ -113,4 +124,15 @@ std::pair<int,int> Board::getSize()
 std::string Board::getGemPath(Gem::GemType gt)
 {
   return m_gemRegistry[gt];
+}
+
+void Board::setSelectedGem(std::pair<int,int> coords)
+{
+  m_selectedGem = coords;
+}
+
+
+std::pair<int,int> Board::getSelectedGem() const
+{
+  return m_selectedGem;
 }

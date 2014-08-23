@@ -35,6 +35,10 @@ public:
   int getTileWidth();
   std::pair<int,int> getSize();
   std::string getGemPath(Gem::GemType);
+  Gem *getGem(int x, int y);
+
+  void setSelectedGem(std::pair<int,int> coords);
+  std::pair<int,int> getSelectedGem() const;
 
 private:
   int m_gemWidth;
@@ -43,6 +47,7 @@ private:
   std::pair<int,int> m_gemsOffset;
   std::pair<int,int> m_size;
   std::map<Gem::GemType, std::string> m_gemRegistry;
+  std::pair<int,int> m_selectedGem;
 };
 
 #endif // BOARD_H

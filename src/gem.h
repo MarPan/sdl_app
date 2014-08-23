@@ -26,11 +26,13 @@ public:
 
   void update(float dt);
   void draw();
-
-  void select();
+  bool onClicked();
 
   void setType(GemType type);
   Board* getBoard();
+  std::pair<int,int> getLogicalCoords();
+  void setLogicalCoords(std::pair<int,int> coords);
+  void select();
 
 private:
   void init();
