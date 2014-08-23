@@ -2,6 +2,7 @@
 #define GEMSTATE_H
 
 #include "state.h"
+#include "object.h"
 
 class Gem;
 
@@ -11,7 +12,7 @@ public:
   GemState(Gem *gem);
   virtual void update(float dt) {};
   virtual void draw();
-private:
+protected:
   Gem* m_gem;
 };
 
@@ -26,6 +27,9 @@ class GemSelectedState : public GemState
 public:
   GemSelectedState(Gem *gem);
   void draw();
+private:
+  Object m_circle;
+  std::string m_circleName;
 };
 
 class GemFallingState : public GemState

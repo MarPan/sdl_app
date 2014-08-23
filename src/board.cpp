@@ -1,8 +1,6 @@
 #include "board.h"
 #include <ctime>
 #include "gem.h"
-#include "gemtyperegistry.h"
-
 
 Board::Board(int rows, int cols)
   : Object(0.0f,0.0f)

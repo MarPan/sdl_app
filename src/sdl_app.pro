@@ -17,7 +17,7 @@ SOURCES += \
     gamestate.cpp \
     playtimestate.cpp \
     boardstate.cpp \
-    gemstate.cpp
+    gemstate.cpp \
 
 
 HEADERS += \
@@ -34,7 +34,7 @@ HEADERS += \
     playtimestate.h \
     boardstate.h \
     multiplatformSDL.h \
-    gemstate.h
+    gemstate.h \
 
 INCLUDEPATH += ../SDL2-bin/include
 INCLUDEPATH += ../SDL2_image-bin/x86_64-w64-mingw32/include
