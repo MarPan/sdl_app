@@ -45,7 +45,7 @@ void Game::init()
     printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
   }
 
-  theTextureManager.load("../resources/board.bmp", "board");
+  theTextureManager.load("board.bmp", "board");
   _world->add(new Board(8,8));
 
   // Game status

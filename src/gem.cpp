@@ -18,16 +18,16 @@ void Gem::init()
   switch (m_type)
     {
     case GT_BLACK_AND_BLUE:
-      m_texId = "../resources/chips/chipBlueWhite.png";
+      m_texId = "chips\\chipBlueWhite.png";
       break;
     case GT_BLACK_AND_GREEN:
-      m_texId = "../resources/chips/chipGreenWhite.png";
+      m_texId = "chips\\chipGreenWhite.png";
       break;
     case GT_BLACK_AND_RED:
-      m_texId = "../resources/chips/chipRedWhite.png";
+      m_texId = "chips\\chipRedWhite.png";
       break;
     case GT_BLACK_AND_WHITE:
-      m_texId = "../resources/chips/chipBlackWhite.png";
+      m_texId = "chips\\chipBlackWhite.png";
       break;
     }
 

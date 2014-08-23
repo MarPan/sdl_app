@@ -1,4 +1,3 @@
-#include <SDL2/SDL_image.h>
 #include "texturemanager.h"
 #include "utilities.h"
 #include "game.h"
@@ -13,13 +12,17 @@ TextureManager::TextureManager()
 }
 
 bool TextureManager::load(std::string fileName, std::string id)
-  {
+{
+  fileName = resourcePath  + fileName;
+  std::cout << fileName << std::endl;
   // check if file is already loaded
   if (m_textureMap.count(id))
     return false;
 
   SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
   if (pTempSurface == 0) {
+    std::cout << "Failed to load " << fileName << std::endl;
+    logSDLError(std::cout, "");
     return false;
   }
   SDL_Texture* pTexture = SDL_CreateTextureFromSurface(theGame.getRenderer(), pTempSurface);

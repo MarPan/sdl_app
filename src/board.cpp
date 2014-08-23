@@ -6,7 +6,7 @@
 Board::Board(int rows, int cols)
   : Object(0.0f,0.0f)
   , m_size(std::pair<int,int>(rows,cols))
-  , m_backgroundPath("../resources/BackGround.jpg")
+  , m_backgroundPath("BackGround.jpg")
   , m_gemWidth(40)
   , m_gemsOffset(std::pair<int,int>(320,100))
 {
@@ -44,6 +44,9 @@ bool Board::swapGems(std::pair<int,int> gemOne, std::pair<int,int> gemTwo)
   Gem *tmp = m_gems[gemOne.first][gemOne.second];
   m_gems[gemOne.first][gemOne.second] = m_gems[gemTwo.first][gemTwo.second];
   m_gems[gemTwo.first][gemTwo.second] = tmp;
+  //TO DO: are you sure it should return bool?
+  //Currently I added return true for compilation purpose.
+  return true;
 }
 
 void Board::selectGem(int x, int y)

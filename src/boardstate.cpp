@@ -1,5 +1,6 @@
 #include "boardstate.h"
 #include "board.h"
+#include <iostream>
 
 BoardState::BoardState()
 {
@@ -24,13 +25,15 @@ void IdleState::onClick(int x, int y)
   x -= m_pBoard->getGemsOffset().first;
   y -= m_pBoard->getGemsOffset().second;
 
+  std::cout << "CLICK " << x << " " << y << std::endl;
+
   if (x > 0 && y > 0 &&
       x < m_pBoard->getSize().first * m_pBoard->getGemWidth() &&
       y < m_pBoard->getSize().second * m_pBoard->getGemWidth()) {
     x /= m_pBoard->getGemWidth();
     y /= m_pBoard->getGemWidth();
+    m_pBoard->selectGem(x, y);
   }
-  m_pBoard->selectGem(x, y);
 }
 
 void IdleState::update(float dt)
