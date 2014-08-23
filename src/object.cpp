@@ -5,12 +5,15 @@
 #include "game.h"
 
 Object::Object()
+  : m_size(std::pair<int,int>(0,0))
 { }
 Object::Object(std::pair<float, float> position)
   : m_position(position)
+  , m_size(std::pair<int,int>(0,0))
 { }
 Object::Object(float posX, float posY)
   : m_position(std::pair<float,float>(posX,posY))
+  , m_size(std::pair<int,int>(0,0))
 { }
 
 void Object::print(std::string str = "")

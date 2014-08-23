@@ -45,7 +45,7 @@ void Gem::init()
 
   theTextureManager.load(m_texId, m_texId);
   m_size = theTextureManager.getSize(m_texId);
-  setState(new GemIdleState());
+  setState(new GemIdleState(this));
 }
 
 void Gem::setType(GemType type)

@@ -1,4 +1,3 @@
-#include <SDL2/SDL_image.h>
 #include "texturemanager.h"
 #include "utilities.h"
 #include "game.h"

@@ -11,7 +11,7 @@ class Gem;
 class GemState : public State
 {
 public:
-  GemState() {};
+  GemState(Gem* gem) {m_gem = gem;};
   void onEnter(Gem &gem);
   virtual void update(float dt) {};
   virtual void draw();
@@ -22,13 +22,13 @@ private:
 class GemIdleState : public GemState
 {
 public:
-  GemIdleState() {}
+  GemIdleState(Gem* gem) : GemState(gem) { }
 };
 
 class GemFallingState : public GemState
 {
 public:
-  GemFallingState() {}
+  GemFallingState(Gem* gem) : GemState(gem) { }
 };
 
 class Gem : public Object

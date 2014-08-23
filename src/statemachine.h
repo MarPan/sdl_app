@@ -10,6 +10,10 @@ public:
   // this mojo ensures that one cannot create StateMachine with types with consts  or references,
   typedef typename ::std::remove_reference< typename ::std::remove_cv< T >::type >::type state_type;
 
+  StateMachine()
+  : m_state(nullptr)
+  { }
+
 protected:
   inline void setState( const state_type& state );
   inline state_type getState() const;

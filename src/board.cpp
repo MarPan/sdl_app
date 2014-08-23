@@ -43,6 +43,9 @@ bool Board::swapGems(std::pair<int,int> gemOne, std::pair<int,int> gemTwo)
   Gem *tmp = m_gems[gemOne.first][gemOne.second];
   m_gems[gemOne.first][gemOne.second] = m_gems[gemTwo.first][gemTwo.second];
   m_gems[gemTwo.first][gemTwo.second] = tmp;
+  //TO DO: are you sure it should return bool?
+  //Currently I added return true for compilation purpose.
+  return true;
 }
 
 void Board::update(float dt)
