@@ -3,6 +3,8 @@
 
 #include <vector>
 #include "object.h"
+#include "statemachine.h"
+#include "boardstate.h"
 
 class Gem;
 class BoardLogic;
@@ -28,6 +30,7 @@ class BoardLogic;
  * We do need some way of connecting a Gem to a graphic object
  */
 class Board : public Object
+            , public StateMachine<BoardState*>
 {
 public:
   Board(int rows, int cols);
@@ -35,6 +38,7 @@ public:
 
   void update(float dt);
   void draw();
+  void onClick(int x, int y);
 
   void fillBoard();
   std::pair<int,int> func();

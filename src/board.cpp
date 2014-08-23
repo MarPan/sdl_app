@@ -9,6 +9,8 @@ Board::Board(int rows, int cols)
     m_backgroundPath("../resources/BackGround.jpg"),
     m_tileWidth(64)
 {
+  setState(new IdleState(this));
+
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
   for (int i = 0; i < size.first; i++)
   {
@@ -56,4 +58,9 @@ void Board::draw()
   for (size_t i = 0; i < m_gems.size(); i++)
     for (size_t j = 0; j < m_gems[i].size(); j++)
       m_gems[i][j]->draw();
+}
+
+void Board::onClick(int x, int y)
+{
+  getState()->onClick(x,y);
 }

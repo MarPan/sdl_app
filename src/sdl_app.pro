@@ -15,7 +15,8 @@ SOURCES += \
     state.cpp \
     statemachine.cpp \
     gamestate.cpp \
-    playtimestate.cpp
+    playtimestate.cpp \
+    boardstate.cpp
 
 
 HEADERS += \
@@ -29,7 +30,8 @@ HEADERS += \
     state.h \
     statemachine.h \
     gamestate.h \
-    playtimestate.h
+    playtimestate.h \
+    boardstate.h
 
 INCLUDEPATH += ../SDL2-bin/include
 INCLUDEPATH += ../SDL2_image-bin/x86_64-w64-mingw32/include

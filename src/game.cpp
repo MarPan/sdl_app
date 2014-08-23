@@ -10,7 +10,7 @@ Game::Game()
     _exit(false),
     _world(new World())
 {
-  setState(new PlayTimeState(this));
+  setState(new PlayTimeState());
 }
 
 /*static*/ Game& Game::getInstance()
