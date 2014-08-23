@@ -3,7 +3,7 @@
 
 #include <utility>
 #include <string>
-#include <SDL.h>
+#include "multiplatformSDL.h"
 
 class Object
 {

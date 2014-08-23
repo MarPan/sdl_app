@@ -8,7 +8,7 @@
 
 #include <string>
 #include <iostream>
-#include <SDL.h>
+#include "multiplatformSDL.h"
 
 // from http://www.willusher.io/
 /**

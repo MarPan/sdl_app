@@ -31,7 +31,8 @@ HEADERS += \
     statemachine.h \
     gamestate.h \
     playtimestate.h \
-    boardstate.h
+    boardstate.h \
+    multiplatformSDL.h
 
 INCLUDEPATH += ../SDL2-bin/include
 INCLUDEPATH += ../SDL2_image-bin/x86_64-w64-mingw32/include

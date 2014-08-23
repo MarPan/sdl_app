@@ -1,4 +1,4 @@
-#include <SDL.h>
+#include "multiplatformSDL.h"
 #include "utilities.h"
 #include "game.h"
 #include "board.h"

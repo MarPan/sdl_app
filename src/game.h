@@ -3,7 +3,7 @@
 
 #include "world.h"
 #include "statemachine.h"
-#include <SDL.h>
+#include "multiplatformSDL.h"
 
 #define theGame Game::getInstance()
 

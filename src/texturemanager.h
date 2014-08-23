@@ -1,7 +1,7 @@
 #ifndef TEXTUREMANAGER_H
 #define TEXTUREMANAGER_H
 
-#include <SDL.h>
+#include "multiplatformSDL.h"
 #include <map>
 
 #define theTextureManager TextureManager::getInstance()
