@@ -4,24 +4,25 @@
 
 
 Board::Board(int rows, int cols)
-  : Object(0.0f,0.0f),
-    size(std::pair<int,int>(rows,cols)),
-    m_backgroundPath("../resources/BackGround.jpg"),
-    m_tileWidth(64)
+  : Object(0.0f,0.0f)
+  , m_size(std::pair<int,int>(rows,cols))
+  , m_backgroundPath("../resources/BackGround.jpg")
+  , m_gemWidth(40)
+  , m_gemsOffset(std::pair<int,int>(320,100))
 {
   setState(new IdleState(this));
 
+  std::srand(std::time(0));
+
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
-  for (int i = 0; i < size.first; i++)
+  for (int i = 0; i < m_size.first; i++)
   {
     m_gems.push_back(std::vector<Gem*>());
-    for (int j = 0; j < size.second; j++)
+    for (int j = 0; j < m_size.second; j++)
       {
-      m_gems[i].push_back(new Gem(i,j, m_tileWidth, Gem::GemType(rand() % Gem::GT_COUNT)));
+      m_gems[i].push_back(new Gem(i,j, Gem::GemType(rand() % Gem::GT_COUNT), this));
       }
   }
-
-  std::srand(std::time(0));
 }
 
 Board::~Board()
@@ -45,6 +46,11 @@ bool Board::swapGems(std::pair<int,int> gemOne, std::pair<int,int> gemTwo)
   m_gems[gemTwo.first][gemTwo.second] = tmp;
 }
 
+void Board::selectGem(int x, int y)
+{
+  m_gems[x][y]->select();
+}
+
 void Board::update(float dt)
 {
   for (size_t i = 0; i < m_gems.size(); i++)
@@ -63,4 +69,19 @@ void Board::draw()
 void Board::onClick(int x, int y)
 {
   getState()->onClick(x,y);
+}
+
+std::pair<int,int> Board::getGemsOffset()
+{
+  return m_gemsOffset;
+}
+
+int Board::getGemWidth()
+{
+  return m_gemWidth;
+}
+
+std::pair<int,int> Board::getSize()
+{
+  return m_size;
 }

@@ -1,27 +1,15 @@
 #include <iostream>
 #include "gem.h"
+#include "board.h"
 #include "texturemanager.h"
+#include "gemstate.h"
 
-
-void GemState::onEnter(Gem &gem)
-{
-  m_gem = &gem;
-}
-
-void GemState::draw()
-{
-  theTextureManager.draw(m_gem->getTexId(),
-                         m_gem->getPosition().first * m_gem->getSize().first,
-                         m_gem->getPosition().second * m_gem->getSize().second,
-                         m_gem->getSize().first,
-                         m_gem->getSize().second);
-}
-
-Gem::Gem(int posX, int posY, int width, GemType type)
-  : Object(posX, posY),
-    m_type(type)
+Gem::Gem(int posX, int posY, GemType type, Board *parent)
+  : Object(posX, posY)
+  , m_type(type)
+  , m_pParent(parent)
 {  
-  setSize(width);
+  setSize(m_pParent->getGemWidth());
   init();
 }
 
@@ -45,7 +33,12 @@ void Gem::init()
 
   theTextureManager.load(m_texId, m_texId);
   m_size = theTextureManager.getSize(m_texId);
-  setState(new GemIdleState());
+  setState(new GemIdleState(this));
+}
+
+void Gem::select()
+{
+  setState(new GemSelectedState(this));
 }
 
 void Gem::setType(GemType type)
@@ -61,4 +54,9 @@ void Gem::update(float dt)
 void Gem::draw()
 {
   getState()->draw();
+}
+
+Board* Gem::getBoard()
+{
+  return m_pParent;
 }

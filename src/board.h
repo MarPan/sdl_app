@@ -45,12 +45,20 @@ public:
   bool swapGems(std::pair<int,int> gemOne,
                 std::pair<int,int> gemTwo);
 
-  std::pair<int, int> size;
+  // @args Logical coords
+  void selectGem(int x, int y);
+
+  // Drawing related stuff
+  std::pair<int,int> getGemsOffset();
+  int getGemWidth();
+  std::pair<int,int> getSize();
 
 private:
-  int m_tileWidth;
+  int m_gemWidth;
   std::vector<std::vector<Gem*>> m_gems;  
   std::string m_backgroundPath;
+  std::pair<int,int> m_gemsOffset;
+  std::pair<int,int> m_size;
 };
 
 #endif // BOARD_H

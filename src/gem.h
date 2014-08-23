@@ -6,30 +6,8 @@
 #include "texturemanager.h"
 #include "statemachine.h"
 
-class Gem;
-
-class GemState : public State
-{
-public:
-  GemState() {};
-  void onEnter(Gem &gem);
-  virtual void update(float dt) {};
-  virtual void draw();
-private:
-  Gem* m_gem;
-};
-
-class GemIdleState : public GemState
-{
-public:
-  GemIdleState() {}
-};
-
-class GemFallingState : public GemState
-{
-public:
-  GemFallingState() {}
-};
+class Board;
+class GemState;
 
 class Gem : public Object
           , private StateMachine<GemState*>
@@ -47,16 +25,20 @@ public:
     GT_COUNT
   };
 
-  Gem(int posX, int posY, int width, GemType type);
+  Gem(int posX, int posY, GemType type, Board* parent);
 
   void update(float dt);
   void draw();
 
+  void select();
+
   void setType(GemType type);
+  Board* getBoard();
 
 private:
   void init();
   GemType m_type;
+  Board* m_pParent;
 };
 
 #endif // GEM_H

@@ -18,7 +18,7 @@ class IdleState : public BoardState
 {
 public:
   IdleState(Board *board);
-  void onClick( int x, int y);
+  void onClick(int x, int y);
   void update(float dt);
   void draw();
 private:
