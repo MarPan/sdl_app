@@ -5,34 +5,14 @@
 #include "gemstate.h"
 
 Gem::Gem(int posX, int posY, GemType type, Board *parent)
-  : Object(posX, posY)
-  , m_type(type)
+  : m_type(type)
   , m_pParent(parent)
 {  
-  setSize(m_pParent->getGemWidth());
-  init();
-}
-
-void Gem::init()
-{
-  switch (m_type)
-    {
-    case GT_BLACK_AND_BLUE:
-      m_texId = "chips\\chipBlueWhite.png";
-      break;
-    case GT_BLACK_AND_GREEN:
-      m_texId = "chips\\chipGreenWhite.png";
-      break;
-    case GT_BLACK_AND_RED:
-      m_texId = "chips\\chipRedWhite.png";
-      break;
-    case GT_BLACK_AND_WHITE:
-      m_texId = "chips\\chipBlackWhite.png";
-      break;
-    }
-
-  theTextureManager.load(m_texId, m_texId);
-  m_size = theTextureManager.getSize(m_texId);
+  setTexId(parent->getGemPath(type));
+  m_logicalCoords = std::make_pair(posX, posY);
+  setSize(theTextureManager.getSize(m_texId));  
+  computeDrawingOrign();
+  print("");
   setState(new GemIdleState(this));
 }
 
@@ -59,4 +39,17 @@ void Gem::draw()
 Board* Gem::getBoard()
 {
   return m_pParent;
+}
+
+void Gem::computeDrawingOrign()
+{
+  std::pair<int,int> tileMiddle(getBoard()->getGemsOffset().first +
+                                m_logicalCoords.first * getBoard()->getTileWidth(),
+                                getBoard()->getGemsOffset().second +
+                                m_logicalCoords.second * getBoard()->getTileWidth());
+
+  tileMiddle.first -= m_size.first / 2;
+  tileMiddle.second -= m_size.second / 2;
+
+  setPosition(tileMiddle);
 }

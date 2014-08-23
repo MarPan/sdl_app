@@ -9,22 +9,24 @@ class Object
 {
 public:
   Object();
-  Object(float posX, float posY);
-  Object(std::pair<float,float> position);
+  Object(int posX, int posY);
+  Object(std::pair<int,int> position);
 
   virtual ~Object() { }
   virtual void update(float dt);
   virtual void draw();
   void print(std::string str);
 
-  std::pair<float,float> getPosition();
-  std::pair<float,float> getSize();  
+  std::pair<int,int> getPosition();
+  std::pair<int,int> getSize();  
   std::string getTexId();
-  void setSize(int width);
+  void setSize(std::pair<int,int> size);
   void setOffset(int offX, int offY);
+  void setTexId(std::string texId);
+  void setPosition(std::pair<int,int> position);
 
 protected:
-  std::pair<float, float> m_position;
+  std::pair<int,int> m_position;
   std::pair<float, float> m_speed;  // speed in pixels per second
   std::pair<int, int> m_size;
   std::pair<int, int> m_offset;

@@ -1,18 +1,41 @@
 #include "board.h"
 #include <ctime>
 #include "gem.h"
+#include "gemtyperegistry.h"
 
 
 Board::Board(int rows, int cols)
   : Object(0.0f,0.0f)
   , m_size(std::pair<int,int>(rows,cols))
   , m_backgroundPath("BackGround.jpg")
-  , m_gemWidth(40)
-  , m_gemsOffset(std::pair<int,int>(320,100))
+  , m_gemWidth(42)
+  , m_gemsOffset(std::pair<int,int>(345,125))
 {
   setState(new IdleState(this));
-
   std::srand(std::time(0));
+
+  for (int i = 0; i < Gem::GT_COUNT; i++) {
+    std::string path;
+    switch (i) {
+      case Gem::GT_BLUE:
+        path = "Blue.png";
+        break;
+      case Gem::GT_GREEN:
+        path = "Green.png";
+        break;
+      case Gem::GT_PURPLE:
+        path = "Purple.png";
+        break;
+      case Gem::GT_RED:
+        path = "Red.png";
+        break;
+      case Gem::GT_YELLOW:
+        path = "Yellow.png";
+        break;
+    }
+    m_gemRegistry.insert(std::make_pair(Gem::GemType(i), path));
+    theTextureManager.load(path, path);
+  }
 
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
   for (int i = 0; i < m_size.first; i++)
@@ -79,7 +102,7 @@ std::pair<int,int> Board::getGemsOffset()
   return m_gemsOffset;
 }
 
-int Board::getGemWidth()
+int Board::getTileWidth()
 {
   return m_gemWidth;
 }
@@ -87,4 +110,9 @@ int Board::getGemWidth()
 std::pair<int,int> Board::getSize()
 {
   return m_size;
+}
+
+std::string Board::getGemPath(Gem::GemType gt)
+{
+  return m_gemRegistry[gt];
 }

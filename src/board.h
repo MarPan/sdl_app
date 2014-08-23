@@ -2,33 +2,15 @@
 #define BOARD_H
 
 #include <vector>
+#include <map>
 #include "object.h"
 #include "statemachine.h"
 #include "boardstate.h"
+#include "gem.h"
 
 class Gem;
 class BoardLogic;
 
-// I need to have BoardView and BoardModel/Logic
-// or sth like this.
-// oh would you look at that
-// https://github.com/yoavfrancis/Bejeweled
-
-/*
- * So this guy has done a really nice job: he has a
- * GameBoard,which consists of BoardView (draws) and BoardLogic (updates).
- * He only has "states" based on enums, and no states for gems.
- * He doesn't have animations
- *
- * Also, in his implementation BV and BM didn't have to be separate - but
- * it really seems smoother that way. Also because in my implementation, I will change
- * gems in BoardModel at once, but Gems in BoardModel will have m_destination, to which
- * they will slide
- *
- * So, in fact, BoardModel won't have gems - only an array of GemTypes, that should be enough.
- *
- * We do need some way of connecting a Gem to a graphic object
- */
 class Board : public Object
             , public StateMachine<BoardState*>
 {
@@ -50,8 +32,9 @@ public:
 
   // Drawing related stuff
   std::pair<int,int> getGemsOffset();
-  int getGemWidth();
+  int getTileWidth();
   std::pair<int,int> getSize();
+  std::string getGemPath(Gem::GemType);
 
 private:
   int m_gemWidth;
@@ -59,6 +42,7 @@ private:
   std::string m_backgroundPath;
   std::pair<int,int> m_gemsOffset;
   std::pair<int,int> m_size;
+  std::map<Gem::GemType, std::string> m_gemRegistry;
 };
 
 #endif // BOARD_H

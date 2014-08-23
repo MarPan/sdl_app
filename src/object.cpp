@@ -7,12 +7,12 @@
 Object::Object()
   : m_size(std::pair<int,int>(0,0))
 { }
-Object::Object(std::pair<float, float> position)
+Object::Object(std::pair<int, int> position)
   : m_position(position)
   , m_size(std::pair<int,int>(0,0))
 { }
-Object::Object(float posX, float posY)
-  : m_position(std::pair<float,float>(posX,posY))
+Object::Object(int posX, int posY)
+  : m_position(std::pair<int,int>(posX,posY))
   , m_size(std::pair<int,int>(0,0))
 { }
 
@@ -38,9 +38,9 @@ void Object::draw()
                          );
 }
 
-void Object::setSize(int width)
+void Object::setSize(std::pair<int,int> size)
 {
-  m_size = std::pair<float,float>(width, width);
+  m_size = size;
 }
 
 void Object::setOffset(int offX, int offY)
@@ -48,12 +48,17 @@ void Object::setOffset(int offX, int offY)
   m_offset = std::pair<int, int>(offX, offY);
 }
 
-std::pair<float,float> Object::getPosition()
+void Object::setTexId(std::string texId)
+{
+  m_texId = texId;
+}
+
+std::pair<int,int> Object::getPosition()
 {
   return m_position;
 }
 
-std::pair<float,float> Object::getSize()
+std::pair<int,int> Object::getSize()
 {
   return m_size;
 }
@@ -63,3 +68,8 @@ std::string Object::getTexId()
   return m_texId;
 }
 
+
+void Object::setPosition(std::pair<int,int> position)
+{
+  m_position = position;
+}

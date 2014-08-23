@@ -22,16 +22,17 @@ void IdleState::onClick(int x, int y)
   // find out which gem is at x, y
   // and inform it that it's clicked
 
-  x -= m_pBoard->getGemsOffset().first;
-  y -= m_pBoard->getGemsOffset().second;
+  x -= m_pBoard->getGemsOffset().first - m_pBoard->getTileWidth() / 2;
+  y -= m_pBoard->getGemsOffset().second - m_pBoard->getTileWidth() / 2;
 
   std::cout << "CLICK " << x << " " << y << std::endl;
 
   if (x > 0 && y > 0 &&
-      x < m_pBoard->getSize().first * m_pBoard->getGemWidth() &&
-      y < m_pBoard->getSize().second * m_pBoard->getGemWidth()) {
-    x /= m_pBoard->getGemWidth();
-    y /= m_pBoard->getGemWidth();
+      x < m_pBoard->getSize().first * m_pBoard->getTileWidth() &&
+      y < m_pBoard->getSize().second * m_pBoard->getTileWidth()) {
+
+    x /= m_pBoard->getTileWidth();
+    y /= m_pBoard->getTileWidth();
     m_pBoard->selectGem(x, y);
   }
 }

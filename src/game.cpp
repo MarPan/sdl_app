@@ -10,6 +10,7 @@ Game::Game()
     _exit(false),
     _world(new World())
 {
+  init();
   setState(new PlayTimeState());
 }
 
@@ -45,9 +46,6 @@ void Game::init()
     printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
   }
 
-  theTextureManager.load("board.bmp", "board");
-  _world->add(new Board(8,8));
-
   // Game status
   _exit = false;
   _lastTime = SDL_GetTicks();
@@ -82,14 +80,14 @@ void Game::input()
     case SDL_MOUSEBUTTONDOWN:
       switch (event.button.button) {
         case SDL_BUTTON_LEFT:
-            SDL_ShowSimpleMessageBox(0, "Mouse", "Left button was pressed!", m_pWindow);
+            //SDL_ShowSimpleMessageBox(0, "Mouse", "Left button was pressed!", m_pWindow);
             getState()->onClick(event.button.x, event.button.y); // !!
             break;
         case SDL_BUTTON_RIGHT:
-            SDL_ShowSimpleMessageBox(0, "Mouse", "Right button was pressed!", m_pWindow);
+            //SDL_ShowSimpleMessageBox(0, "Mouse", "Right button was pressed!", m_pWindow);
             break;
         default:
-            SDL_ShowSimpleMessageBox(0, "Mouse", "Some other button was pressed!", m_pWindow);
+            //SDL_ShowSimpleMessageBox(0, "Mouse", "Some other button was pressed!", m_pWindow);
             break;
       }
     }
@@ -98,13 +96,13 @@ void Game::input()
 
 void Game::update(float deltaTime)
 {
-  _world->update(deltaTime);
+  getState()->update(deltaTime);
 }
 
 void Game::draw()
 {
   SDL_RenderClear(m_pRenderer);
 //  theTextureManager.draw("board", 0, 0, _windowSize.first, _windowSize.second);
-  _world->draw();
+  getState()->draw();
   SDL_RenderPresent(m_pRenderer);
 }

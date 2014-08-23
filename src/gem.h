@@ -13,15 +13,12 @@ class Gem : public Object
           , private StateMachine<GemState*>
 {
 public:
-  // or maybe I don't need an enum?
-  // I could differentiate between gems based on their m_texId
-  // it would be cumbersome to generate random gems though...
-  // maybe I should just define somewhere map<GemType, TexId>
   enum GemType {
-    GT_BLACK_AND_WHITE = 0,
-    GT_BLACK_AND_GREEN,
-    GT_BLACK_AND_BLUE,
-    GT_BLACK_AND_RED,
+    GT_BLUE = 0,
+    GT_GREEN,
+    GT_PURPLE,
+    GT_RED,
+    GT_YELLOW,
     GT_COUNT
   };
 
@@ -37,6 +34,8 @@ public:
 
 private:
   void init();
+  void computeDrawingOrign();
+  std::pair<int,int> m_logicalCoords;  // remember to call computeDrawingOrign after changing these coords!
   GemType m_type;
   Board* m_pParent;
 };

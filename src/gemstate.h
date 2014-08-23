@@ -24,7 +24,8 @@ public:
 class GemSelectedState : public GemState
 {
 public:
-  GemSelectedState(Gem *gem) : GemState(gem) {}
+  GemSelectedState(Gem *gem);
+  void draw();
 };
 
 class GemFallingState : public GemState
