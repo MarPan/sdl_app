@@ -1,7 +1,8 @@
 #include "boardlogic.h"
 #include <ctime>
+#include <iostream>
 
-MoveInfo* BoardLogic::resetBoard(int rows, int cols)
+std::shared_ptr<MoveInfo> BoardLogic::resetBoard(int rows, int cols)
 {
   createBoard(rows, cols);
 
@@ -20,9 +21,9 @@ void BoardLogic::createBoard(int rows, int cols)
   m_board = std::vector<std::vector<Gem::GemType>>(m_rows, std::vector<Gem::GemType>(m_cols));
 }
 
-MoveInfo* BoardLogic::makeMove(int srcRow, int srcCol, int dstRow, int dstCol)
+std::shared_ptr<MoveInfo> BoardLogic::makeMove(int srcRow, int srcCol, int dstRow, int dstCol)
 {
-  MoveInfo* moveInfo = new MoveInfo();
+  std::shared_ptr<MoveInfo> moveInfo(new MoveInfo);
 
   if (isMoveValid(srcRow, srcCol, dstRow, dstCol))  {
     std::swap(m_board[srcRow][srcCol], m_board[dstRow][dstCol]);
@@ -34,19 +35,19 @@ MoveInfo* BoardLogic::makeMove(int srcRow, int srcCol, int dstRow, int dstCol)
   return moveInfo;
 }
 
-MoveInfo* BoardLogic::makeMove(const std::pair<int,int>& from, const std::pair<int,int>& to)
+std::shared_ptr<MoveInfo> BoardLogic::makeMove(const std::pair<int,int>& from, const std::pair<int,int>& to)
 {
   return makeMove(from.first, from.second, to.first, to.second);
 }
 
-MoveInfo* BoardLogic::updateBoard()
+std::shared_ptr<MoveInfo> BoardLogic::updateBoard()
 {
   return getBoardChanges();
 }
 
-MoveInfo* BoardLogic::dumpBoardState() const
+std::shared_ptr<MoveInfo> BoardLogic::dumpBoardState() const
 {
-  MoveInfo* moveInfo = new MoveInfo();
+  std::shared_ptr<MoveInfo> moveInfo(new MoveInfo);
   for (size_t i = 0; i < m_rows; ++i) {
     for (size_t j = 0; j < m_cols; ++j) {
       moveInfo->addNewGem(MoveInfo::NewGem(m_board[i][j], std::pair<int,int>(i, j)));
@@ -119,12 +120,15 @@ void BoardLogic::fillBoard()
   }
 }
 
-MoveInfo* BoardLogic::getBoardChanges()
-{
-  MoveInfo* moveInfo = new MoveInfo();
 
-  for (size_t i = 0; i < m_rows; ++i) {
-    for (size_t j = 1; j < m_cols; ++j) {
+// This looks for connections and creates MoveInfo object defining
+// what is supposed to happen next
+std::shared_ptr<MoveInfo> BoardLogic::getBoardChanges()
+{
+  std::shared_ptr<MoveInfo> moveInfo(new MoveInfo);
+
+  for (int i = 0; i < m_rows; ++i) {
+    for (int j = 1; j < m_cols; ++j) {
       if (m_board[i][j - 1] == m_board[i][j]) {
         int subsequent = 2;
         for (size_t k = j + 1; k < m_cols && m_board[i][k] == m_board[i][k - 1]; ++k) {
@@ -144,8 +148,8 @@ MoveInfo* BoardLogic::getBoardChanges()
     }
   }
 
-  for (size_t j = 0; j < m_cols; ++j) {
-    for (size_t i = 1; i < m_rows; ++i) {
+  for (int j = 0; j < m_cols; ++j) {
+    for (int i = 1; i < m_rows; ++i) {
       if (m_board[i - 1][j] == m_board[i][j]) {
         int subsequent = 2;
         for (size_t k = i + 1; k < m_rows && m_board[k][j] == m_board[k - 1][j]; ++k) {
@@ -165,25 +169,28 @@ MoveInfo* BoardLogic::getBoardChanges()
     }
   }
 
+  // a simple board representation showing which tiles are not filled with gems
   std::vector<std::vector<bool>> filled(m_rows, std::vector<bool>(m_cols, true));
 
   for each (auto connection in moveInfo->getConnections()) {
     size_t length = connection.getSize();
-    for (size_t i = 0; i < length; ++i) {
+    for (int i = 0; i < length; ++i) {
       auto coords = connection[i].coords;
-      filled[coords.first][coords.second] = false;
+      filled[coords.first][coords.second] = false;  // every gem from connection disappears
     }
   }
-
-  for (size_t j = 0; j < m_cols; ++j) {
-    for (size_t i = m_rows - 1; i >= 0; --i) {
+  
+  // lastly, we swap empty places with whatever is above them
+  // if nothing is above them: create new gems at the top
+  for (int j = 0; j < m_cols; ++j) {
+    for (int i = m_rows - 1; i >= 0; --i) {
       if (!filled[i][j]) {
         int zeros = 0;
         while (i >= 0 && !filled[i][j]) {
           ++zeros;
           --i;
         }
-        for (size_t k = i + zeros; k > i; --k) {
+        for (int k = i + zeros; k > i; --k) {
           if (k - zeros >= 0) {
             std::swap(filled[k][j], filled[k - zeros][j]);
             std::swap(m_board[k][j], m_board[k - zeros][j]);

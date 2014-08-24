@@ -37,10 +37,16 @@ public:
   std::pair<int,int> getSize();
   std::string getGemPath(Gem::GemType);
   Gem *getGem(int x, int y);
+  BoardLogic* getLogic();  // actually after all those changes, I could use a controller, e.g.
+  // BoardController, which has both Board(View?) and BoardLogic
+  // every update it would poll logic with updateBoard
+  // and send the result to BoardView::updateBoard
+  // ...naming is not fortunate here
 
   void setSelectedGem(std::pair<int,int> coords);
   std::pair<int,int> getSelectedGem() const;
-  void updateBoard(MoveInfo* moveInfo);
+  void updateBoard(std::shared_ptr<MoveInfo> moveInfo);
+
 
 private:
   int m_gemWidth;  //< in pixels

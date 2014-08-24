@@ -38,9 +38,7 @@ Board::Board(int rows, int cols)
   }
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
 
-  MoveInfo *moveInfo = m_boardLogic->dumpBoardState();
-  updateBoard(moveInfo);
-  delete moveInfo; // why am I not using smart pointers? damn
+  updateBoard(m_boardLogic->dumpBoardState());
   // TODO
 }
 
@@ -51,7 +49,7 @@ Board::~Board()
       delete m_gems[i][j];
 }
 
-void Board::updateBoard(MoveInfo* moveInfo)
+void Board::updateBoard(std::shared_ptr<MoveInfo> moveInfo)
 {
   // firstly, we need a copy of our gems board
   // in this copy, we will execute all moves - instantly
@@ -69,22 +67,30 @@ void Board::updateBoard(MoveInfo* moveInfo)
     std::pair<int,int> src = swap.getSource();
     std::pair<int,int> dst = swap.getDestination();
 
+    std::swap(m_gems[src.first][src.second], m_gems[dst.first][dst.second]);
+    m_gems[src.first][src.second]->setLogicalCoords(src);
+    m_gems[dst.first][dst.second]->setLogicalCoords(dst);
+
     //m_gems[src.first][src.second]->setDestination();  r( GetGemAt( dst ) ) );
     //m_gems[dst.first][dst.second].Reset( Fx::GemPtr( GetGemAt( src ) ) );
   }
 
- /* for each ( auto& reloc in moveInfo->GetRelocations() )
+  for each ( auto& reloc in moveInfo->getRelocations())
   {
-    std::pair<int,int> oldPos = reloc.GetOldPosition();
-    std::pair<int,int> newPos = reloc.GetNewPosition();
+    std::pair<int,int> oldPos = reloc.getOldPosition();
+    std::pair<int,int> newPos = reloc.getNewPosition();
 
-    copy[newPos.first][newPos.second].Reset( Fx::GemPtr( GetGemAt( oldPos ) ) );
+    delete m_gems[newPos.first][newPos.second];
+    m_gems[newPos.first][newPos.second] = m_gems[oldPos.first][oldPos.second];
+    m_gems[oldPos.first][oldPos.second] = nullptr;
+    m_gems[newPos.first][newPos.second]->setLogicalCoords(newPos);
   } 
-  */
+
 
   for each (auto& newGem in moveInfo->getNewGems())
   {
     std::pair<int,int> coords = newGem.getPosition();
+    delete m_gems[coords.first][coords.second]; // ?
     m_gems[coords.first][coords.second] = new Gem(coords.first, coords.second,
                                                   newGem.getGemType(), this);
   }
@@ -208,6 +214,10 @@ void Board::setSelectedGem(std::pair<int,int> coords)
   m_selectedGem = coords;
 }
 
+BoardLogic* Board::getLogic()
+{
+  return m_boardLogic;
+}
 
 std::pair<int,int> Board::getSelectedGem() const
 {

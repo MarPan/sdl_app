@@ -12,7 +12,6 @@ Gem::Gem(int posX, int posY, GemType type, Board *parent)
   m_logicalCoords = std::make_pair(posX, posY);
   setSize(theTextureManager.getSize(m_texId));  
   computeDrawingOrign();
-  print("");
   setState(new GemStates::GemIdleState(this));
 }
 
@@ -51,9 +50,9 @@ Board* Gem::getBoard()
 void Gem::computeDrawingOrign()
 {
   std::pair<int,int> tileMiddle(getBoard()->getGemsOffset().first +
-                                m_logicalCoords.first * getBoard()->getTileWidth(),
+                                m_logicalCoords.second * getBoard()->getTileWidth(),
                                 getBoard()->getGemsOffset().second +
-                                m_logicalCoords.second * getBoard()->getTileWidth());
+                                m_logicalCoords.first * getBoard()->getTileWidth());
 
   tileMiddle.first -= m_size.first / 2;
   tileMiddle.second -= m_size.second / 2;

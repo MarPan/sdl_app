@@ -10,11 +10,11 @@ class BoardLogic
 {
 
 public:
-  MoveInfo* resetBoard(int rows, int cols);
-  MoveInfo* makeMove(int srcRow, int srcCol, int dstX, int dstY);
-  MoveInfo* makeMove(const std::pair<int,int>& src, const std::pair<int,int>& dst);
-  MoveInfo* updateBoard();
-  MoveInfo* dumpBoardState() const;
+  std::shared_ptr<MoveInfo> resetBoard(int rows, int cols);
+  std::shared_ptr<MoveInfo> makeMove(int srcRow, int srcCol, int dstX, int dstY);
+  std::shared_ptr<MoveInfo> makeMove(const std::pair<int,int>& src, const std::pair<int,int>& dst);
+  std::shared_ptr<MoveInfo> updateBoard();
+  std::shared_ptr<MoveInfo> dumpBoardState() const;
 
   bool isMoveValid(int srcRow, int srcCol, int dstRow, int dstCol);
   bool isMoveValid(const std::pair<int,int>& src, const std::pair<int,int>& dst);
@@ -25,7 +25,7 @@ protected:
   void fillBoard();
   bool hasConnections(const std::vector<std::vector<Gem::GemType>>& board) const;
   Gem::GemType setNewGem(const std::pair<int,int>& coords);
-  MoveInfo* getBoardChanges();
+  std::shared_ptr<MoveInfo> getBoardChanges();
 
 private:
   std::vector<std::vector<Gem::GemType>> m_board;
