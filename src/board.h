@@ -12,7 +12,7 @@ class Gem;
 class BoardLogic;
 
 class Board : public Object
-            , public StateMachine<BoardState*>
+            , public StateMachine<BoardStates::BoardState*>
 {
 public:
   Board(int rows, int cols);

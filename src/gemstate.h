@@ -6,13 +6,15 @@
 
 class Gem;
 
+namespace GemStates {
+
 class GemState : public State
 {
 public:
   GemState(Gem *gem);
   virtual void update(float dt) {};
   virtual void draw();
-  virtual bool onClicked();
+  virtual GemState* onClicked();
 protected:
   Gem* m_gem;
 };
@@ -21,7 +23,7 @@ class GemIdleState : public GemState
 {
 public:
   GemIdleState(Gem *gem);
-  bool onClicked();
+  GemState* onClicked();
 };
 
 class GemSelectedState : public GemState
@@ -29,6 +31,7 @@ class GemSelectedState : public GemState
 public:
   GemSelectedState(Gem *gem);
   void draw();
+  GemState* onClicked();
 private:
   Object m_circle;
   std::string m_circleName;
@@ -40,5 +43,6 @@ public:
   GemFallingState(Gem *gem) : GemState(gem) {}
 };
 
+}
 
 #endif // GEMSTATE_H

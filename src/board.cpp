@@ -10,7 +10,7 @@ Board::Board(int rows, int cols)
   , m_gemWidth(42)
   , m_gemsOffset(std::pair<int,int>(345,125))
 {
-  setState(new IdleState(this));
+  setState(new BoardStates::IdleState(this));
   std::srand(std::time(0));
 
   for (int i = 0; i < Gem::GT_COUNT; i++) {
@@ -100,7 +100,7 @@ Gem *Board::getGem(int x, int y)
 
 void Board::onClick(int x, int y)
 {
-  BoardState* state = getState()->onClick(x,y);
+  BoardStates::BoardState* state = getState()->onClick(x,y);
   if (state != nullptr) {
     setState(state);
   }

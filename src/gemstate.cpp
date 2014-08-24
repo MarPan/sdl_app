@@ -5,6 +5,8 @@
 #include "gem.h"
 #include "board.h"
 
+namespace GemStates {
+
 GemState::GemState(Gem *gem)
   : m_gem(gem)
 { }
@@ -18,7 +20,7 @@ void GemState::draw()
                          m_gem->getSize().second);
 }
 
-bool GemState::onClicked()
+GemState *GemState::onClicked()
 {
   return false;
 }
@@ -53,11 +55,18 @@ void GemSelectedState::draw()
                          m_circle.getSize().second);
 }
 
+GemState* GemSelectedState::onClicked()
+{
+  return new GemStates::GemIdleState(m_gem);
+}
+
 GemIdleState::GemIdleState(Gem *gem)
   : GemState(gem) 
 {}
 
-bool GemIdleState::onClicked()
+GemState* GemIdleState::onClicked()
 {
-  return true;
+  return new GemStates::GemSelectedState(m_gem);
+}
+
 }

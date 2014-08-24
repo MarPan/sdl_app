@@ -13,14 +13,16 @@ Gem::Gem(int posX, int posY, GemType type, Board *parent)
   setSize(theTextureManager.getSize(m_texId));  
   computeDrawingOrign();
   print("");
-  setState(new GemIdleState(this));
+  setState(new GemStates::GemIdleState(this));
 }
 
 // @returns true, if gem became selected
+// TODO this seems like a poor solution for some reason
 bool Gem::onClicked()
 {
-  if (getState()->onClicked()) {
-    setState(new GemSelectedState(this));
+  GemStates::GemState *state = getState()->onClicked();
+  if (state) {
+    setState(state);
     return true;
   }
   return false;  
@@ -68,5 +70,5 @@ void Gem::setLogicalCoords(std::pair<int,int> coords)
 {
   m_logicalCoords = coords;
   computeDrawingOrign();
-  setState(new GemIdleState(this));
+  setState(new GemStates::GemIdleState(this));
 }

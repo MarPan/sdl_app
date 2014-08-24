@@ -5,6 +5,8 @@
 
 class Board;
 
+namespace BoardStates {
+
 class BoardState
 {
 public:
@@ -33,12 +35,7 @@ public:
   BoardState* onClick(int x, int y);
 };
 
-
-
-
-
-
-
+}
 
 #endif // BOARDSTATE_H
 

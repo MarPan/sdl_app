@@ -5,12 +5,12 @@
 #include "state.h"
 #include "texturemanager.h"
 #include "statemachine.h"
+#include "gemstate.h"
 
 class Board;
-class GemState;
 
 class Gem : public Object
-          , private StateMachine<GemState*>
+          , private StateMachine<GemStates::GemState*>
 {
 public:
   enum GemType {
