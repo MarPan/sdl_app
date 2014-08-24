@@ -6,6 +6,7 @@
 #include "object.h"
 #include "statemachine.h"
 #include "boardstate.h"
+#include "boardlogic.h"
 #include "gem.h"
 
 class Gem;
@@ -39,15 +40,17 @@ public:
 
   void setSelectedGem(std::pair<int,int> coords);
   std::pair<int,int> getSelectedGem() const;
+  void updateBoard(MoveInfo* moveInfo);
 
 private:
-  int m_gemWidth;
-  std::vector<std::vector<Gem*>> m_gems;  
-  std::string m_backgroundPath;
-  std::pair<int,int> m_gemsOffset;
-  std::pair<int,int> m_size;
-  std::map<Gem::GemType, std::string> m_gemRegistry;
+  int m_gemWidth;  //< in pixels
+  std::vector<std::vector<Gem*>> m_gems;  //< graphic objects
+  std::string m_backgroundPath;  
+  std::pair<int,int> m_gemsOffset;  //< draw topleft gem here
+  std::pair<int,int> m_size;  //< in rows and columns
+  std::map<Gem::GemType, std::string> m_gemRegistry;  //< every gemType has an image resource
   std::pair<int,int> m_selectedGem;
+  BoardLogic* m_boardLogic;
 };
 
 #endif // BOARD_H

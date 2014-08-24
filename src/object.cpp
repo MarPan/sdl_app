@@ -1,6 +1,6 @@
 #include <SDL_render.h>
 #include <iostream>
-#include "texturemanager.h"t"
+#include "texturemanager.h"
 #include "object.h"
 #include "game.h"
 
@@ -24,8 +24,8 @@ void Object::print(std::string str = "")
 
 void Object::update(float dt)
 {
-  m_position.first += m_speed.first * dt / 1000;
-  m_position.second += m_speed.second * dt / 1000;
+  m_position.first += int(m_speed.first * dt);
+  m_position.second += int(m_speed.second * dt);
 }
 
 void Object::draw()
@@ -35,7 +35,7 @@ void Object::draw()
                          m_position.second + m_offset.second,
                          getSize().first,
                          getSize().second
-                         );
+                        );
 }
 
 void Object::setSize(std::pair<int,int> size)

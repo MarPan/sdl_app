@@ -23,8 +23,8 @@ Game::Game()
 void Game::init()
 {
   // Intialize SDL
-  if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 ) {
-    printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+  if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+    printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
   }
   SDL_ShowCursor(1);      // show cursor
 
@@ -37,13 +37,13 @@ void Game::init()
           SDL_WINDOW_SHOWN);
 
   if (m_pWindow == NULL) {
-    printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+    printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
   }
 
-  m_pRenderer = SDL_CreateRenderer( m_pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+  m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
   if (m_pRenderer == NULL) {
-    printf( "Renderer could not be created! SDL_Error: %s\n", SDL_GetError() );
+    printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
   }
 
   // Game status

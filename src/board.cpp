@@ -1,4 +1,3 @@
-#include <ctime>
 #include <iostream>
 #include "board.h"
 #include "gem.h"
@@ -11,7 +10,9 @@ Board::Board(int rows, int cols)
   , m_gemsOffset(std::pair<int,int>(345,125))
 {
   setState(new BoardStates::IdleState(this));
-  std::srand(std::time(0));
+  m_boardLogic = new BoardLogic();
+  m_boardLogic->resetBoard(8,8);
+  m_gems = std::vector<std::vector<Gem*>>(8, 8);
 
   for (int i = 0; i < Gem::GT_COUNT; i++) {
     std::string path;
@@ -35,16 +36,12 @@ Board::Board(int rows, int cols)
     m_gemRegistry.insert(std::make_pair(Gem::GemType(i), path));
     theTextureManager.load(path, path);
   }
-
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
-  for (int i = 0; i < m_size.first; i++)
-  {
-    m_gems.push_back(std::vector<Gem*>());
-    for (int j = 0; j < m_size.second; j++)
-      {
-      m_gems[i].push_back(new Gem(i,j, Gem::GemType(rand() % Gem::GT_COUNT), this));
-      }
-  }
+
+  MoveInfo *moveInfo = m_boardLogic->dumpBoardState();
+  updateBoard(moveInfo);
+  delete moveInfo; // why am I not using smart pointers? damn
+  // TODO
 }
 
 Board::~Board()
@@ -54,12 +51,92 @@ Board::~Board()
       delete m_gems[i][j];
 }
 
-void Board::fillBoard()
+void Board::updateBoard(MoveInfo* moveInfo)
 {
-  for (size_t i = 0; i < m_gems.size(); i++)
-    for (size_t j = 0; j < m_gems[i].size(); j++)
-      m_gems[i][j]->setType(Gem::GemType(rand() % Gem::GT_COUNT));
+  // firstly, we need a copy of our gems board
+  // in this copy, we will execute all moves - instantly
+  // next, in real board we tell all the gems how they should change 
+  // and how should they render it
+
+  // I hope I didn't understand this properly, because to me this kinda sucks
+
+  // Why can't we simply iterate over every move
+  // and instantly tell every gem what his destination and mode of move 
+  // should be?
+
+  for each (auto& swap in moveInfo->getSwaps())
+  {
+    std::pair<int,int> src = swap.getSource();
+    std::pair<int,int> dst = swap.getDestination();
+
+    //m_gems[src.first][src.second]->setDestination();  r( GetGemAt( dst ) ) );
+    //m_gems[dst.first][dst.second].Reset( Fx::GemPtr( GetGemAt( src ) ) );
+  }
+
+ /* for each ( auto& reloc in moveInfo->GetRelocations() )
+  {
+    std::pair<int,int> oldPos = reloc.GetOldPosition();
+    std::pair<int,int> newPos = reloc.GetNewPosition();
+
+    copy[newPos.first][newPos.second].Reset( Fx::GemPtr( GetGemAt( oldPos ) ) );
+  } 
+  */
+
+  for each (auto& newGem in moveInfo->getNewGems())
+  {
+    std::pair<int,int> coords = newGem.getPosition();
+    m_gems[coords.first][coords.second] = new Gem(coords.first, coords.second,
+                                                  newGem.getGemType(), this);
+  }
+ /*
+  for ( size_t i = 0; i < rows; ++i )
+  {
+    for ( size_t j = 0; j < cols; ++j )
+    {
+      GetGemBoxAt( i, j )->SetGem( copy[i][j] );
+    }
+  }
+
+  for each ( auto& swap in moveInfo->GetSwaps() )
+  {
+    std::pair<int,int> src = swap.GetSource();
+    std::pair<int,int> dst = swap.GetDestination();
+    GetGemBoxAt( src )->RenderSwap();
+    GetGemBoxAt( dst )->RenderSwap();
+  }
+
+  for each ( auto& reloc in moveInfo->GetRelocations() )
+  {
+    std::pair<int,int> newPos = reloc.GetNewPosition();
+    GetGemBoxAt( newPos )->RenderDrop();
+  }
+
+  for each ( auto& newGem in moveInfo->GetNewGems() )
+  {
+    std::pair<int,int> cell = newGem.GetPosition();            
+    GetGemBoxAt( cell )->RenderDrop();
+  }
+
+  for each ( auto& invalidSwap in moveInfo->GetInvalidSwaps() )
+  {
+    std::pair<int,int> src = invalidSwap.GetPosition();
+    std::pair<int,int> dst = invalidSwap.GetInvalidNewPosition();
+    GetGemBoxAt( src )->RenderInvalidSwap( GetCellPosition( dst ) );
+    GetGemBoxAt( dst )->RenderInvalidSwap( GetCellPosition( src ) );
+  }
+
+  if ( !moveInfo->IsEmpty() )
+  {
+    m_moveStarted = true;
+  }*/
 }
+
+//void Board::fillBoard()
+//{
+//  for (size_t i = 0; i < m_gems.size(); i++)
+//    for (size_t j = 0; j < m_gems[i].size(); j++)
+//      m_gems[i][j]->setType(Gem::GemType(rand() % Gem::GT_COUNT));
+//}
 
 bool Board::swapGems(std::pair<int,int> gemOne, std::pair<int,int> gemTwo)
 {

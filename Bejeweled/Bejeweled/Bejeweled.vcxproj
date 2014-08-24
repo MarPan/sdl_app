@@ -69,12 +69,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\board.cpp" />
+    <ClCompile Include="..\..\src\boardlogic.cpp" />
     <ClCompile Include="..\..\src\boardstate.cpp" />
     <ClCompile Include="..\..\src\game.cpp" />
     <ClCompile Include="..\..\src\gamestate.cpp" />
     <ClCompile Include="..\..\src\gem.cpp" />
     <ClCompile Include="..\..\src\gemstate.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\moveinfo.cpp" />
     <ClCompile Include="..\..\src\object.cpp" />
     <ClCompile Include="..\..\src\playtimestate.cpp" />
     <ClCompile Include="..\..\src\state.cpp" />
@@ -85,11 +87,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\board.h" />
+    <ClInclude Include="..\..\src\boardlogic.h" />
     <ClInclude Include="..\..\src\boardstate.h" />
     <ClInclude Include="..\..\src\game.h" />
     <ClInclude Include="..\..\src\gamestate.h" />
     <ClInclude Include="..\..\src\gem.h" />
     <ClInclude Include="..\..\src\gemstate.h" />
+    <ClInclude Include="..\..\src\moveinfo.h" />
     <ClInclude Include="..\..\src\multiplatformSDL.h" />
     <ClInclude Include="..\..\src\object.h" />
     <ClInclude Include="..\..\src\playtimestate.h" />

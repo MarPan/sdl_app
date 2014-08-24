@@ -15,7 +15,7 @@ public:
   { }
 
 protected:
-  inline void setState( const state_type& state );
+  inline void setState(const state_type& state);
   inline state_type getState() const;
 
 private:
@@ -23,7 +23,7 @@ private:
 };
 
 template < class T >
-inline void StateMachine<T>::setState( const typename StateMachine<T>::state_type& state )
+inline void StateMachine<T>::setState(const typename StateMachine<T>::state_type& state)
 {
   if (m_state) {
 //    m_state->onExit();

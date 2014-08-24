@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 class Object;
-class SDL_Renderer;
+struct SDL_Renderer;
 
 class World
 {

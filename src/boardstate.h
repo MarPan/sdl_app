@@ -13,7 +13,7 @@ public:
   BoardState(Board *board);
   virtual ~BoardState();
 
-  virtual BoardState* onClick( int x, int y) = 0;
+  virtual BoardState* onClick(int x, int y) = 0;
   virtual void update(float dt);
   virtual void draw();  
 protected:
