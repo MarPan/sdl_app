@@ -7,12 +7,14 @@
 Gem::Gem(int posX, int posY, GemType type, Board *parent)
   : m_type(type)
   , m_pParent(parent)
-{  
+{
   setTexId(parent->getGemPath(type));
-  m_logicalCoords = std::make_pair(posX, posY);
-  setSize(theTextureManager.getSize(m_texId));  
-  computeDrawingOrign();
+  setLogicalCoords(std::make_pair(posX, posY));
+  setSize(theTextureManager.getSize(m_texId));
+  setPosition(computeDrawingOrign(m_logicalCoords));
   setState(new GemStates::GemIdleState(this));
+  std::cout  << " " << m_logicalCoords.first << " " << m_logicalCoords.second <<
+               " " << m_logicalCoords.first << " " << m_logicalCoords.second << std::endl;
 }
 
 // @returns true, if gem became selected
@@ -33,8 +35,18 @@ void Gem::setType(GemType type)
 }
 
 void Gem::update(float dt)
-{
+{  
   getState()->update(dt);
+  if (m_logicalDestinationCoords != m_logicalCoords) {
+    std::cout << "setting movement dest " << m_logicalDestinationCoords.first << " " << m_logicalDestinationCoords.second << std::endl;
+    std::cout << "setting movement src " << m_logicalCoords.first << " " << m_logicalCoords.second << std::endl;
+    m_movementDestination = computeDrawingOrign(m_logicalDestinationCoords);
+    std::cout << "setting movement dest " << m_movementDestination.first << " " << m_movementDestination.second << std::endl;
+    std::cout << "setting movement src " << m_position.first << " " << m_position.second << std::endl;
+    m_logicalCoords = m_logicalDestinationCoords;
+    //TODO: set state to MOVING or sth
+  }
+  Object::update(dt);
 }
 
 void Gem::draw()
@@ -47,17 +59,18 @@ Board* Gem::getBoard()
   return m_pParent;
 }
 
-void Gem::computeDrawingOrign()
+std::pair<int,int> Gem::computeDrawingOrign(std::pair<int,int> logicalCoords)
 {
   std::pair<int,int> tileMiddle(getBoard()->getGemsOffset().first +
-                                m_logicalCoords.second * getBoard()->getTileWidth(),
+                                logicalCoords.second * getBoard()->getTileWidth(),
                                 getBoard()->getGemsOffset().second +
-                                m_logicalCoords.first * getBoard()->getTileWidth());
+                                logicalCoords.first * getBoard()->getTileWidth());
 
   tileMiddle.first -= m_size.first / 2;
   tileMiddle.second -= m_size.second / 2;
 
-  setPosition(tileMiddle);
+  //setPosition(tileMiddle);
+  return tileMiddle;
 }
 
 
@@ -68,6 +81,7 @@ std::pair<int,int>Gem::getLogicalCoords()
 void Gem::setLogicalCoords(std::pair<int,int> coords)
 {
   m_logicalCoords = coords;
-  computeDrawingOrign();
+  m_logicalDestinationCoords = coords;
+  setPosition(computeDrawingOrign(coords));
   setState(new GemStates::GemIdleState(this));
 }

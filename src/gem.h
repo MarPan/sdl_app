@@ -34,12 +34,16 @@ public:
   void setLogicalCoords(std::pair<int,int> coords);
   void select();
 
+  // TODO: temporary
+  std::pair<int,int> m_logicalDestinationCoords;
+
 private:
   void init();
-  void computeDrawingOrign();
+  std::pair<int,int> computeDrawingOrign(std::pair<int,int> logicalCoords);
   // ok this is BS, gems shouldn't know this
   // i think
   std::pair<int,int> m_logicalCoords;  // remember to call computeDrawingOrign after changing these coords!
+
   GemType m_type;
   Board* m_pParent;
 };

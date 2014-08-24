@@ -9,8 +9,6 @@ class Object
 {
 public:
   Object();
-  Object(int posX, int posY);
-  Object(std::pair<int,int> position);
 
   virtual ~Object() { }
   virtual void update(float dt);
@@ -25,12 +23,16 @@ public:
   void setTexId(std::string texId);
   void setPosition(std::pair<int,int> position);
 
+  // temporary - i will make it nice later
+  std::pair<int,int> m_movementDestination;
+
 protected:
   std::pair<int,int> m_position;
   std::pair<float, float> m_speed;  // speed in pixels per second
   std::pair<int, int> m_size;
   std::pair<int, int> m_offset;
   std::string m_texId;
+
 };
 
 #endif // OBJECT_H

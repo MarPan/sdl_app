@@ -3,7 +3,7 @@
 #include "gem.h"
 
 Board::Board(int rows, int cols)
-  : Object(0.0f,0.0f)
+  : Object()
   , m_size(std::pair<int,int>(rows,cols))
   , m_backgroundPath("BackGround.jpg")
   , m_gemWidth(42)
@@ -68,8 +68,8 @@ void Board::updateBoard(std::shared_ptr<MoveInfo> moveInfo)
     std::pair<int,int> dst = swap.getDestination();
 
     std::swap(m_gems[src.first][src.second], m_gems[dst.first][dst.second]);
-    m_gems[src.first][src.second]->setLogicalCoords(src);
-    m_gems[dst.first][dst.second]->setLogicalCoords(dst);
+    m_gems[src.first][src.second]->m_logicalDestinationCoords = (src);
+    m_gems[dst.first][dst.second]->m_logicalDestinationCoords = (dst);
 
     //m_gems[src.first][src.second]->setDestination();  r( GetGemAt( dst ) ) );
     //m_gems[dst.first][dst.second].Reset( Fx::GemPtr( GetGemAt( src ) ) );
@@ -83,7 +83,7 @@ void Board::updateBoard(std::shared_ptr<MoveInfo> moveInfo)
     delete m_gems[newPos.first][newPos.second];
     m_gems[newPos.first][newPos.second] = m_gems[oldPos.first][oldPos.second];
     m_gems[oldPos.first][oldPos.second] = nullptr;
-    m_gems[newPos.first][newPos.second]->setLogicalCoords(newPos);
+    m_gems[newPos.first][newPos.second]->m_logicalDestinationCoords = (newPos);
   } 
 
 
