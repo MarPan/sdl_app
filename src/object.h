@@ -9,8 +9,6 @@ class Object
 {
 public:
   Object();
-  Object(int posX, int posY);
-  Object(std::pair<int,int> position);
 
   virtual ~Object() { }
   virtual void update(float dt);

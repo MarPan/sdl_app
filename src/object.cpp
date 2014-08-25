@@ -1,19 +1,10 @@
-#include <SDL_render.h>
+#include "multiplatformSDL.h"
 #include <iostream>
-#include "texturemanager.h"t"
+#include "texturemanager.h"
 #include "object.h"
 #include "game.h"
 
 Object::Object()
-  : m_size(std::pair<int,int>(0,0))
-{ }
-Object::Object(std::pair<int, int> position)
-  : m_position(position)
-  , m_size(std::pair<int,int>(0,0))
-{ }
-Object::Object(int posX, int posY)
-  : m_position(std::pair<int,int>(posX,posY))
-  , m_size(std::pair<int,int>(0,0))
 { }
 
 void Object::print(std::string str = "")
@@ -30,6 +21,7 @@ void Object::update(float dt)
 
 void Object::draw()
 {
+//  print(m_texId);
   theTextureManager.draw(m_texId,
                          m_position.first + m_offset.first,
                          m_position.second + m_offset.second,
@@ -51,6 +43,7 @@ void Object::setOffset(int offX, int offY)
 void Object::setTexId(std::string texId)
 {
   m_texId = texId;
+  setSize(theTextureManager.getSize(texId));
 }
 
 std::pair<int,int> Object::getPosition()

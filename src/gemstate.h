@@ -4,32 +4,32 @@
 #include "state.h"
 #include "object.h"
 
-class Gem;
+class GemController;
 
 namespace GemStates {
 
 class GemState : public State
 {
 public:
-  GemState(Gem *gem);
+  GemState(Object *gem);
   virtual void update(float dt) {};
   virtual void draw();
   virtual GemState* onClicked();
 protected:
-  Gem* m_gem;
+  Object* m_gem;
 };
 
 class GemIdleState : public GemState
 {
 public:
-  GemIdleState(Gem *gem);
+  GemIdleState(Object *gem);
   GemState* onClicked();
 };
 
 class GemSelectedState : public GemState
 {
 public:
-  GemSelectedState(Gem *gem);
+  GemSelectedState(Object *gem);
   void draw();
   GemState* onClicked();
 private:
@@ -40,7 +40,7 @@ private:
 class GemFallingState : public GemState
 {
 public:
-  GemFallingState(Gem *gem) : GemState(gem) {}
+  GemFallingState(Object *gem) : GemState(gem) {}
 };
 
 }

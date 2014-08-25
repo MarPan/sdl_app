@@ -10,8 +10,7 @@ Game::Game()
     _exit(false),
     _world(new World())
 {
-  init();
-  setState(new PlayTimeState());
+
 }
 
 /*static*/ Game& Game::getInstance()
@@ -49,6 +48,8 @@ void Game::init()
   // Game status
   _exit = false;
   _lastTime = SDL_GetTicks();
+
+  setState(new PlayTimeState());
 }
 
 void Game::run(void)

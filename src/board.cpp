@@ -1,10 +1,11 @@
 #include <ctime>
 #include <iostream>
 #include "board.h"
-#include "gem.h"
+#include "gemcontroller.h"
+#include "texturemanager.h"
 
 Board::Board(int rows, int cols)
-  : Object(0.0f,0.0f)
+  : Object()
   , m_size(std::pair<int,int>(rows,cols))
   , m_backgroundPath("BackGround.jpg")
   , m_gemWidth(42)
@@ -13,36 +14,37 @@ Board::Board(int rows, int cols)
   setState(new BoardStates::IdleState(this));
   std::srand(std::time(0));
 
-  for (int i = 0; i < Gem::GT_COUNT; i++) {
+  for (int i = 0; i < GT_COUNT; i++) {
     std::string path;
     switch (i) {
-      case Gem::GT_BLUE:
+      case GT_BLUE:
         path = "Blue.png";
         break;
-      case Gem::GT_GREEN:
+      case GT_GREEN:
         path = "Green.png";
         break;
-      case Gem::GT_PURPLE:
+      case GT_PURPLE:
         path = "Purple.png";
         break;
-      case Gem::GT_RED:
+      case GT_RED:
         path = "Red.png";
         break;
-      case Gem::GT_YELLOW:
+      case GT_YELLOW:
         path = "Yellow.png";
         break;
     }
-    m_gemRegistry.insert(std::make_pair(Gem::GemType(i), path));
+    m_gemRegistry.insert(std::make_pair(GemType(i), path));
     theTextureManager.load(path, path);
   }
 
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
   for (int i = 0; i < m_size.first; i++)
   {
-    m_gems.push_back(std::vector<Gem*>());
+    m_gems.push_back(std::vector<GemController*>());
     for (int j = 0; j < m_size.second; j++)
       {
-      m_gems[i].push_back(new Gem(i,j, Gem::GemType(rand() % Gem::GT_COUNT), this));
+      m_gems[i].push_back(new GemController(i,j, this));
+      m_gems[i][j]->setType(GemType(rand() % GT_COUNT));
       }
   }
 }
@@ -58,7 +60,7 @@ void Board::fillBoard()
 {
   for (size_t i = 0; i < m_gems.size(); i++)
     for (size_t j = 0; j < m_gems[i].size(); j++)
-      m_gems[i][j]->setType(Gem::GemType(rand() % Gem::GT_COUNT));
+      m_gems[i][j]->setType(GemType(rand() % GT_COUNT));
 }
 
 bool Board::swapGems(std::pair<int,int> gemOne, std::pair<int,int> gemTwo)
@@ -66,14 +68,14 @@ bool Board::swapGems(std::pair<int,int> gemOne, std::pair<int,int> gemTwo)
   std::cout << "swapping " << gemOne.first << " " << gemOne.second
             << " with " << gemTwo.first << " " << gemTwo.second << std::endl;
   {
-  auto tmp = m_gems[gemOne.first][gemOne.second]->getLogicalCoords();  
-  m_gems[gemOne.first][gemOne.second]->setLogicalCoords(m_gems[gemTwo.first][gemTwo.second]->getLogicalCoords());
-  m_gems[gemTwo.first][gemTwo.second]->setLogicalCoords(tmp);
+  std::swap(m_gems[gemOne.first][gemOne.second], m_gems[gemTwo.first][gemTwo.second]);
+  m_gems[gemOne.first][gemOne.second]->setCoords(gemOne);
+  m_gems[gemTwo.first][gemTwo.second]->setCoords(gemTwo);
   }
   
-  Gem *tmp = m_gems[gemOne.first][gemOne.second];
-  m_gems[gemOne.first][gemOne.second] = m_gems[gemTwo.first][gemTwo.second];
-  m_gems[gemTwo.first][gemTwo.second] = tmp;
+//  Gem *tmp = m_gems[gemOne.first][gemOne.second];
+//  m_gems[gemOne.first][gemOne.second] = m_gems[gemTwo.first][gemTwo.second];
+//  m_gems[gemTwo.first][gemTwo.second] = tmp;
 
   return true;
 }
@@ -93,7 +95,7 @@ void Board::draw()
       m_gems[i][j]->draw();
 }
 
-Gem *Board::getGem(int x, int y)
+GemController *Board::getGem(int x, int y)
 {
   return m_gems[x][y];
 }
@@ -121,7 +123,7 @@ std::pair<int,int> Board::getSize()
   return m_size;
 }
 
-std::string Board::getGemPath(Gem::GemType gt)
+std::string Board::getGemPath(GemType gt)
 {
   return m_gemRegistry[gt];
 }

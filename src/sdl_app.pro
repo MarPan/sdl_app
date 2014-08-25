@@ -6,7 +6,6 @@ CONFIG -= qt
 SOURCES += \
             board.cpp \
             game.cpp \
-            gem.cpp \
             main.cpp \
             object.cpp \
             texturemanager.cpp \
@@ -18,12 +17,12 @@ SOURCES += \
     playtimestate.cpp \
     boardstate.cpp \
     gemstate.cpp \
+    gemcontroller.cpp
 
 
 HEADERS += \
             board.h \
             game.h \
-            gem.h \
             object.h \
             texturemanager.h \
             utilities.h \
@@ -35,6 +34,7 @@ HEADERS += \
     boardstate.h \
     multiplatformSDL.h \
     gemstate.h \
+    gemcontroller.h
 
 INCLUDEPATH += ../SDL2-bin/include
 INCLUDEPATH += ../SDL2_image-bin/x86_64-w64-mingw32/include
