@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
   object.registerObserver(ObjectEvent::DESTINATION_REACHED, std::bind(&XXX::foo, xxx));
   object.emitThisShit();
   std::cout.flush();
-  return 45;
+//  return 45;
 
   theGame.init();
   theGame.run();

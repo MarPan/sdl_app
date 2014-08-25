@@ -13,3 +13,9 @@ SDL2-bin/
 *.ipch
 *.docx#
 *.orig
+*.o
+*.Debug
+build-sdl_app-Desktop_Qt_5_3_MinGW_32bit-Debug/Makefile
+build-sdl_app-Desktop_Qt_5_3_MinGW_32bit-Debug/Makefile.Release
+build-sdl_app-Desktop_Qt_5_3_MinGW_32bit-Debug/debug/sdl_app.exe
+build-sdl_app-Desktop_Qt_5_3_MinGW_32bit-Debug/object_script.sdl_app.Release

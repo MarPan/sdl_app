@@ -39,16 +39,17 @@ HEADERS += \
     boardlogic.h \
     notifier.h
 
-INCLUDEPATH += ../SDL2-bin/include
-INCLUDEPATH += ../SDL2_image-bin/x86_64-w64-mingw32/include
+INCLUDEPATH += ../Libraries/SDL2-2.0.3/include
+INCLUDEPATH += ../Libraries/SDL2_image-2.0.0/include
 
 DEFINES += SDL_MAIN_HANDLED
 
 LIBS += \
-        -L../SDL2_image-bin/i686-w64-mingw32/lib \
-        #-L../SDL2_image-bin/x86_64-w64-mingw32/lib \
-        -L../SDL2-bin/lib/x86 \
+        -L../Libraries/SDL2_image-2.0.0/lib/x86 \
+        -L../Libraries/SDL2-2.0.3/lib/x86 \
         -lSDL2 -lSDL2_image #-lSDL2_ttf -lSDL2_mixer
+
+DESTDIR = ../Bejeweled/Debug/
 
 unix {
     LIBS += `sdl2-config --libs`

@@ -44,7 +44,7 @@ Board::Board(int rows, int cols)
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
   for (int i = 0; i < m_size.first; i++) {
     for (int j = 0; j < m_size.second; j++) {
-      m_gems[i].push_back(new GemController(i,j, this));
+      m_gems[i][j] = new GemController(i,j, this);
       m_gems[i][j]->setType(GemType(rand() % GT_COUNT));
       }
     }
