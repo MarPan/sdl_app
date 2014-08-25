@@ -41,11 +41,11 @@ public:
   std::pair<int,int> getSelectedGem() const;
 
 private:
+  std::pair<int,int> m_size;
   std::string m_backgroundPath;
   int m_gemWidth;
   std::vector<std::vector<GemController*>> m_gems;
   std::pair<int,int> m_gemsOffset;
-  std::pair<int,int> m_size;
   std::map<GemType, std::string> m_gemRegistry;
   std::pair<int,int> m_selectedGem;
 };

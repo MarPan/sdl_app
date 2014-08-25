@@ -16,6 +16,11 @@ void GemState::draw()
   m_gem->draw();
 }
 
+void GemState::update(float dt)
+{
+  m_gem->update(dt);
+}
+
 GemState *GemState::onClicked()
 {
   return nullptr  ;

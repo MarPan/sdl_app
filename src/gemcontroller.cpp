@@ -16,6 +16,14 @@ void GemController::setCoords(std::pair<int,int> coords)
   m_gem->setPosition(computePosition(coords));
 }
 
+
+void GemController::moveTo(std::pair<int,int> coords)
+{
+  m_logicalCoords = coords;
+  std::pair<int,int> destination = computePosition(coords);
+  m_gem->setDestination(destination);
+}
+
 void GemController::setType(GemType type)
 {
   m_type = type;
@@ -35,11 +43,6 @@ std::pair<int,int> GemController::computePosition(std::pair<int,int> coords)
   tileMiddle.second -= m_gem->getSize().second / 2;
 
   return tileMiddle;
-  //m_gem->setPosition(tileMiddle);
-
-    std::cout << "From " << coords.first << "," << coords.second <<
-                 "to   " << tileMiddle.first << "," << tileMiddle.second << std::endl;
-
 }
 
 void GemController::update(float dt)
@@ -67,7 +70,6 @@ Board* GemController::getBoard()
 {
   return m_pBoard;
 }
-
 
 GemController::~GemController()
 {

@@ -69,13 +69,11 @@ bool Board::swapGems(std::pair<int,int> gemOne, std::pair<int,int> gemTwo)
             << " with " << gemTwo.first << " " << gemTwo.second << std::endl;
   {
   std::swap(m_gems[gemOne.first][gemOne.second], m_gems[gemTwo.first][gemTwo.second]);
-  m_gems[gemOne.first][gemOne.second]->setCoords(gemOne);
-  m_gems[gemTwo.first][gemTwo.second]->setCoords(gemTwo);
+  m_gems[gemOne.first][gemOne.second]->moveTo(gemOne);
+  m_gems[gemTwo.first][gemTwo.second]->moveTo(gemTwo);
+//  m_gems[gemOne.first][gemOne.second]->setCoords(gemOne);
+//  m_gems[gemTwo.first][gemTwo.second]->setCoords(gemTwo);
   }
-  
-//  Gem *tmp = m_gems[gemOne.first][gemOne.second];
-//  m_gems[gemOne.first][gemOne.second] = m_gems[gemTwo.first][gemTwo.second];
-//  m_gems[gemTwo.first][gemTwo.second] = tmp;
 
   return true;
 }

@@ -5,12 +5,15 @@ GameState::GameState()
 {
 }
 
+GameState::~GameState()
+{ }
+
 void GameState::onClick(int x, int y)
 {
   //std::cout << "Gamestate::onClick base method undefined (" << x << ", " << y << ")"  << std::endl;
 }
 
-void GameState::update(int dt)
+void GameState::update(float dt)
 {
   //std::cout << "Gamestate::update base method undefined" << std::endl;
 }

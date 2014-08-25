@@ -21,6 +21,7 @@ public:
   GemController(int x, int y, Board* board);
   ~GemController();
   void setCoords(std::pair<int,int> coords);
+  void moveTo(std::pair<int,int> coords);
 
   // we need those to forward them to m_gem
   void update(float dt);

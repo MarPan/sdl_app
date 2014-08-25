@@ -5,9 +5,10 @@ class GameState
 {
 public:
   GameState();
+  virtual ~GameState();
 
   virtual void onClick(int x, int y);
-  virtual void update(int dt);
+  virtual void update(float dt);
   virtual void draw();
 };
 

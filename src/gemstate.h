@@ -12,7 +12,7 @@ class GemState : public State
 {
 public:
   GemState(Object *gem);
-  virtual void update(float dt) {};
+  virtual void update(float dt);
   virtual void draw();
   virtual GemState* onClicked();
 protected:

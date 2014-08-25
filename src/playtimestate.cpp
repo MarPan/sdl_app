@@ -1,3 +1,4 @@
+#include <iostream>
 #include "playtimestate.h"
 
 PlayTimeState::PlayTimeState()
@@ -18,10 +19,4 @@ void PlayTimeState::draw()
 void PlayTimeState::onClick(int x, int y)
 {
   m_pBoard->onClick(x, y);
-  // TODO:
-  // propagate a click to a board
-  // then a board shall (depending on its state)
-  //  * select a gem
-  //  * swap new gem with previously selected
-  //  * (and so on)
 }
