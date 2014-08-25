@@ -3,15 +3,19 @@
 #include "board.h"
 #include "gemcontroller.h"
 #include "texturemanager.h"
+#include "boardlogic.h"
 
 Board::Board(int rows, int cols)
   : Object()
   , m_size(std::pair<int,int>(rows,cols))
   , m_backgroundPath("BackGround.jpg")
   , m_gemWidth(42)
+  , m_gems(rows, std::vector<GemController*>(cols))
   , m_gemsOffset(std::pair<int,int>(345,125))
 {
   setState(new BoardStates::IdleState(this));
+  m_boardLogic = new BoardLogic(rows, cols);
+
   std::srand(std::time(0));
 
   for (int i = 0; i < GT_COUNT; i++) {
@@ -38,15 +42,12 @@ Board::Board(int rows, int cols)
   }
 
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
-  for (int i = 0; i < m_size.first; i++)
-  {
-    m_gems.push_back(std::vector<GemController*>());
-    for (int j = 0; j < m_size.second; j++)
-      {
+  for (int i = 0; i < m_size.first; i++) {
+    for (int j = 0; j < m_size.second; j++) {
       m_gems[i].push_back(new GemController(i,j, this));
       m_gems[i][j]->setType(GemType(rand() % GT_COUNT));
       }
-  }
+    }
 }
 
 Board::~Board()
@@ -93,9 +94,9 @@ void Board::draw()
       m_gems[i][j]->draw();
 }
 
-GemController *Board::getGem(int x, int y)
+bool Board::clickGem(int x, int y)
 {
-  return m_gems[x][y];
+  return m_gems[x][y]->onClicked();
 }
 
 void Board::onClick(int x, int y)

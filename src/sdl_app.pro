@@ -17,7 +17,8 @@ SOURCES += \
     playtimestate.cpp \
     boardstate.cpp \
     gemstate.cpp \
-    gemcontroller.cpp
+    gemcontroller.cpp \
+    boardlogic.cpp
 
 
 HEADERS += \
@@ -34,7 +35,9 @@ HEADERS += \
     boardstate.h \
     multiplatformSDL.h \
     gemstate.h \
-    gemcontroller.h
+    gemcontroller.h \
+    boardlogic.h \
+    notifier.h
 
 INCLUDEPATH += ../SDL2-bin/include
 INCLUDEPATH += ../SDL2_image-bin/x86_64-w64-mingw32/include

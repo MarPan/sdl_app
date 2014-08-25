@@ -35,7 +35,7 @@ public:
   int getTileWidth();
   std::pair<int,int> getSize();
   std::string getGemPath(GemType);
-  GemController *getGem(int x, int y);  // I don't like it
+  bool clickGem(int x, int y);
 
   void setSelectedGem(std::pair<int,int> coords);
   std::pair<int,int> getSelectedGem() const;
@@ -48,6 +48,7 @@ private:
   std::pair<int,int> m_gemsOffset;
   std::map<GemType, std::string> m_gemRegistry;
   std::pair<int,int> m_selectedGem;
+  BoardLogic *m_boardLogic;
 };
 
 #endif // BOARD_H

@@ -56,7 +56,7 @@ BoardState* IdleState::onClick(int x, int y)
 {
   auto coords = translateToTileCoords(x,y);
   if (coords.first != -1) {
-    if (m_pBoard->getGem(coords.first, coords.second)->onClicked())
+    if (m_pBoard->clickGem(coords.first, coords.second))
       m_pBoard->setSelectedGem(coords);
       std::cout << "Selected: " << coords.first << " " << coords.second << std::endl;
       return new SelectedState(m_pBoard);
@@ -79,9 +79,9 @@ BoardState* SelectedState::onClick(int x, int y)
   {
     m_pBoard->swapGems(m_pBoard->getSelectedGem(), coords);
   } else if (prevCoords.first == coords.first && prevCoords.second == coords.second) {
-    m_pBoard->getGem(coords.first, coords.second)->onClicked();
+    m_pBoard->clickGem(coords.first, coords.second);
   } else {
-    m_pBoard->getGem(prevCoords.first, prevCoords.second)->onClicked();
+    m_pBoard->clickGem(prevCoords.first, prevCoords.second);
   }
   return new IdleState(m_pBoard);
 }

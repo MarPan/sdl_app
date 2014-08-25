@@ -3,9 +3,12 @@
 
 #include <utility>
 #include <string>
+#include "notifier.h"
 #include "multiplatformSDL.h"
 
-class Object
+enum class ObjectEvent { DESTINATION_REACHED };
+
+class Object : public Notifier<ObjectEvent>
 {
 public:
   Object();
@@ -22,6 +25,8 @@ public:
   void setTexId(std::string texId);
   void setPosition(std::pair<int,int> position);
   void setDestination(std::pair<int,int> position);
+
+  void emitThisShit() { notify(ObjectEvent::DESTINATION_REACHED); }
 
 protected:
   std::pair<int,int> m_position;
