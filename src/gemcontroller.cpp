@@ -24,7 +24,7 @@ void GemController::moveTo(std::pair<int,int> coords)
   m_gem->setDestination(destination);
   m_gem->registerObserver(ObjectEvent::DESTINATION_REACHED,
                           std::bind(&GemController::onGemReachedDestination, this));
-
+  // do we need to unregister, ever? I don't think so.
 }
 
 void GemController::setType(GemType type)

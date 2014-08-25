@@ -14,13 +14,6 @@ public:
 
 int main(int argc, char *argv[])
 {
-  Object object;
-  XXX xxx;
-  object.registerObserver(ObjectEvent::DESTINATION_REACHED, std::bind(&XXX::foo, xxx));
-  object.emitThisShit();
-  std::cout.flush();
-//  return 45;
-
   theGame.init();
   theGame.run();
   return 0;

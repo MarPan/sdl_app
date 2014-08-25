@@ -10,6 +10,8 @@ template <typename Event>
 class Notifier
 {
 public:
+  // disclaimer: this is only a slight modification of
+  // C++11 Observer pattern from juanchopanzacpp.wordpress.com.
   template <typename Observer>
   void registerObserver(const Event& event, Observer&& observer)
   {
@@ -24,7 +26,7 @@ public:
 
   void notify(const Event& event) const
   {
-    if (m_observers.empty()) // not sure why it crashed w/o this
+    if (m_observers.empty())
       return;
     for (const auto& observer : m_observers.at(event))
       observer();
