@@ -24,7 +24,10 @@ public:
 
   void notify(const Event& event) const
   {
-    for (const auto& obs : m_observers.at(event)) obs();
+    if (m_observers.empty()) // not sure why it crashed w/o this
+      return;
+    for (const auto& observer : m_observers.at(event))
+      observer();
   }
 
 private:

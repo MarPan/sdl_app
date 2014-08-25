@@ -7,6 +7,7 @@
 
 Object::Object()
   : m_speed(1,1)
+  , m_destinationReached(true)
 { }
 
 void Object::print(std::string str = "")
@@ -18,8 +19,14 @@ void Object::print(std::string str = "")
 void Object::update(float dt)
 {
   if (m_destination == m_position) {
+    if (m_destinationReached == false) {
+      notify(ObjectEvent::DESTINATION_REACHED);
+    }
+    m_destinationReached = true;
     return;
   }
+
+  m_destinationReached ? m_destinationReached = false : m_destinationReached;
 
   int hDir = 0, vDir = 0;
   if (m_destination.first - m_position.first > 0) {

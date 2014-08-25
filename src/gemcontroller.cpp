@@ -22,6 +22,9 @@ void GemController::moveTo(std::pair<int,int> coords)
   m_logicalCoords = coords;
   std::pair<int,int> destination = computePosition(coords);
   m_gem->setDestination(destination);
+  m_gem->registerObserver(ObjectEvent::DESTINATION_REACHED,
+                          std::bind(&GemController::onGemReachedDestination, this));
+
 }
 
 void GemController::setType(GemType type)
@@ -31,6 +34,10 @@ void GemController::setType(GemType type)
   m_gem->setPosition(computePosition(m_logicalCoords));  // because size might have changed
 }
 
+void GemController::onGemReachedDestination()
+{
+  std::cout << "SQUEEEEEEEEEEEEEEE" << std::endl;
+}
 
 std::pair<int,int> GemController::computePosition(std::pair<int,int> coords)
 {

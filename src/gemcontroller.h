@@ -36,6 +36,8 @@ private:
   GemType m_type;
   std::pair<int,int> m_logicalCoords;  // remember to call computeDrawingOrign after changing these coords!
   Board* m_pBoard;
+
+  void onGemReachedDestination();
   std::pair<int,int> computePosition(std::pair<int,int> coords);
 };
 
