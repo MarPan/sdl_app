@@ -28,6 +28,9 @@ public:
 
 
 private:
+  bool isMovePossible(Coordinates src, Coordinates dst);
+  bool findConnections(const std::vector<std::vector<GemType>>& logicBoard, MoveInfo& moveInfo);
+
   std::vector<std::vector<GemType>> m_logicBoard;
 };
 

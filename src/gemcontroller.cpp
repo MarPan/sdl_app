@@ -7,24 +7,26 @@ GemController::GemController(int x, int y, Board* board)
   , m_pBoard(board)
 {
   setCoords(std::make_pair(x, y));
-  setState(new GemStates::GemIdleState(m_gem));;
+  setState(new GemStates::GemIdleState(m_gem));
+  m_gem->registerObserver(ObjectEvent::DESTINATION_REACHED,
+                          std::bind(&GemController::onGemReachedDestination, this));
+  // do we need to unregister, ever? I don't think so.
 }
 
 void GemController::setCoords(Coordinates coords)
 {
+  //std::cout << "Set coords called \n" ;
   m_logicalCoords = coords;
   m_gem->setPosition(computePosition(coords));
 }
 
 
-void GemController::moveTo(Coordinates coords)
+void GemController::addMoveTo(Coordinates coords)
 {
+  //std::cout << "From (" << m_logicalCoords.first << "," << m_logicalCoords.second << ") to " << "(" << coords.first << "," << coords.second << ")\n";;
   m_logicalCoords = coords;
   Coordinates destination = computePosition(coords);
-  m_gem->setDestination(destination);
-  m_gem->registerObserver(ObjectEvent::DESTINATION_REACHED,
-                          std::bind(&GemController::onGemReachedDestination, this));
-  // do we need to unregister, ever? I don't think so.
+  m_gem->addDestination(destination);
 }
 
 void GemController::setType(GemType type)
@@ -36,7 +38,7 @@ void GemController::setType(GemType type)
 
 void GemController::onGemReachedDestination()
 {
-  std::cout << "SQUEEEEEEEEEEEEEEE" << std::endl;
+  m_pBoard->gemFinishedMoving(this);
 }
 
 Coordinates GemController::computePosition(Coordinates coords)
@@ -66,6 +68,7 @@ void GemController::draw()
 // TODO this seems like a poor solution for some reason
 bool GemController::onClicked()
 {
+  std::cout << "(" << m_logicalCoords.first << "," << m_logicalCoords.second << ")" << std::endl;
   GemStates::GemState *state = getState()->onClicked();
   if (state) {
     setState(state);

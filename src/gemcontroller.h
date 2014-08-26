@@ -21,7 +21,7 @@ public:
   GemController(int x, int y, Board* board);
   ~GemController();
   void setCoords(Coordinates coords);
-  void moveTo(Coordinates coords);
+  void addMoveTo(Coordinates coords);
 
   // we need those to forward them to m_gem
   void update(float dt);
@@ -29,6 +29,7 @@ public:
   bool onClicked();
 
   void setType(GemType type);
+  GemType getType() { return m_type; }
   Board* getBoard();
 
 private:

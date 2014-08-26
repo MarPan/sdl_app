@@ -1,6 +1,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include <deque>
 #include "utilities.h"
 #include "notifier.h"
 #include "multiplatformSDL.h"
@@ -23,15 +24,15 @@ public:
   void setSize(Coordinates size);
   void setTexId(std::string texId);
   void setPosition(Coordinates position);
-  void setDestination(Coordinates position);
+  void setDestination(Coordinates position); //< clears destinations and sets a new one
+  void addDestination(Coordinates position);
 
 protected:
   Coordinates m_position;
   std::pair<float, float> m_speed;  //< speed in pixels per second
   Coordinates m_size;
-  Coordinates m_destination;  //< object will be moved towards this point
+  std::deque<Coordinates> m_destinations;  //< object will be moved towards this point
   std::string m_texId;
-  bool m_destinationReached;
 };
 
 #endif // OBJECT_H

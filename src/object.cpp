@@ -7,7 +7,6 @@
 
 Object::Object()
   : m_speed(1,1)
-  , m_destinationReached(true)
 { }
 
 void Object::print(std::string str = "")
@@ -18,36 +17,41 @@ void Object::print(std::string str = "")
 
 void Object::update(float dt)
 {
-  if (m_destination == m_position) {
-    if (m_destinationReached == false) {
-      notify(ObjectEvent::DESTINATION_REACHED);
-    }
-    m_destinationReached = true;
+  if (m_destinations.empty()) {
     return;
   }
 
-  m_destinationReached ? m_destinationReached = false : m_destinationReached;
+  Coordinates& destination = m_destinations.front();
+
+  if (destination == m_position) {
+    m_destinations.pop_front();
+    if (m_destinations.empty()) {
+      notify(ObjectEvent::DESTINATION_REACHED);
+    }
+    return;
+  }
 
   int hDir = 0, vDir = 0;
-  if (m_destination.first - m_position.first > 0) {
+  if (destination.first - m_position.first > 0) {
     hDir = 1;
-  } else if (m_destination.first - m_position.first < 0) {
+  } else if (destination.first - m_position.first < 0) {
     hDir = -1;
   }
 
-  if (m_destination.second - m_position.second > 0) {
+  if (destination.second - m_position.second > 0) {
     vDir = 1;
-  } else if (m_destination.second - m_position.second < 0) {
+  } else if (destination.second - m_position.second < 0) {
     vDir = -1;
   }
 
+  // not ideal, since I will have a set minimal speed 1 pixel per frame
+  // maybe I should store an offset as a float
   m_position.first += std::ceil(m_speed.first * dt) * hDir;
   m_position.second += std::ceil(m_speed.second * dt) * vDir;
 }
 
 void Object::draw()
 {
-//  print(m_texId);
   theTextureManager.draw(m_texId,
                          m_position.first,
                          m_position.second,
@@ -84,12 +88,19 @@ std::string Object::getTexId()
 
 void Object::setPosition(Coordinates position)
 {
+  std::cout << "setPosition " << m_texId << std::endl;
   m_position = position;
-  m_destination = position;
+  m_destinations.clear();
 }
 
 void Object::setDestination(Coordinates destination)
 {
-  m_destination = destination;
+  std::cout << "setDestination";
+  m_destinations.clear();
+  addDestination(destination);
 }
 
+void Object::addDestination(Coordinates destination)
+{
+  m_destinations.push_back(destination);
+}
