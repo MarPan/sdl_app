@@ -115,7 +115,6 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
   for (auto& a : moveInfo.getAnnihilations()) {
     // how do I deal with gem removal? Do I simply delete them?
     // or do I create "invisible" gem?
-    std::cout << "removing" << "("<< a.first << "," << a.second << ")\n";
     m_gems[a.first][a.second]->remove();
   }
 
@@ -125,7 +124,7 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
     }
     delete m_gems[c.first][c.second];
     m_gems[c.first][c.second] =
-          new GemController(c.first, 0, this); // create it over the board
+          new GemController(c.first, -1, this); // create it over the board
     m_gems[c.first][c.second]->setType(GemType(rand()%GemType::GT_COUNT));
     m_gems[c.first][c.second]->addMoveTo(c); // let it fall to its place
   }

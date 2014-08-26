@@ -6,7 +6,7 @@
 #include "game.h"
 
 Object::Object()
-  : m_speed(1,1)
+  : m_speed(250,250)
   , m_angle(0)
   , m_rotationSpeed(0)
   , m_rotationToDo(0)

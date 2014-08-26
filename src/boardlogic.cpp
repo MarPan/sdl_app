@@ -9,7 +9,7 @@ void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
 {
   std::cout << "Src: " << coordsToString(src) << std::endl;
 //  moveInfo.addInvalidSwap(InvalidSwap(src, dst));
-  moveInfo.addAnnihilation(src);
+  moveInfo.addCreation(src);
   return;
   moveInfo.addInvalidSwap(InvalidSwap(src, dst));
   moveInfo.addInvalidSwap(InvalidSwap(src, dst));
