@@ -27,12 +27,23 @@ public:
   void setDestination(Coordinates position); //< clears destinations and sets a new one
   void addDestination(Coordinates position);
 
+  void setRotation(double angle, double speed);
+
 protected:
   Coordinates m_position;
   std::pair<float, float> m_speed;  //< speed in pixels per second
-  Coordinates m_size;
   std::deque<Coordinates> m_destinations;  //< object will be moved towards this point
+
+  Coordinates m_size;
   std::string m_texId;
+
+  double m_angle;
+  double m_rotationSpeed;  // in degrees per second, so 360 means one turnaround per second
+  double m_rotationToDo;
+  short int m_rotationDirection; // -1 or 1
+
+  void move(float dt);
+  void rotate(float dt);
 };
 
 #endif // OBJECT_H

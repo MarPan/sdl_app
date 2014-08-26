@@ -11,6 +11,10 @@ GemController::GemController(int x, int y, Board* board)
   m_gem->registerObserver(ObjectEvent::DESTINATION_REACHED,
                           std::bind(&GemController::onGemReachedDestination, this));
   // do we need to unregister, ever? I don't think so.
+
+  if (x == 0 && y == 0) {
+    m_gem->setRotation(180, 360);
+  }
 }
 
 void GemController::setCoords(Coordinates coords)

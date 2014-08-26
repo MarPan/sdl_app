@@ -7,6 +7,10 @@
 
 Object::Object()
   : m_speed(1,1)
+  , m_angle(0)
+  , m_rotationSpeed(0)
+  , m_rotationToDo(0)
+  , m_rotationDirection(1)
 { }
 
 void Object::print(std::string str = "")
@@ -16,6 +20,28 @@ void Object::print(std::string str = "")
 }
 
 void Object::update(float dt)
+{
+  move(dt);
+  rotate(dt);
+}
+
+void Object::rotate(float dt)
+{
+  if (m_rotationSpeed == 0 || m_rotationToDo == 0) {
+    return;
+  }
+
+  double rotationInThisFrame = m_rotationSpeed * dt;
+  if (rotationInThisFrame > m_rotationToDo) {
+    m_angle += m_rotationToDo * m_rotationDirection;
+    m_rotationToDo = 0;
+  } else {
+    m_rotationToDo -= rotationInThisFrame;
+    m_angle += rotationInThisFrame * m_rotationDirection;
+  }
+}
+
+void Object::move(float dt)
 {
   if (m_destinations.empty()) {
     return;
@@ -56,7 +82,8 @@ void Object::draw()
                          m_position.first,
                          m_position.second,
                          getSize().first,
-                         getSize().second
+                         getSize().second,
+                         m_angle
                          );
 }
 
@@ -84,6 +111,12 @@ Coordinates Object::getSize()
 std::string Object::getTexId()
 {
   return m_texId;
+}
+
+void Object::setRotation(double angle, double speed)
+{
+  m_rotationSpeed = speed;
+  m_rotationToDo = angle;
 }
 
 void Object::setPosition(Coordinates position)

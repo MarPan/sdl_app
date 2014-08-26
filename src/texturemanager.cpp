@@ -49,17 +49,17 @@ std::pair<int,int> TextureManager::getSize(std::string id)
   return retVal;
 }
 
-void TextureManager::draw(std::string id, int x, int y, int width, int height)
+void TextureManager::draw(std::string id, int x, int y, int width, int height, double angle)
 {
   SDL_Rect destRect;
   destRect.w = width;
   destRect.h = height;
   destRect.x = x;
   destRect.y = y;
-  draw(id, destRect);
+  draw(id, destRect, angle);
 }
 
-void TextureManager::draw(std::string id, const SDL_Rect& rect)
+void TextureManager::draw(std::string id, const SDL_Rect& rect, double angle)
 {
   SDL_Rect srcRect;
   const SDL_Rect &destRect = rect;
@@ -68,7 +68,7 @@ void TextureManager::draw(std::string id, const SDL_Rect& rect)
   srcRect.w = destRect.w;
   srcRect.h = destRect.h;
 
-  int retVal = SDL_RenderCopyEx(theGame.getRenderer(), m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
+  int retVal = SDL_RenderCopyEx(theGame.getRenderer(), m_textureMap[id], &srcRect, &destRect, angle, NULL, SDL_FLIP_NONE);
   if (retVal != 0) {
     std::string msg = "Drawing texture " + id + " failed";
     logSDLError(std::cout, msg);
