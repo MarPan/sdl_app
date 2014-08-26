@@ -3,13 +3,14 @@
 
 #include <vector>
 #include "gemcontroller.h"
+#include "moveinfo.h"
 
 class BoardLogic
 {
 public:
   BoardLogic(int x, int y);
-//  void swapGems(std::pair<int,int> src, std::pair<int,int> dst, MoveInfo& moveInfo);
-//  void updateBoard(MoveInfo& moveInfo);
+  void swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo);
+  void updateBoard(MoveInfo& moveInfo);
   /*
    * PS approach:
    * każdy ruch, każde cokolwiek na logicznej planszy generuje ruch

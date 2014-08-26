@@ -20,8 +20,8 @@ class GemController : private StateMachine<GemStates::GemState*>
 public:
   GemController(int x, int y, Board* board);
   ~GemController();
-  void setCoords(std::pair<int,int> coords);
-  void moveTo(std::pair<int,int> coords);
+  void setCoords(Coordinates coords);
+  void moveTo(Coordinates coords);
 
   // we need those to forward them to m_gem
   void update(float dt);
@@ -34,11 +34,11 @@ public:
 private:
   Object* m_gem;
   GemType m_type;
-  std::pair<int,int> m_logicalCoords;  // remember to call computeDrawingOrign after changing these coords!
+  Coordinates m_logicalCoords;  // remember to call computeDrawingOrign after changing these coords!
   Board* m_pBoard;
 
   void onGemReachedDestination();
-  std::pair<int,int> computePosition(std::pair<int,int> coords);
+  Coordinates computePosition(Coordinates coords);
 };
 
 #endif // GEMCONTROLLER_H

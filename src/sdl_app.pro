@@ -18,7 +18,8 @@ SOURCES += \
     boardstate.cpp \
     gemstate.cpp \
     gemcontroller.cpp \
-    boardlogic.cpp
+    boardlogic.cpp \
+    moveinfo.cpp
 
 
 HEADERS += \
@@ -37,7 +38,8 @@ HEADERS += \
     gemstate.h \
     gemcontroller.h \
     boardlogic.h \
-    notifier.h
+    notifier.h \
+    moveinfo.h
 
 INCLUDEPATH += ../Libraries/SDL2-2.0.3/include
 INCLUDEPATH += ../Libraries/SDL2_image-2.0.0/include

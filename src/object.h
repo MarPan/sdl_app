@@ -1,8 +1,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <utility>
-#include <string>
+#include "utilities.h"
 #include "notifier.h"
 #include "multiplatformSDL.h"
 
@@ -18,19 +17,19 @@ public:
   virtual void draw();
   void print(std::string str);
 
-  std::pair<int,int> getPosition();
-  std::pair<int,int> getSize();  
+  Coordinates getPosition();
+  Coordinates getSize();  
   std::string getTexId();
-  void setSize(std::pair<int,int> size);
+  void setSize(Coordinates size);
   void setTexId(std::string texId);
-  void setPosition(std::pair<int,int> position);
-  void setDestination(std::pair<int,int> position);
+  void setPosition(Coordinates position);
+  void setDestination(Coordinates position);
 
 protected:
-  std::pair<int,int> m_position;
+  Coordinates m_position;
   std::pair<float, float> m_speed;  //< speed in pixels per second
-  std::pair<int, int> m_size;
-  std::pair<int, int> m_destination;  //< object will be moved towards this point
+  Coordinates m_size;
+  Coordinates m_destination;  //< object will be moved towards this point
   std::string m_texId;
   bool m_destinationReached;
 };

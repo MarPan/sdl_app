@@ -8,7 +8,10 @@
 
 #include <string>
 #include <iostream>
+#include <utility>
 #include "multiplatformSDL.h"
+
+typedef std::pair<int,int> Coordinates;
 
 // from http://www.willusher.io/
 /**

@@ -10,17 +10,17 @@ GemController::GemController(int x, int y, Board* board)
   setState(new GemStates::GemIdleState(m_gem));;
 }
 
-void GemController::setCoords(std::pair<int,int> coords)
+void GemController::setCoords(Coordinates coords)
 {
   m_logicalCoords = coords;
   m_gem->setPosition(computePosition(coords));
 }
 
 
-void GemController::moveTo(std::pair<int,int> coords)
+void GemController::moveTo(Coordinates coords)
 {
   m_logicalCoords = coords;
-  std::pair<int,int> destination = computePosition(coords);
+  Coordinates destination = computePosition(coords);
   m_gem->setDestination(destination);
   m_gem->registerObserver(ObjectEvent::DESTINATION_REACHED,
                           std::bind(&GemController::onGemReachedDestination, this));
@@ -39,9 +39,9 @@ void GemController::onGemReachedDestination()
   std::cout << "SQUEEEEEEEEEEEEEEE" << std::endl;
 }
 
-std::pair<int,int> GemController::computePosition(std::pair<int,int> coords)
+Coordinates GemController::computePosition(Coordinates coords)
 {
-  std::pair<int,int> tileMiddle(getBoard()->getGemsOffset().first +
+  Coordinates tileMiddle(getBoard()->getGemsOffset().first +
                                 coords.first * getBoard()->getTileWidth(),
                                 getBoard()->getGemsOffset().second +
                                 coords.second * getBoard()->getTileWidth());

@@ -10,7 +10,7 @@
 #else
   #include <SDL2/SDL.h>
   #include <SDL2/SDL_image.h>
-  const std::string resourcePath = "../resources/";
+  const std::string resourcePath = "../../resources/";
 #endif
 
 #endif // MULTIPLATFORMSDL_H

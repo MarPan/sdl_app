@@ -1,8 +1,7 @@
 #ifndef BOARDSTATE_H
 #define BOARDSTATE_H
 
-#include <utility>
-
+#include "utilities.h"
 class Board;
 
 namespace BoardStates {
@@ -17,7 +16,7 @@ public:
   virtual void update(float dt);
   virtual void draw();  
 protected:
-  std::pair<int,int> translateToTileCoords(int x, int y);
+  Coordinates translateToTileCoords(int x, int y);
   Board *m_pBoard;
 };
 

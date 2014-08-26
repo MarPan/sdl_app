@@ -7,11 +7,11 @@
 
 Board::Board(int rows, int cols)
   : Object()
-  , m_size(std::pair<int,int>(rows,cols))
+  , m_size(Coordinates(rows,cols))
   , m_backgroundPath("BackGround.jpg")
   , m_gemWidth(42)
   , m_gems(rows, std::vector<GemController*>(cols))
-  , m_gemsOffset(std::pair<int,int>(345,125))
+  , m_gemsOffset(Coordinates(345,125))
 {
   setState(new BoardStates::IdleState(this));
   m_boardLogic = new BoardLogic(rows, cols);
@@ -64,19 +64,43 @@ void Board::fillBoard()
       m_gems[i][j]->setType(GemType(rand() % GT_COUNT));
 }
 
-bool Board::swapGems(std::pair<int,int> gemOne, std::pair<int,int> gemTwo)
+bool Board::swapGems(Coordinates gemOne, Coordinates gemTwo)
 {
   std::cout << "swapping " << gemOne.first << " " << gemOne.second
             << " with " << gemTwo.first << " " << gemTwo.second << std::endl;
-  {
   std::swap(m_gems[gemOne.first][gemOne.second], m_gems[gemTwo.first][gemTwo.second]);
+
+  m_gemsInMotion.push_back(m_gems[gemOne.first][gemOne.second]);
+  m_gemsInMotion.push_back(m_gems[gemTwo.first][gemTwo.second]);
   m_gems[gemOne.first][gemOne.second]->moveTo(gemOne);
   m_gems[gemTwo.first][gemTwo.second]->moveTo(gemTwo);
-//  m_gems[gemOne.first][gemOne.second]->setCoords(gemOne);
-//  m_gems[gemTwo.first][gemTwo.second]->setCoords(gemTwo);
-  }
+  // it might be beneficial, to store all moving gems
+  // I will call BoardLogic::tick() only when the last gem stopped moving
 
   return true;
+}
+
+void Board::gemFinishedMoving(GemController *gem)
+{
+  for (int i = 0; i < m_gemsInMotion.size(); i++) {
+    if (gem == m_gemsInMotion[i]) {
+      m_gemsInMotion.erase(m_gemsInMotion.begin() + i);
+      break;
+    }
+  }
+  MoveInfo moveInfo;
+  if (m_gemsInMotion.empty())
+    m_boardLogic->updateBoard(moveInfo);
+
+  parseMoveInfo(moveInfo);
+}
+
+void Board::parseMoveInfo(const MoveInfo& moveInfo)
+{
+  for (auto& is : moveInfo.getInvalidSwaps()) {
+    // set multiple destinations
+    // for both gems
+  }
 }
 
 void Board::update(float dt)
@@ -107,7 +131,7 @@ void Board::onClick(int x, int y)
   }
 }
 
-std::pair<int,int> Board::getGemsOffset()
+Coordinates Board::getGemsOffset()
 {
   return m_gemsOffset;
 }
@@ -117,7 +141,7 @@ int Board::getTileWidth()
   return m_gemWidth;
 }
 
-std::pair<int,int> Board::getSize()
+Coordinates Board::getSize()
 {
   return m_size;
 }
@@ -127,13 +151,13 @@ std::string Board::getGemPath(GemType gt)
   return m_gemRegistry[gt];
 }
 
-void Board::setSelectedGem(std::pair<int,int> coords)
+void Board::setSelectedGem(Coordinates coords)
 {
   m_selectedGem = coords;
 }
 
 
-std::pair<int,int> Board::getSelectedGem() const
+Coordinates Board::getSelectedGem() const
 {
   return m_selectedGem;
 }

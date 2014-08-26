@@ -10,7 +10,7 @@ BoardState::BoardState(Board *board)
 {
 }
 
-std::pair<int,int> BoardState::translateToTileCoords(int x, int y)
+Coordinates BoardState::translateToTileCoords(int x, int y)
 {
   auto retVal = std::make_pair(-1, -1);
   x -= m_pBoard->getGemsOffset().first - m_pBoard->getTileWidth() / 2;

@@ -7,6 +7,7 @@
 #include "statemachine.h"
 #include "boardstate.h"
 #include "gemcontroller.h"
+#include "moveinfo.h"
 
 class Gem;
 class BoardLogic;
@@ -23,32 +24,37 @@ public:
   void onClick(int x, int y);
 
   void fillBoard();
-  std::pair<int,int> func();
-  bool swapGems(std::pair<int,int> gemOne,
-                std::pair<int,int> gemTwo);
+  Coordinates func();
+  bool swapGems(Coordinates gemOne,
+                Coordinates gemTwo);
 
   // @args Logical coords
   void selectGem(int x, int y);
 
   // Drawing related stuff
-  std::pair<int,int> getGemsOffset();
+  Coordinates getGemsOffset();
   int getTileWidth();
-  std::pair<int,int> getSize();
+  Coordinates getSize();
   std::string getGemPath(GemType);
   bool clickGem(int x, int y);
 
-  void setSelectedGem(std::pair<int,int> coords);
-  std::pair<int,int> getSelectedGem() const;
+  void setSelectedGem(Coordinates coords);
+  Coordinates getSelectedGem() const;
+  void gemFinishedMoving(GemController *gem);
 
 private:
-  std::pair<int,int> m_size;
+  Coordinates m_size;
   std::string m_backgroundPath;
   int m_gemWidth;
   std::vector<std::vector<GemController*>> m_gems;
-  std::pair<int,int> m_gemsOffset;
+  Coordinates m_gemsOffset;
   std::map<GemType, std::string> m_gemRegistry;
-  std::pair<int,int> m_selectedGem;
+  Coordinates m_selectedGem;
   BoardLogic *m_boardLogic;
+
+  std::vector<GemController*> m_gemsInMotion;
+
+  void parseMoveInfo(const MoveInfo& moveInfo);
 };
 
 #endif // BOARD_H

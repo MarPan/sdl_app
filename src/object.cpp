@@ -56,7 +56,7 @@ void Object::draw()
                          );
 }
 
-void Object::setSize(std::pair<int,int> size)
+void Object::setSize(Coordinates size)
 {
   m_size = size;
 }
@@ -67,12 +67,12 @@ void Object::setTexId(std::string texId)
   setSize(theTextureManager.getSize(texId));
 }
 
-std::pair<int,int> Object::getPosition()
+Coordinates Object::getPosition()
 {
   return m_position;
 }
 
-std::pair<int,int> Object::getSize()
+Coordinates Object::getSize()
 {
   return m_size;
 }
@@ -82,13 +82,13 @@ std::string Object::getTexId()
   return m_texId;
 }
 
-void Object::setPosition(std::pair<int,int> position)
+void Object::setPosition(Coordinates position)
 {
   m_position = position;
   m_destination = position;
 }
 
-void Object::setDestination(std::pair<int,int> destination)
+void Object::setDestination(Coordinates destination)
 {
   m_destination = destination;
 }
