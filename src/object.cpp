@@ -13,6 +13,10 @@ Object::Object()
   , m_rotationDirection(1)
 { }
 
+Object::~Object()
+{
+}
+
 void Object::print(std::string str = "")
 {
   std::cout << str << " " << m_position.first << " " << m_position.second <<
@@ -35,6 +39,7 @@ void Object::rotate(float dt)
   if (rotationInThisFrame > m_rotationToDo) {
     m_angle += m_rotationToDo * m_rotationDirection;
     m_rotationToDo = 0;
+    notify(ObjectEvent::ROTATION_FINISHED);
   } else {
     m_rotationToDo -= rotationInThisFrame;
     m_angle += rotationInThisFrame * m_rotationDirection;

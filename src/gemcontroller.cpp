@@ -11,6 +11,8 @@ GemController::GemController(int x, int y, Board* board)
   setState(new GemStates::GemIdleState(m_gem));
   m_gem->registerObserver(ObjectEvent::DESTINATION_REACHED,
                           std::bind(&GemController::onGemReachedDestination, this));
+  m_gem->registerObserver(ObjectEvent::ROTATION_FINISHED,
+                          std::bind(&GemController::onGemFinishedRotation, this));
   // do we need to unregister, ever? I don't think so.
 }
 
@@ -47,6 +49,11 @@ void GemController::onGemReachedDestination()
   m_pBoard->gemFinishedMoving(this);
 }
 
+void GemController::onGemFinishedRotation()
+{
+  m_removed = true;
+}
+
 Coordinates GemController::computePosition(Coordinates coords)
 {
   Coordinates tileMiddle(getBoard()->getGemsOffset().first +
@@ -78,7 +85,6 @@ void GemController::draw()
 // TODO this seems like a poor solution for some reason
 bool GemController::onClicked()
 {
-  std::cout << "(" << m_logicalCoords.first << "," << m_logicalCoords.second << ")" << std::endl;
   GemStates::GemState *state = getState()->onClicked();
   if (state) {
     setState(state);
@@ -92,8 +98,9 @@ Board* GemController::getBoard()
 }
 
 void GemController::remove()
-{
-  m_removed = true;
+{  
+  setRotation(180, 1440);
+  // we should set m_removed only after rotation finishes
 }
 
 bool GemController::isRemoved()

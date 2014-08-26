@@ -6,14 +6,17 @@
 #include "notifier.h"
 #include "multiplatformSDL.h"
 
-enum class ObjectEvent { DESTINATION_REACHED };
+enum class ObjectEvent {
+  DESTINATION_REACHED,
+  ROTATION_FINISHED
+};
 
 class Object : public Notifier<ObjectEvent>
 {
 public:
   Object();
 
-  virtual ~Object() { }
+  virtual ~Object();
   virtual void update(float dt);
   virtual void draw();
   void print(std::string str);

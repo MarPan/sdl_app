@@ -13,6 +13,8 @@
 
 typedef std::pair<int,int> Coordinates;
 
+std::string coordsToString(const Coordinates &coords);
+
 // from http://www.willusher.io/
 /**
 * Log an SDL error with some error message to the output stream of our choice

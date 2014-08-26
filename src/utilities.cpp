@@ -1,5 +1,14 @@
+#include <sstream>
 #include "utilities.h"
 #include "multiplatformSDL.h"
+
+std::string coordsToString(const Coordinates &coords)
+{
+  std::stringstream ss;
+  ss << "("<< coords.first << "," << coords.second << ")";
+  return ss.str();
+}
+
 
 void logSDLError(std::ostream &os, const std::string &msg)
 {

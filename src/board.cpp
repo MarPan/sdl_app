@@ -113,14 +113,13 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
   }
 
   for (auto& a : moveInfo.getAnnihilations()) {
-    m_gems[a.first][a.first]->setRotation(180, 90);
     // how do I deal with gem removal? Do I simply delete them?
     // or do I create "invisible" gem?
-    m_gems[a.first][a.first]->remove();
+    std::cout << "removing" << "("<< a.first << "," << a.second << ")\n";
+    m_gems[a.first][a.second]->remove();
   }
 
   for (auto& c : moveInfo.getCreations()) {
-    //GemType type = m_gems[c.first][c.second]->getType();
     if (m_gems[c.first][c.second]->isRemoved() == false) {
       std::cout << "ERROR: creating new gem on top of a previous one\n";
     }

@@ -43,6 +43,7 @@ private:
   bool m_removed;
 
   void onGemReachedDestination();
+  void onGemFinishedRotation();
   Coordinates computePosition(Coordinates coords);
 };
 
