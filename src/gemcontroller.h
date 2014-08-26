@@ -22,6 +22,7 @@ public:
   ~GemController();
   void setCoords(Coordinates coords);
   void addMoveTo(Coordinates coords);
+  void setRotation(double angle, double speed);
 
   // we need those to forward them to m_gem
   void update(float dt);
@@ -31,12 +32,15 @@ public:
   void setType(GemType type);
   GemType getType() { return m_type; }
   Board* getBoard();
+  bool isRemoved();
+  void remove();
 
 private:
   Object* m_gem;
   GemType m_type;
   Coordinates m_logicalCoords;  // remember to call computeDrawingOrign after changing these coords!
   Board* m_pBoard;
+  bool m_removed;
 
   void onGemReachedDestination();
   Coordinates computePosition(Coordinates coords);

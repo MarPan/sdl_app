@@ -7,6 +7,13 @@ BoardLogic::BoardLogic(int x, int y)
 
 void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
 {
+//  moveInfo.addInvalidSwap(InvalidSwap(src, dst));
+  moveInfo.addAnnihilation(src);
+  return;
+  moveInfo.addInvalidSwap(InvalidSwap(src, dst));
+  moveInfo.addInvalidSwap(InvalidSwap(src, dst));
+  return;
+
   int random = rand()%2;
   switch (random) {
     case 0:

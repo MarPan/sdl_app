@@ -5,16 +5,13 @@
 GemController::GemController(int x, int y, Board* board)
   : m_gem(new Object())
   , m_pBoard(board)
+  , m_removed(false)
 {
   setCoords(std::make_pair(x, y));
   setState(new GemStates::GemIdleState(m_gem));
   m_gem->registerObserver(ObjectEvent::DESTINATION_REACHED,
                           std::bind(&GemController::onGemReachedDestination, this));
   // do we need to unregister, ever? I don't think so.
-
-  if (x == 0 && y == 0) {
-    m_gem->setRotation(180, 360);
-  }
 }
 
 void GemController::setCoords(Coordinates coords)
@@ -31,6 +28,11 @@ void GemController::addMoveTo(Coordinates coords)
   m_logicalCoords = coords;
   Coordinates destination = computePosition(coords);
   m_gem->addDestination(destination);
+}
+
+void GemController::setRotation(double angle, double speed)
+{
+  m_gem->setRotation(angle, speed);
 }
 
 void GemController::setType(GemType type)
@@ -60,12 +62,16 @@ Coordinates GemController::computePosition(Coordinates coords)
 
 void GemController::update(float dt)
 {
-  getState()->update(dt);
+  if (!m_removed) {
+    getState()->update(dt);
+  }
 }
 
 void GemController::draw()
 {
-  getState()->draw();
+  if (!m_removed) {
+    getState()->draw();
+  }
 }
 
 // @returns true, if gem became selected
@@ -83,6 +89,16 @@ bool GemController::onClicked()
 Board* GemController::getBoard()
 {
   return m_pBoard;
+}
+
+void GemController::remove()
+{
+  m_removed = true;
+}
+
+bool GemController::isRemoved()
+{
+  return m_removed;
 }
 
 GemController::~GemController()

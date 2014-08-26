@@ -112,36 +112,48 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
     m_gems[r.first.first][r.first.second]->addMoveTo(r.second);
   }
 
-//  for (auto& a : moveInfo.getAnnihilations()) {
-//    delete m_gems[a.first][a.first];
-//  }
+  for (auto& a : moveInfo.getAnnihilations()) {
+    m_gems[a.first][a.first]->setRotation(180, 90);
+    // how do I deal with gem removal? Do I simply delete them?
+    // or do I create "invisible" gem?
+    m_gems[a.first][a.first]->remove();
+  }
 
-//  for (auto& c : moveInfo.getCreations()) {
-//    GemType type = m_gems[c.first][c.second]->getType();
-//    m_gems[c.first][c.second] =
-//          new GemController(c.first, c.second, this);
-//    m_gems[c.first][c.second]->setType(GemType((type+1)%GemType::GT_COUNT));
-//  }
+  for (auto& c : moveInfo.getCreations()) {
+    //GemType type = m_gems[c.first][c.second]->getType();
+    if (m_gems[c.first][c.second]->isRemoved() == false) {
+      std::cout << "ERROR: creating new gem on top of a previous one\n";
+    }
+    delete m_gems[c.first][c.second];
+    m_gems[c.first][c.second] =
+          new GemController(c.first, 0, this); // create it over the board
+    m_gems[c.first][c.second]->setType(GemType(rand()%GemType::GT_COUNT));
+    m_gems[c.first][c.second]->addMoveTo(c); // let it fall to its place
+  }
 }
 
 void Board::update(float dt)
 {
   for (size_t i = 0; i < m_gems.size(); i++)
     for (size_t j = 0; j < m_gems[i].size(); j++)
-      m_gems[i][j]->update(dt);
+      if (m_gems[i][j])
+        m_gems[i][j]->update(dt);
 }
 
 void Board::draw()
 {
   theTextureManager.draw(m_backgroundPath, 0, 0, 755, 600);
   for (size_t i = 0; i < m_gems.size(); i++)
-    for (size_t j = 0; j < m_gems[i].size(); j++)
-      m_gems[i][j]->draw();
+    for (size_t j = 0; j < m_gems[i].size(); j++)      
+      if (m_gems[i][j])
+        m_gems[i][j]->draw();
 }
 
 bool Board::clickGem(int x, int y)
 {
-  return m_gems[x][y]->onClicked();
+  if (m_gems[x][y])
+    return m_gems[x][y]->onClicked();
+  return false;
 }
 
 void Board::onClick(int x, int y)
