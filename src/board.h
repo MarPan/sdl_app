@@ -23,8 +23,6 @@ public:
   void draw();
   void onClick(int x, int y);
 
-  void fillBoard();
-  Coordinates func();
   bool swapGems(Coordinates gemOne,
                 Coordinates gemTwo);
 

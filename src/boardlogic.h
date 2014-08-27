@@ -9,6 +9,10 @@ class BoardLogic
 {
 public:
   BoardLogic(int x, int y);
+
+  void setGemType(int x, int y, GemType type);
+
+  void newBoard(int x, int y, MoveInfo &moveInfo);
   void swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo);
   void updateBoard(MoveInfo& moveInfo);
   /*

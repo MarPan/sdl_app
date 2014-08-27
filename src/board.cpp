@@ -41,13 +41,16 @@ Board::Board(int rows, int cols)
     theTextureManager.load(path, path);
   }
 
-  theTextureManager.load(m_backgroundPath, m_backgroundPath);
   for (int i = 0; i < m_size.first; i++) {
     for (int j = 0; j < m_size.second; j++) {
-      m_gems[i][j] = new GemController(i,j, this);
-      m_gems[i][j]->setType(GemType(rand() % GT_COUNT));
+        m_gems[i][j] = nullptr;
       }
     }
+
+  theTextureManager.load(m_backgroundPath, m_backgroundPath);
+  MoveInfo moveInfo;
+  m_boardLogic->newBoard(m_size.first, m_size.second, moveInfo);
+  parseMoveInfo(moveInfo);
 }
 
 Board::~Board()
@@ -55,13 +58,6 @@ Board::~Board()
   for (size_t i = 0; i < m_gems.size(); i++)
     for (size_t j = 0; j < m_gems[i].size(); j++)
       delete m_gems[i][j];
-}
-
-void Board::fillBoard()
-{
-  for (size_t i = 0; i < m_gems.size(); i++)
-    for (size_t j = 0; j < m_gems[i].size(); j++)
-      m_gems[i][j]->setType(GemType(rand() % GT_COUNT));
 }
 
 bool Board::swapGems(Coordinates gemOne, Coordinates gemTwo)
@@ -119,14 +115,16 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
   }
 
   for (auto& c : moveInfo.getCreations()) {
-    if (m_gems[c.first][c.second]->isRemoved() == false) {
-      std::cout << "ERROR: creating new gem on top of a previous one\n";
+    if (m_gems[c.first][c.second]) {
+      if (m_gems[c.first][c.second]->isRemoved() == false) {
+        std::cout << "WARNING: creating new gem on top of a previous one\n";
+      }
+      delete m_gems[c.first][c.second];
     }
-    delete m_gems[c.first][c.second];
     m_gems[c.first][c.second] =
           new GemController(c.first, -1, this); // create it over the board
-    m_gems[c.first][c.second]->setType(GemType(rand()%GemType::GT_COUNT));
-    m_gems[c.first][c.second]->addMoveTo(c); // let it fall to its place
+    m_gems[c.first][c.second]->setType(c.type);
+    m_gems[c.first][c.second]->addMoveTo(Coordinates(c.first, c.second)); // let it fall to its place
   }
 }
 

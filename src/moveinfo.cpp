@@ -6,7 +6,7 @@ void MoveInfo::addRelocation(Relocation r)
 }
 
 
-void MoveInfo::addCreation(Coordinates c)
+void MoveInfo::addCreation(Creation c)
 {
   m_creations.push_back(c);
 }
@@ -29,7 +29,7 @@ const std::vector<Relocation> MoveInfo::getRelocations() const
 }
 
 
-const std::vector<Coordinates> MoveInfo::getCreations() const
+const std::vector<Creation> MoveInfo::getCreations() const
 {
   return m_creations;
 }

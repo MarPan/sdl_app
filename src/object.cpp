@@ -77,8 +77,19 @@ void Object::move(float dt)
 
   // not ideal, since I will have a set minimal speed 1 pixel per frame
   // maybe I should store an offset as a float
-  m_position.first += std::ceil(m_speed.first * dt) * hDir;
-  m_position.second += std::ceil(m_speed.second * dt) * vDir;
+  int thisXMovement = std::ceil(m_speed.first * dt) * hDir;
+  int thisYMovement = std::ceil(m_speed.second * dt) * vDir;
+
+  if (abs(m_position.first - destination.first) < thisXMovement) {
+    m_position.first = destination.first;
+  } else {
+    m_position.first += thisXMovement;
+  }
+  if (abs(m_position.second - destination.second) < thisYMovement) {
+    m_position.second = destination.second;
+  } else {
+    m_position.second += thisYMovement;
+  }
 }
 
 void Object::draw()
