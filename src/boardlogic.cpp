@@ -45,9 +45,20 @@ void BoardLogic::findConnections(MoveInfo &moveInfo)
 
 void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
 {
+
+//  void print() {
+    std::cout<<"LOGIC: ";
+    for (int j = 0; j < 8; j++)
+      {
+        std::cout<<"\n";
+        for (int i = 0; i < 8; i++)
+          {
+            std::cout<<m_logicBoard[i][j]<<" "; }
+      }
+//  }
+
   if (isMovePossible(src, dst)) {
-    moveInfo.addRelocation(Relocation(src, dst));
-    moveInfo.addRelocation(Relocation(dst, src));
+    moveInfo.addSwap(Swap(src, dst));
     std::swap(m_logicBoard[src.first][src.second], m_logicBoard[dst.first][dst.second]);
   } else {
     moveInfo.addInvalidSwap(InvalidSwap(src, dst));

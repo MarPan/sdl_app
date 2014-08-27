@@ -7,6 +7,7 @@
 
 typedef std::pair<Coordinates, Coordinates> InvalidSwap;
 typedef std::pair<Coordinates, Coordinates> Relocation;
+typedef std::pair<Coordinates, Coordinates> Swap;
 
 struct Creation
 {
@@ -23,18 +24,21 @@ public:
   void addRelocation(Relocation r);
   void addCreation(Creation c);
   void addAnnihilation(Coordinates a);
-  void addInvalidSwap(InvalidSwap is);
+  void addInvalidSwap(InvalidSwap is);  
+  void addSwap(Swap a);
 
   const std::vector<Relocation> getRelocations() const;
   const std::vector<Creation> getCreations() const;
   const std::vector<Coordinates> getAnnihilations() const;
   const std::vector<InvalidSwap> getInvalidSwaps() const;
+  const std::vector<Swap> getSwaps() const;
 
 private:
   std::vector<Relocation> m_relocations;
   std::vector<Creation> m_creations;
   std::vector<Coordinates> m_annihilations;
   std::vector<InvalidSwap> m_invalidSwaps;
+  std::vector<Swap> m_swaps;
 };
 
 #endif // MOVEINFO_H

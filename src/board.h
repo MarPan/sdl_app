@@ -40,6 +40,17 @@ public:
   Coordinates getSelectedGem() const;
   void gemFinishedMoving(GemController *gem);
 
+  void print() {
+    std::cout<<"BOARD: ";
+    for (int j = 0; j < m_size.second; j++)
+      {
+        std::cout<<"\n";
+        for (int i = 0; i < m_size.first; i++)
+          {if (m_gems[i][j])
+            std::cout<<m_gems[i][j]->getType()<<" "; }
+      }
+  }
+
 private:
   Coordinates m_size;
   std::string m_backgroundPath;

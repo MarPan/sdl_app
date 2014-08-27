@@ -103,6 +103,7 @@ void Board::gemFinishedMoving(GemController *gem)
 
 void Board::parseMoveInfo(const MoveInfo& moveInfo)
 {
+  std::cout<<"\n\n\n\n";
   for (auto& is : moveInfo.getInvalidSwaps()) {
     // set multiple destinations for both gems
     // and this is why I should make my own Coordinates class instead of std::pair
@@ -116,10 +117,25 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
     m_gemsInMotion.push_back(m_gems[is.second.first][is.second.second]);
   }
 
+  printf("BEFORE\n");
+  print();
+
   for (auto& r : moveInfo.getRelocations()) {
     m_gems[r.first.first][r.first.second]->addMoveTo(r.second);
     m_gemsInMotion.push_back(m_gems[r.first.first][r.first.second]);
+    std::swap(m_gems[r.first.first][r.first.second], m_gems[r.second.first][r.second.second]);
   }
+
+  for (auto& r : moveInfo.getSwaps()) {
+    m_gems[r.first.first][r.first.second]->addMoveTo(r.second);
+    m_gems[r.second.first][r.second.second]->addMoveTo(r.first);
+    m_gemsInMotion.push_back(m_gems[r.first.first][r.first.second]);
+    m_gemsInMotion.push_back(m_gems[r.second.first][r.second.second]);
+    std::swap(m_gems[r.first.first][r.first.second], m_gems[r.second.first][r.second.second]);
+  }
+ printf("AFTER\n");
+  print();
+
 
   for (auto& a : moveInfo.getAnnihilations()) {
     // only mark gem - it won't be rendered.

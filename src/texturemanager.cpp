@@ -75,3 +75,10 @@ void TextureManager::draw(std::string id, const SDL_Rect& rect, double angle)
     logSDLError(std::cout, msg);
   }
 }
+
+TextureManager::~TextureManager()
+{
+  for (auto& mapPair : m_textureMap) {
+    delete mapPair.second;
+  }
+}

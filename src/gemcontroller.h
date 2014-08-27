@@ -43,7 +43,7 @@ private:
   GemType m_type;
   Coordinates m_logicalCoords;  // remember to call computeDrawingOrign after changing these coords!
   Board* m_pBoard;
-  // this flag disables rendering and updating.
+  // this flag disables rendering.
   bool m_removed;
 
   void onGemReachedDestination();
