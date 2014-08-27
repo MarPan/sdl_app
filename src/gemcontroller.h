@@ -29,18 +29,21 @@ public:
   void update(float dt);
   void draw();
   bool onClicked();
+  bool isSelected();
 
+  void remove();
   void setType(GemType type);
   GemType getType() { return m_type; }
   Board* getBoard();
+  Coordinates getCoordinates();
   bool isRemoved();
-  void remove();
 
 private:
   Object* m_gem;
   GemType m_type;
   Coordinates m_logicalCoords;  // remember to call computeDrawingOrign after changing these coords!
   Board* m_pBoard;
+  // this flag disables rendering and updating.
   bool m_removed;
 
   void onGemReachedDestination();

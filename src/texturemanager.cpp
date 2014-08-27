@@ -13,11 +13,12 @@ TextureManager::TextureManager()
 
 bool TextureManager::load(std::string fileName, std::string id)
 {
-  fileName = resourcePath  + fileName;
-  std::cout << fileName << std::endl;
   // check if file is already loaded
-  if (m_textureMap.count(id))
+  if (m_textureMap.count(id)) {
     return false;
+  }
+
+  fileName = resourcePath  + fileName;
 
   SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
   if (pTempSurface == 0) {

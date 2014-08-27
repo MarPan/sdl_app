@@ -16,7 +16,7 @@ public:
   void swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo);
   void updateBoard(MoveInfo& moveInfo);
   // removing gems will result in other falling down.
-  void removeGems(std::vector<Coordinates> toBeRemoved, MoveInfo& moveInfo);
+  void removeGems(const std::vector<Coordinates> &toBeRemoved, MoveInfo& moveInfo);
   /*
    * PS approach:
    * każdy ruch, każde cokolwiek na logicznej planszy generuje ruch

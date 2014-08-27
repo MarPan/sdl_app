@@ -12,6 +12,7 @@ Board::Board(int rows, int cols)
   , m_gemWidth(42)
   , m_gems(rows, std::vector<GemController*>(cols))
   , m_gemsOffset(Coordinates(345,125))
+  , m_selectedGem(nullptr)
 {
   setState(new BoardStates::IdleState(this));
   m_boardLogic = new BoardLogic(rows, cols);
@@ -62,20 +63,20 @@ Board::~Board()
 
 bool Board::swapGems(Coordinates gemOne, Coordinates gemTwo)
 {
-  // it might be beneficial, to store all moving gems
-  // I will call BoardLogic::tick() only when the last gem stopped moving
-  m_gemsInMotion.push_back(m_gems[gemOne.first][gemOne.second]);
-  m_gemsInMotion.push_back(m_gems[gemTwo.first][gemTwo.second]);
-
   MoveInfo moveInfo;
   m_boardLogic->swapGems(gemOne, gemTwo, moveInfo);
   parseMoveInfo(moveInfo);
-
-  return true;
+  return true; // TODO
 }
 
 void Board::gemFinishedMoving(GemController *gem)
 {
+  if (gem == m_selectedGem) {
+  // if (gem->isSelected()) {
+    gem->onClicked();
+    m_selectedGem = nullptr; // maybe I shoud store a ptr
+  }
+
   for (size_t i = 0; i < m_gemsInMotion.size(); i++) {
     if (gem == m_gemsInMotion[i]) {
       m_gemsInMotion.erase(m_gemsInMotion.begin() + i);
@@ -94,24 +95,28 @@ void Board::gemFinishedMoving(GemController *gem)
 void Board::parseMoveInfo(const MoveInfo& moveInfo)
 {
   for (auto& is : moveInfo.getInvalidSwaps()) {
-    // set multiple destinations
-    // for both gems
+    // set multiple destinations for both gems
     // and this is why I should make my own Coordinates class instead of std::pair
     m_gems[is.first.first][is.first.second]->addMoveTo(is.second);
     m_gems[is.first.first][is.first.second]->addMoveTo(is.first);
 
     m_gems[is.second.first][is.second.second]->addMoveTo(is.first);
     m_gems[is.second.first][is.second.second]->addMoveTo(is.second);
+
+    m_gemsInMotion.push_back(m_gems[is.first.first][is.first.second]);
+    m_gemsInMotion.push_back(m_gems[is.second.first][is.second.second]);
   }
 
   for (auto& r : moveInfo.getRelocations()) {
     m_gems[r.first.first][r.first.second]->addMoveTo(r.second);
+    m_gemsInMotion.push_back(m_gems[r.first.first][r.first.second]);
   }
 
   for (auto& a : moveInfo.getAnnihilations()) {
-    // how do I deal with gem removal? Do I simply delete them?
-    // or do I create "invisible" gem?
+    // only mark gem - it won't be rendered.
+    // we will delete it when a new gem will be creatad on top of it.
     m_gems[a.first][a.second]->remove();
+    m_gemsInMotion.push_back(m_gems[a.first][a.second]);
   }
 
   for (auto& c : moveInfo.getCreations()) {
@@ -125,6 +130,7 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
           new GemController(c.first, -1, this); // create it over the board
     m_gems[c.first][c.second]->setType(c.type);
     m_gems[c.first][c.second]->addMoveTo(Coordinates(c.first, c.second)); // let it fall to its place
+    m_gemsInMotion.push_back(m_gems[c.first][c.second]);
   }
 }
 
@@ -182,10 +188,10 @@ std::string Board::getGemPath(GemType gt)
 
 void Board::setSelectedGem(Coordinates coords)
 {
-  m_selectedGem = coords;
+  m_selectedGem = m_gems[coords.first][coords.second];
 }
 
 Coordinates Board::getSelectedGem() const
 {
-  return m_selectedGem;
+  return m_selectedGem->getCoordinates();
 }

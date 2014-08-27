@@ -15,6 +15,7 @@ public:
   virtual void update(float dt);
   virtual void draw();
   virtual GemState* onClicked();
+  virtual bool isSelected();
 protected:
   Object* m_gem;
 };
@@ -32,6 +33,7 @@ public:
   GemSelectedState(Object *gem);
   void draw();
   GemState* onClicked();
+  bool isSelected();
 private:
   Object m_circle;
   std::string m_circleName;

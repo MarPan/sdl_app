@@ -27,10 +27,8 @@ Coordinates BoardState::translateToTileCoords(int x, int y)
   return retVal;
 }
 
-
 BoardState::~BoardState()
-{
-}
+{ }
 
 BoardState* BoardState::onClick(int x, int y)
 {
@@ -50,6 +48,7 @@ void BoardState::draw()
 IdleState::IdleState(Board *board)
   : BoardState(board)
 {
+  std::cout << "BOARD IdleState" << std::endl;
 }
 
 BoardState* IdleState::onClick(int x, int y)
@@ -66,7 +65,7 @@ BoardState* IdleState::onClick(int x, int y)
 
 SelectedState::SelectedState(Board* board)
   : BoardState(board)
-{ }
+{ std::cout << "BOARD SelectedState" << std::endl; }
 
 BoardState* SelectedState::onClick(int x, int y)
 {
@@ -82,5 +81,10 @@ BoardState* SelectedState::onClick(int x, int y)
   }
   return new IdleState(m_pBoard);
 }
+
+GemsMovingState::GemsMovingState(Board *board)
+  : BoardState(board)
+{ std::cout << "BOARD GemsMovingState" << std::endl; }
+
 
 }

@@ -12,7 +12,7 @@ public:
   BoardState(Board *board);
   virtual ~BoardState();
 
-  virtual BoardState* onClick( int x, int y) = 0;
+  virtual BoardState* onClick( int x, int y);
   virtual void update(float dt);
   virtual void draw();  
 protected:
@@ -33,6 +33,13 @@ public:
   SelectedState(Board *board);
   BoardState* onClick(int x, int y);
 };
+
+class GemsMovingState : public BoardState
+{
+public:
+  GemsMovingState(Board *board);
+};
+
 
 }
 

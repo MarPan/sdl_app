@@ -46,12 +46,17 @@ void GemController::setType(GemType type)
 
 void GemController::onGemReachedDestination()
 {
-  m_pBoard->gemFinishedMoving(this);
+  if (!m_gem->isRotating()) {
+    m_pBoard->gemFinishedMoving(this);
+  }
 }
 
 void GemController::onGemFinishedRotation()
 {
-  m_removed = true;
+  if (!m_gem->isRotating()) {
+    m_removed = true;  // right now rotation means that we are removing the gem.
+    m_pBoard->gemFinishedMoving(this);
+  }
 }
 
 Coordinates GemController::computePosition(Coordinates coords)
@@ -92,6 +97,12 @@ bool GemController::onClicked()
   }
   return false;
 }
+
+bool GemController::isSelected()
+{
+  return getState()->isSelected();
+}
+
 Board* GemController::getBoard()
 {
   return m_pBoard;
@@ -106,6 +117,11 @@ void GemController::remove()
 bool GemController::isRemoved()
 {
   return m_removed;
+}
+
+Coordinates GemController::getCoordinates()
+{
+  return m_logicalCoords;
 }
 
 GemController::~GemController()

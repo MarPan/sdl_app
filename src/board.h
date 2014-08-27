@@ -47,7 +47,7 @@ private:
   std::vector<std::vector<GemController*>> m_gems;
   Coordinates m_gemsOffset;
   std::map<GemType, std::string> m_gemRegistry;
-  Coordinates m_selectedGem;
+  GemController* m_selectedGem;
   BoardLogic *m_boardLogic;
 
   std::vector<GemController*> m_gemsInMotion;

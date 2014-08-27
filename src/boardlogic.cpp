@@ -12,37 +12,39 @@ void BoardLogic::newBoard(int x, int y, MoveInfo &moveInfo)
   for (int i = 0; i < x; i++) {
     for (int j = 0; j < y; j++) {
       GemType type = GemType(rand() % GT_COUNT);
-      moveInfo.addCreation(Creation(i, j, type));
+      //moveInfo.addCreation(Creation(i, j, type));
       m_logicBoard[i][j] = type;
+    }
+  }
+
+  std::vector<Coordinates> gemsToBeRemoved;
+  do {
+    MoveInfo annihilations;
+    gemsToBeRemoved.clear();
+    findConnections(m_logicBoard, annihilations);
+    for (Coordinates coords : annihilations.getAnnihilations()) {
+      gemsToBeRemoved.push_back(coords);
+    }
+    removeGems(gemsToBeRemoved, annihilations);
+    std::cout << gemsToBeRemoved.size() << std::endl;
+  }
+  while (gemsToBeRemoved.empty() == false);
+
+  for (int i = 0; i < x; i++) {
+    for (int j = 0; j < y; j++) {
+      moveInfo.addCreation(Creation(i, j, m_logicBoard[i][j]));
     }
   }
 }
 
 void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
 {
-  std::cout << "Src: " << coordsToString(src) << std::endl;
-  std::vector<Coordinates> haha;
-  haha.push_back(src);
-  haha.push_back(dst);
-  removeGems(haha, moveInfo);
-//  moveInfo.addInvalidSwap(InvalidSwap(src, dst));
-//  moveInfo.addCreation(src);
-//  findConnections(m_logicBoard, moveInfo);
-  return;
-  moveInfo.addInvalidSwap(InvalidSwap(src, dst));
-  moveInfo.addInvalidSwap(InvalidSwap(src, dst));
-  return;
-
-  int random = rand()%2;
-  switch (random) {
-    case 0:
-      moveInfo.addInvalidSwap(InvalidSwap(src, dst));
-      break;
-    case 1:
-      moveInfo.addRelocation(Relocation(src, dst));
-      moveInfo.addRelocation(Relocation(dst, src));
-      break;
-    }
+  if (isMovePossible(src, dst)) {
+    moveInfo.addRelocation(Relocation(src, dst));
+    moveInfo.addRelocation(Relocation(dst, src));
+  } else {
+    moveInfo.addInvalidSwap(InvalidSwap(src, dst));
+  }
 }
 
 bool BoardLogic::isMovePossible(Coordinates src, Coordinates dst)
@@ -53,7 +55,7 @@ bool BoardLogic::isMovePossible(Coordinates src, Coordinates dst)
   return findConnections(copy, moveInfo);
 }
 
-void BoardLogic::removeGems(std::vector<Coordinates> toBeRemoved, MoveInfo& moveInfo)
+void BoardLogic::removeGems(const std::vector<Coordinates>& toBeRemoved, MoveInfo& moveInfo)
 {
   std::vector<int> emptyGemsCount(m_logicBoard.size());
   for (int i = 0; i < emptyGemsCount.size(); i++) {
@@ -66,12 +68,11 @@ void BoardLogic::removeGems(std::vector<Coordinates> toBeRemoved, MoveInfo& move
     emptyGemsCount[toBeRemoved[i].first]++;
   }
 
-  // inaczej: dla każdej kolumny, jadąc od dołu, liczę -1, zapisuję do tmp
-  // jak trafię na prawdziwy klejnot, mówię mu że musi spaść o tmp pól w dół
+  // easier: for each column, starting from the bottomn, I count invalid gems
+  // when I find real gem, I move it down by invalidGemsCount
   // GENIALNE
 
   std::vector<std::vector<GemType>> copy = m_logicBoard;
-  // compute Relocations
   for (int i = 0; i < m_logicBoard.size(); i++) {
     if (emptyGemsCount[i] == 0) {
       continue;
@@ -83,6 +84,17 @@ void BoardLogic::removeGems(std::vector<Coordinates> toBeRemoved, MoveInfo& move
       } else if (emptyCount != 0) {
         moveInfo.addRelocation(Relocation(Coordinates(i,j), Coordinates(i,j+emptyCount)));
         std::swap(copy[i][j], copy[i][j+emptyCount]);
+      }
+    }
+  }
+
+  // create new gems for the ones removed
+  for (int i = 0; i < m_logicBoard.size(); i++) {
+    for (int j = 0; j < m_logicBoard[i].size(); j++) {
+      if (copy[i][j] == GT_INVALID) {
+        GemType type = GemType(rand() % GT_COUNT);
+        moveInfo.addCreation(Creation(i, j, type));
+        copy[i][j] = type;
       }
     }
   }
@@ -147,9 +159,13 @@ bool BoardLogic::findConnections(const std::vector<std::vector<GemType>>& logicB
       } // else (next gem is different)
     } // for col
   } // for row
+  if (moveInfo.getAnnihilations().size()) {
+    return true;
+  }
+  return false;
 }
 
 void BoardLogic::updateBoard(MoveInfo& moveInfo)
 {
-  std::cout << "BoardLogic tick!" << std::endl;
+ // std::cout << "BoardLogic tick!" << std::endl;
 }

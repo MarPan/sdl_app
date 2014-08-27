@@ -29,8 +29,10 @@ public:
   void setPosition(Coordinates position);
   void setDestination(Coordinates position); //< clears destinations and sets a new one
   void addDestination(Coordinates position);
-
   void setRotation(double angle, double speed);
+
+  bool isMoving();
+  bool isRotating();
 
 protected:
   Coordinates m_position;

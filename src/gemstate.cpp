@@ -23,9 +23,13 @@ void GemState::update(float dt)
 
 GemState *GemState::onClicked()
 {
-  return nullptr  ;
+  return nullptr;
 }
 
+bool GemState::isSelected()
+{
+  return false;
+}
 
 GemSelectedState::GemSelectedState(Object *gem)
   : GemState(gem) 
@@ -54,6 +58,11 @@ void GemSelectedState::draw()
 GemState* GemSelectedState::onClicked()
 {
   return new GemStates::GemIdleState(m_gem);
+}
+
+bool GemSelectedState::isSelected()
+{
+  return true;
 }
 
 GemIdleState::GemIdleState(Object *gem)
