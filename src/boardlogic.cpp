@@ -5,11 +5,6 @@ BoardLogic::BoardLogic(int x, int y)
 {
 }
 
-void BoardLogic::setGemType(int x, int y, GemType type)
-{
-  m_logicBoard[x][y] = type;
-}
-
 void BoardLogic::newBoard(int x, int y, MoveInfo &moveInfo)
 {
   std::vector<std::vector<GemType>> newLogicBoard(x, std::vector<GemType>(y));
@@ -26,9 +21,13 @@ void BoardLogic::newBoard(int x, int y, MoveInfo &moveInfo)
 void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
 {
   std::cout << "Src: " << coordsToString(src) << std::endl;
+  std::vector<Coordinates> haha;
+  haha.push_back(src);
+  haha.push_back(dst);
+  removeGems(haha, moveInfo);
 //  moveInfo.addInvalidSwap(InvalidSwap(src, dst));
 //  moveInfo.addCreation(src);
-  findConnections(m_logicBoard, moveInfo);
+//  findConnections(m_logicBoard, moveInfo);
   return;
   moveInfo.addInvalidSwap(InvalidSwap(src, dst));
   moveInfo.addInvalidSwap(InvalidSwap(src, dst));
@@ -54,12 +53,44 @@ bool BoardLogic::isMovePossible(Coordinates src, Coordinates dst)
   return findConnections(copy, moveInfo);
 }
 
-// scans the board. If finds connection, adds moves to the moveInfo:
-// Annihilation for the gems from connection
-// Relocation for the gems over the connection
-// TODO: what should we do when we have more than two connections?
-// SOLUTION: we should do it in steps: firstly, remove all of the connections
-// then let all the pieces fall to their new positions - one tile at a time!
+void BoardLogic::removeGems(std::vector<Coordinates> toBeRemoved, MoveInfo& moveInfo)
+{
+  std::vector<int> emptyGemsCount(m_logicBoard.size());
+  for (int i = 0; i < emptyGemsCount.size(); i++) {
+    emptyGemsCount[i] = false;
+  }
+
+  // set the gems to -1 or sth
+  for (int i = 0; i < toBeRemoved.size(); i++) {
+    m_logicBoard[toBeRemoved[i].first][toBeRemoved[i].second] = GT_INVALID;
+    emptyGemsCount[toBeRemoved[i].first]++;
+  }
+
+  // inaczej: dla każdej kolumny, jadąc od dołu, liczę -1, zapisuję do tmp
+  // jak trafię na prawdziwy klejnot, mówię mu że musi spaść o tmp pól w dół
+  // GENIALNE
+
+  std::vector<std::vector<GemType>> copy = m_logicBoard;
+  // compute Relocations
+  for (int i = 0; i < m_logicBoard.size(); i++) {
+    if (emptyGemsCount[i] == 0) {
+      continue;
+    }
+    int emptyCount = 0;
+    for (int j = m_logicBoard[i].size() - 1; j >= 0 ; j--) {
+      if (m_logicBoard[i][j] == GT_INVALID) {
+        emptyCount++;
+      } else if (emptyCount != 0) {
+        moveInfo.addRelocation(Relocation(Coordinates(i,j), Coordinates(i,j+emptyCount)));
+        std::swap(copy[i][j], copy[i][j+emptyCount]);
+      }
+    }
+  }
+
+  m_logicBoard = copy;
+}
+
+// scans the board. If finds connection, adds Annihilation to the moveInfo
 bool BoardLogic::findConnections(const std::vector<std::vector<GemType>>& logicBoard, MoveInfo& moveInfo)
 {
   int minLength = 3;

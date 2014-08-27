@@ -10,7 +10,8 @@ enum GemType {
   GT_PURPLE,
   GT_RED,
   GT_YELLOW,
-  GT_COUNT
+  GT_COUNT,
+  GT_INVALID
 };
 
 class Board;
