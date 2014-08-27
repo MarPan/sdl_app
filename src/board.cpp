@@ -77,6 +77,10 @@ void Board::gemFinishedMoving(GemController *gem)
     m_selectedGem = nullptr; // maybe I shoud store a ptr
   }
 
+  if (gem->isRemoved()) {
+    m_gemsToBeRemoved.push_back(gem->getCoordinates());
+  }
+
   for (size_t i = 0; i < m_gemsInMotion.size(); i++) {
     if (gem == m_gemsInMotion[i]) {
       m_gemsInMotion.erase(m_gemsInMotion.begin() + i);
@@ -87,7 +91,12 @@ void Board::gemFinishedMoving(GemController *gem)
   if (m_gemsInMotion.empty()) {
     std::cout << "All gems finished moving" << std::endl;
     MoveInfo moveInfo;
-    m_boardLogic->updateBoard(moveInfo);
+    if (m_gemsToBeRemoved.size()) {
+      m_boardLogic->removeGems(m_gemsToBeRemoved, moveInfo);
+      m_gemsToBeRemoved.clear();
+    } else {
+      m_boardLogic->findConnections(moveInfo);
+    }
     parseMoveInfo(moveInfo);
   }
 }

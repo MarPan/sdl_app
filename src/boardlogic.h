@@ -15,6 +15,8 @@ public:
   void newBoard(int x, int y, MoveInfo &moveInfo);
   void swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo);
   void updateBoard(MoveInfo& moveInfo);
+
+  void findConnections(MoveInfo &moveInfo);
   // removing gems will result in other falling down.
   void removeGems(const std::vector<Coordinates> &toBeRemoved, MoveInfo& moveInfo);
   /*

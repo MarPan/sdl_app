@@ -36,12 +36,19 @@ void BoardLogic::newBoard(int x, int y, MoveInfo &moveInfo)
     }
   }
 }
+// moveInfo will be filled with annihilations of gems
+// that are in connections
+void BoardLogic::findConnections(MoveInfo &moveInfo)
+{
+  findConnections(m_logicBoard, moveInfo);
+}
 
 void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
 {
   if (isMovePossible(src, dst)) {
     moveInfo.addRelocation(Relocation(src, dst));
     moveInfo.addRelocation(Relocation(dst, src));
+    std::swap(m_logicBoard[src.first][src.second], m_logicBoard[dst.first][dst.second]);
   } else {
     moveInfo.addInvalidSwap(InvalidSwap(src, dst));
   }

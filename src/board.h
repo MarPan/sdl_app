@@ -48,6 +48,7 @@ private:
   Coordinates m_gemsOffset;
   std::map<GemType, std::string> m_gemRegistry;
   GemController* m_selectedGem;
+  std::vector<Coordinates> m_gemsToBeRemoved;
   BoardLogic *m_boardLogic;
 
   std::vector<GemController*> m_gemsInMotion;
