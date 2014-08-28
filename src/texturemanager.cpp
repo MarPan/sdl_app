@@ -35,6 +35,47 @@ bool TextureManager::load(std::string fileName, std::string id)
   return false;
 }
 
+bool TextureManager::loadTextWithFont(std::string fontName, std::string id, std::string txt, SDL_Color txtColor, int fontSize)
+{
+  fontName = resourcePath  + fontName;
+  std::cout << fontName << std::endl;
+  if (m_textureMap.count(id))
+  {
+    std::cout << "Failed to load " << fontName <<". Id exist."<<std::endl;
+    return false;
+  }
+
+  TTF_Font *font = TTF_OpenFont(fontName.c_str(), fontSize);
+  if (font == nullptr)
+  {
+    std::cout << "Failed to load " << fontName << std::endl;
+    logSDLError(std::cout, "");
+    return false;
+  }
+
+  SDL_Surface* pTempSurface = TTF_RenderText_Solid(font, txt.c_str(), txtColor);
+  TTF_CloseFont(font);
+  font = nullptr;
+  if (pTempSurface == nullptr) {
+    std::cout << "Failed to load " << fontName << std::endl;
+    logSDLError(std::cout, "");
+    return false;
+  }
+
+  SDL_Texture* pTexture = SDL_CreateTextureFromSurface(theGame.getRenderer(), pTempSurface);
+  SDL_FreeSurface(pTempSurface);
+  if (pTexture != nullptr){
+    m_textureMap[id] = pTexture;
+    return true;
+  }
+  return false;
+}
+
+void TextureManager::drawFont(std::string id, int x, int y)
+{
+    //draw(id, x, y, m_textureMap[id]->w, m_textureMap[id]->h);
+}
+
 std::pair<int,int> TextureManager::getSize(std::string id)
 {
   std::pair<int,int> retVal(0,0);
@@ -74,3 +115,4 @@ void TextureManager::draw(std::string id, const SDL_Rect& rect, double angle)
     logSDLError(std::cout, msg);
   }
 }
+

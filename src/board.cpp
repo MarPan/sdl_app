@@ -12,6 +12,7 @@ Board::Board(int rows, int cols)
   , m_gemWidth(42)
   , m_gems(rows, std::vector<GemController*>(cols))
   , m_gemsOffset(Coordinates(345,125))
+  , m_Time("00:00")
 {
   setState(new BoardStates::IdleState(this));
   m_boardLogic = new BoardLogic(rows, cols);
@@ -134,6 +135,10 @@ void Board::update(float dt)
     for (size_t j = 0; j < m_gems[i].size(); j++)
       if (m_gems[i][j])
         m_gems[i][j]->update(dt);
+
+  SDL_Color textColor = { 0, 0, 255 };
+  //std::cout << "action_man" + m_Time;
+  theTextureManager.loadTextWithFont("Action-Man/Action_Man.ttf", "action_man" + m_Time, m_Time, textColor, 56);
 }
 
 void Board::draw()
@@ -143,6 +148,8 @@ void Board::draw()
     for (size_t j = 0; j < m_gems[i].size(); j++)      
       if (m_gems[i][j])
         m_gems[i][j]->draw();
+  //draw clock
+  theTextureManager.draw("action_man" + m_Time, 90, 200, theTextureManager.getSize("action_man" + m_Time).first, theTextureManager.getSize("action_man" + m_Time).second);
 }
 
 bool Board::clickGem(int x, int y)
@@ -183,6 +190,11 @@ std::string Board::getGemPath(GemType gt)
 void Board::setSelectedGem(Coordinates coords)
 {
   m_selectedGem = coords;
+}
+
+void Board::setTime(std::string time)
+{
+  m_Time = time;
 }
 
 Coordinates Board::getSelectedGem() const

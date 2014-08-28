@@ -13,8 +13,8 @@ class Game : private StateMachine<GameState*>
 {
 public:
 
-  void init(void);
-  void run(void);
+  void init();
+  void run();
 
   SDL_Renderer* getRenderer() { return m_pRenderer; }
 
@@ -22,7 +22,7 @@ public:
 
 private:  
   Game();
-  void input();
+  virtual void input();
   void update(float deltaTime);
   void draw();
 

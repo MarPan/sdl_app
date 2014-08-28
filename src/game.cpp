@@ -4,6 +4,7 @@
 #include "board.h"
 #include "texturemanager.h"
 #include "playtimestate.h"
+#include "clock.h"
 
 Game::Game()
   : _windowSize(std::pair<int, int>(755, 600)),
@@ -24,6 +25,12 @@ void Game::init()
   // Intialize SDL
   if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 ) {
     printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+  }
+
+  //initialize TTF
+  if( TTF_Init() < 0 )
+  {
+      printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
   }
   SDL_ShowCursor(1);      // show cursor
 
@@ -55,24 +62,27 @@ void Game::init()
 void Game::run(void)
 {
   printf("STARTING LOOP:\n");
+  Clock* c = new Clock();
+  c->start(1);
   while (_exit == false) {
     float deltaTime = (float)(SDL_GetTicks() - _lastTime) / 1000;
 //      printf("%f\n", deltaTime);
-
     input();
     update(deltaTime);
     draw();
 
     _lastTime = SDL_GetTicks();
-     SDL_Delay(10);
+    SDL_Delay(10);
   }
+  c->stop();
   printf("THE END\n");
 }
 
 void Game::input()
 {
   while (SDL_PollEvent(&event)) {
-    switch (event.type) {
+    switch (event.type)
+    {
     // Clicking 'x' or pressing F4
     case SDL_QUIT:
       printf("GOT SDL_QUIT\n");
@@ -91,6 +101,9 @@ void Game::input()
             //SDL_ShowSimpleMessageBox(0, "Mouse", "Some other button was pressed!", m_pWindow);
             break;
       }
+    case SDL_USEREVENT:
+        getState()->input(event);
+        std::cout << "SDL_UserEvent arrived " << std::endl;
     }
   }
 }

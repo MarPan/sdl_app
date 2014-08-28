@@ -37,6 +37,7 @@ public:
   bool clickGem(int x, int y);
 
   void setSelectedGem(Coordinates coords);
+  void setTime(std::string);
   Coordinates getSelectedGem() const;
   void gemFinishedMoving(GemController *gem);
 
@@ -49,6 +50,7 @@ private:
   std::map<GemType, std::string> m_gemRegistry;
   Coordinates m_selectedGem;
   BoardLogic *m_boardLogic;
+  std::string m_Time;
 
   std::vector<GemController*> m_gemsInMotion;
 

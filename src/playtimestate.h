@@ -13,6 +13,7 @@ public:
   void onClick(int x, int y);
   void update(float dt);
   void draw();
+  void input(SDL_Event &event);
 
 private:
   Board* m_pBoard;

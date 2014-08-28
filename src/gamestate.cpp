@@ -22,3 +22,8 @@ void GameState::draw()
 {
   //std::cout << "Gamestate::draw base method undefined" << std::endl;
 }
+
+void GameState::input(SDL_Event& event)
+{
+  //std::cout << "Gamestate::draw base method undefined" << std::endl;
+}

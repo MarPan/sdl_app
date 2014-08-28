@@ -19,7 +19,9 @@ SOURCES += \
     gemstate.cpp \
     gemcontroller.cpp \
     boardlogic.cpp \
-    moveinfo.cpp
+    moveinfo.cpp \
+    timer.cpp \
+    clock.cpp
 
 
 HEADERS += \
@@ -39,7 +41,9 @@ HEADERS += \
     gemcontroller.h \
     boardlogic.h \
     notifier.h \
-    moveinfo.h
+    moveinfo.h \
+    timer.h \
+    clock.h
 
 INCLUDEPATH += ../Libraries/SDL2-2.0.3/include
 INCLUDEPATH += ../Libraries/SDL2_image-2.0.0/include
@@ -49,7 +53,7 @@ DEFINES += SDL_MAIN_HANDLED
 LIBS += \
         -L../Libraries/SDL2_image-2.0.0/lib/x86 \
         -L../Libraries/SDL2-2.0.3/lib/x86 \
-        -lSDL2 -lSDL2_image #-lSDL2_ttf -lSDL2_mixer
+        -lSDL2 -lSDL2_image -lSDL2_ttf #-lSDL2_mixer
 
 DESTDIR = ../Bejeweled/Debug/
 
