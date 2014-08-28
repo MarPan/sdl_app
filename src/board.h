@@ -54,7 +54,6 @@ public:
 
 private:
   Coordinates m_size;
-  std::string m_backgroundPath;
   int m_gemWidth;
   std::vector<std::vector<GemController*>> m_gems;
   Coordinates m_gemsOffset;

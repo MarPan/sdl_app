@@ -36,13 +36,12 @@ bool TextureManager::load(std::string fileName, std::string id)
   return false;
 }
 
-bool TextureManager::loadText(std::string fontName, std::string id, std::string txt, SDL_Color txtColor, int fontSize)
+bool TextureManager::loadText(std::string fontName, std::string text, SDL_Color txtColor, int fontSize)
 {
-  fontName = resourcePath  + fontName;
-  std::cout << fontName << std::endl;
-  if (m_textureMap.count(id)) {
+  if (m_textureMap.count(text)) {
     return false;
   }
+  fontName = resourcePath  + fontName;
 
   TTF_Font *font = TTF_OpenFont(fontName.c_str(), fontSize);
   if (font == nullptr) {
@@ -51,11 +50,11 @@ bool TextureManager::loadText(std::string fontName, std::string id, std::string 
     return false;
   }
 
-  SDL_Surface* pTempSurface = TTF_RenderText_Solid(font, txt.c_str(), txtColor);
+  SDL_Surface* pTempSurface = TTF_RenderText_Solid(font, text.c_str(), txtColor);
   TTF_CloseFont(font);
 
   if (pTempSurface == nullptr) {
-    std::string err = "Failed to render text " + txt;
+    std::string err = "Failed to render text " + text;
     logSDLError(std::cout, err);
     return false;
   }
@@ -63,7 +62,7 @@ bool TextureManager::loadText(std::string fontName, std::string id, std::string 
   SDL_Texture* pTexture = SDL_CreateTextureFromSurface(theGame.getRenderer(), pTempSurface);
   SDL_FreeSurface(pTempSurface);
   if (pTexture != nullptr) {
-    m_textureMap[id] = pTexture;
+    m_textureMap[text] = pTexture;
     return true;
   }
   return false;

@@ -10,7 +10,6 @@
 Board::Board(int rows, int cols)
   : Object()
   , m_size(Coordinates(rows,cols))
-  , m_backgroundPath("BackGround.jpg")
   , m_gemWidth(42)
   , m_gems(rows, std::vector<GemController*>(cols))
   , m_gemsOffset(Coordinates(345,125))
@@ -57,7 +56,6 @@ Board::Board(int rows, int cols)
   m_boardLogic->newBoard(m_size.first, m_size.second, moveInfo);
   parseMoveInfo(moveInfo);
 
-  theTextureManager.load(m_backgroundPath, m_backgroundPath);
   theSoundManager.load(m_gemsRemovedSfx, m_gemsRemovedSfx, SoundType::SFX);
   theSoundManager.load(m_invalidMoveSfx, m_invalidMoveSfx, SoundType::SFX);
   theSoundManager.load(m_gemFellSfx, m_gemFellSfx, SoundType::SFX);
@@ -198,7 +196,6 @@ void Board::update(float dt)
 
 void Board::draw()
 {
-  theTextureManager.draw(m_backgroundPath, 0, 0, 755, 600);
   for (size_t i = 0; i < m_gems.size(); i++)
     for (size_t j = 0; j < m_gems[i].size(); j++)      
       if (m_gems[i][j])

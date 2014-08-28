@@ -17,6 +17,12 @@ public:
   int pts;
 private:
   Board* m_pBoard;
+  std::string m_backgroundPath;
+  std::string m_sPoints;
+  std::pair<int,int> m_pointsTexSize;
+  std::string m_fontName;
+  std::pair<int,int> m_bgSize;
+  SDL_Color m_textColor = {0, 0 ,0, 255};
 };
 
 #endif // PLAYTIMESTATE_H
