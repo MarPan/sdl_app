@@ -1,6 +1,7 @@
 #include <iostream>
 #include "gemcontroller.h"
 #include "board.h"
+#include "soundmanager.h"
 
 GemController::GemController(int x, int y, Board* board)
   : m_gem(new Object())
@@ -26,7 +27,6 @@ void GemController::setCoords(Coordinates coords)
 
 void GemController::addMoveTo(Coordinates coords)
 {
-  //std::cout << "From (" << m_logicalCoords.first << "," << m_logicalCoords.second << ") to " << "(" << coords.first << "," << coords.second << ")\n";;
   m_logicalCoords = coords;
   Coordinates destination = computePosition(coords);
   m_gem->addDestination(destination);
@@ -46,12 +46,17 @@ void GemController::setType(GemType type)
 
 void GemController::onGemReachedDestination()
 {
-  m_pBoard->gemFinishedMoving(this);
+  if (!m_gem->isRotating()) {
+    m_pBoard->gemFinishedMoving(this);
+  }
 }
 
 void GemController::onGemFinishedRotation()
 {
-  m_removed = true;
+  if (!m_gem->isRotating()) {
+    m_removed = true;  // right now rotation means that we are removing the gem.
+    m_pBoard->gemFinishedMoving(this);
+  }
 }
 
 Coordinates GemController::computePosition(Coordinates coords)
@@ -69,9 +74,7 @@ Coordinates GemController::computePosition(Coordinates coords)
 
 void GemController::update(float dt)
 {
-  if (!m_removed) {
-    getState()->update(dt);
-  }
+  getState()->update(dt);
 }
 
 void GemController::draw()
@@ -92,20 +95,35 @@ bool GemController::onClicked()
   }
   return false;
 }
+
+bool GemController::isSelected()
+{
+  return getState()->isSelected();
+}
+
 Board* GemController::getBoard()
 {
   return m_pBoard;
 }
 
-void GemController::remove()
-{  
-  setRotation(180, 1440);
+bool GemController::remove()
+{
+  if (!m_gem->isRotating()) {
+    setRotation(180, 1440);
+    return true; // successfully removed
+  }
+  return false; // cannot remove already removed gem
   // we should set m_removed only after rotation finishes
 }
 
 bool GemController::isRemoved()
 {
   return m_removed;
+}
+
+Coordinates GemController::getCoordinates()
+{
+  return m_logicalCoords;
 }
 
 GemController::~GemController()

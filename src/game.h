@@ -12,9 +12,9 @@ class GameState;
 class Game : private StateMachine<GameState*>
 {
 public:
-
   void init();
   void run();
+  ~Game();
 
   SDL_Renderer* getRenderer() { return m_pRenderer; }
 

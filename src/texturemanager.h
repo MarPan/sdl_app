@@ -9,6 +9,7 @@
 class TextureManager
 {
 public:
+  ~TextureManager();
   bool load(std::string fileName, std::string id);
   bool loadTextWithFont(std::string fontName, std::string id, std::string txt, SDL_Color txtColor, int fontSize = 24);
   void draw(std::string id, int x, int y, int width, int height, double angle = 0);

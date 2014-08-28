@@ -6,7 +6,7 @@
 #include "game.h"
 
 Object::Object()
-  : m_speed(250,250)
+  : m_speed(450,450)
   , m_angle(0)
   , m_rotationSpeed(0)
   , m_rotationToDo(0)
@@ -137,14 +137,12 @@ void Object::setRotation(double angle, double speed)
 
 void Object::setPosition(Coordinates position)
 {
-  std::cout << "setPosition " << m_texId << std::endl;
   m_position = position;
   m_destinations.clear();
 }
 
 void Object::setDestination(Coordinates destination)
 {
-  std::cout << "setDestination";
   m_destinations.clear();
   addDestination(destination);
 }
@@ -152,4 +150,14 @@ void Object::setDestination(Coordinates destination)
 void Object::addDestination(Coordinates destination)
 {
   m_destinations.push_back(destination);
+}
+
+bool Object::isMoving()
+{
+  return m_destinations.size();
+}
+
+bool Object::isRotating()
+{
+  return m_rotationToDo;
 }

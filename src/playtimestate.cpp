@@ -8,7 +8,12 @@ PlayTimeState::PlayTimeState()
 
 void PlayTimeState::update(float dt)
 {
+  if (pts != m_pBoard->getPoints()) {
+    std::cout << "POINTS: " << m_pBoard->getPoints() << std::endl;
+    pts = m_pBoard->getPoints();
+  }
   m_pBoard->update(dt);
+
 }
 
 void PlayTimeState::input(SDL_Event &event)

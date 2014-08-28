@@ -10,7 +10,8 @@ enum GemType {
   GT_PURPLE,
   GT_RED,
   GT_YELLOW,
-  GT_COUNT
+  GT_COUNT,
+  GT_INVALID
 };
 
 class Board;
@@ -28,18 +29,21 @@ public:
   void update(float dt);
   void draw();
   bool onClicked();
+  bool isSelected();
 
+  bool remove();
   void setType(GemType type);
   GemType getType() { return m_type; }
   Board* getBoard();
+  Coordinates getCoordinates();
   bool isRemoved();
-  void remove();
 
 private:
   Object* m_gem;
   GemType m_type;
   Coordinates m_logicalCoords;  // remember to call computeDrawingOrign after changing these coords!
   Board* m_pBoard;
+  // this flag disables rendering.
   bool m_removed;
 
   void onGemReachedDestination();

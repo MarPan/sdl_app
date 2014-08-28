@@ -15,6 +15,7 @@ public:
   void draw();
   void input(SDL_Event &event);
 
+  int pts;
 private:
   Board* m_pBoard;
 };

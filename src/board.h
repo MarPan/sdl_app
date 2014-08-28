@@ -27,7 +27,7 @@ public:
                 Coordinates gemTwo);
 
   // @args Logical coords
-  void selectGem(int x, int y);
+  void deselectGem(Coordinates gem);
 
   // Drawing related stuff
   Coordinates getGemsOffset();
@@ -36,10 +36,22 @@ public:
   std::string getGemPath(GemType);
   bool clickGem(int x, int y);
 
-  void setSelectedGem(Coordinates coords);
   void setTime(std::string);
-  Coordinates getSelectedGem() const;
   void gemFinishedMoving(GemController *gem);
+  int getPoints();
+
+  inline void setState(const state_type& state);
+
+  void print() {
+    std::cout<<"BOARD: ";
+    for (int j = 0; j < m_size.second; j++)
+      {
+        std::cout<<"\n";
+        for (int i = 0; i < m_size.first; i++)
+          {if (m_gems[i][j])
+            std::cout<<m_gems[i][j]->getType()<<" "; }
+      }
+  }
 
 private:
   Coordinates m_size;
@@ -48,11 +60,15 @@ private:
   std::vector<std::vector<GemController*>> m_gems;
   Coordinates m_gemsOffset;
   std::map<GemType, std::string> m_gemRegistry;
-  Coordinates m_selectedGem;
+  std::vector<Coordinates> m_gemsToBeRemoved;
   BoardLogic *m_boardLogic;
   std::string m_Time;
 
   std::vector<GemController*> m_gemsInMotion;
+
+  std::string m_invalidMoveSfx;
+  std::string m_gemsRemovedSfx;
+  std::string m_gemFellSfx;
 
   void parseMoveInfo(const MoveInfo& moveInfo);
 };

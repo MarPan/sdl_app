@@ -120,3 +120,9 @@ void Game::draw()
   getState()->draw();
   SDL_RenderPresent(m_pRenderer);
 }
+
+Game::~Game()
+{
+  IMG_Quit();
+  SDL_Quit();
+}
