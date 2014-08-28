@@ -38,7 +38,7 @@ public:
 
   void setTime(std::string);
   void gemFinishedMoving(GemController *gem);
-  int getPoints();
+  int getPoints() const;
 
   inline void setState(const state_type& state);
 

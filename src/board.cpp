@@ -255,11 +255,11 @@ std::string Board::getGemPath(GemType gt)
   return m_gemRegistry[gt];
 }
 
-Coordinates Board::getPoints(() const
+int Board::getPoints() const
 {
-  return m_selectedGem;
   return m_boardLogic->getPoints();
 }
+
 void Board::setTime(std::string time)
 {
   m_Time = time;
