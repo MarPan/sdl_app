@@ -50,14 +50,14 @@ void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
 {
 
 //  void print() {
-    std::cout<<"LOGIC: ";
-    for (int j = 0; j < 8; j++)
-      {
-        std::cout<<"\n";
-        for (int i = 0; i < 8; i++)
-          {
-            std::cout<<m_logicBoard[i][j]<<" "; }
-      }
+//    std::cout<<"LOGIC: ";
+//    for (int j = 0; j < 8; j++)
+//      {
+//        std::cout<<"\n";
+//        for (int i = 0; i < 8; i++)
+//          {
+//            std::cout<<m_logicBoard[i][j]<<" "; }
+//      }
 //  }
 
   if (isMovePossible(src, dst)) {

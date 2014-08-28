@@ -50,8 +50,8 @@ Board::Board(int rows, int cols)
     }
 
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
-  theSoundManager.load("sounds/Pop.ogg", "sounds/Pop.ogg", SoundType::MUSIC);
-  theSoundManager.load("sounds/click1.wav", "sounds/click1.wav", SoundType::SFX);
+  theSoundManager.load("break.ogg", "break.ogg", SoundType::SFX);
+  theSoundManager.load("click.ogg", "click.ogg", SoundType::SFX);
 
   MoveInfo moveInfo;
   m_boardLogic->newBoard(m_size.first, m_size.second, moveInfo);
@@ -88,7 +88,7 @@ void Board::gemFinishedMoving(GemController *gem)
   if (gem->isRemoved()) {
     m_gemsToBeRemoved.push_back(gem->getCoordinates());
   } else {
-    theSoundManager.playSound("sounds/click1.wav", 0);
+    theSoundManager.playSound("click.ogg", 0);
   }
 
   for (size_t i = 0; i < m_gemsInMotion.size(); i++) {
@@ -116,7 +116,7 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
 {
   // std::cout<<"\n\n\n\n";
   for (auto& is : moveInfo.getInvalidSwaps()) {
-    theSoundManager.playMusic("sounds/Pop.ogg", 0);
+    theSoundManager.playSound("break.ogg", 0);
     // set multiple destinations for both gems
     // and this is why I should make my own Coordinates class instead of std::pair
     m_gems[is.first.first][is.first.second]->addMoveTo(is.second);
@@ -165,7 +165,7 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
     m_gemsInMotion.push_back(m_gems[c.first][c.second]);
   }
   if (m_gemsInMotion.size()) {
-    setState(new BoardStates::GemsMovingState(this));
+    //setState(new BoardStates::GemsMovingState(this));
   }
 }
 
@@ -214,6 +214,14 @@ int Board::getTileWidth()
 Coordinates Board::getSize()
 {
   return m_size;
+}
+
+// @args Logical coords
+void Board::deselectGem(Coordinates gem)
+{
+  if (m_gems[gem.first][gem.second]->isSelected()) {
+    m_gems[gem.first][gem.second]->onClicked();
+  }
 }
 
 std::string Board::getGemPath(GemType gt)

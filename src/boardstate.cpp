@@ -40,6 +40,7 @@ BoardState::~BoardState()
 
 BoardState* BoardState::onClick(int x, int y)
 {
+  std::cout << x << " " << y << std::endl;
   return nullptr;
 }
 
@@ -62,7 +63,7 @@ IdleState::IdleState(Board *board)
 BoardState* IdleState::onClick(int x, int y)
 {
   auto coords = translateToTileCoords(x,y);
-  if (coords.first > 0 && coords.second > 0) {
+  if (coords.first >= 0 && coords.second >= 0) {
     if (m_pBoard->clickGem(coords.first, coords.second))
       return new SelectedState(m_pBoard, coords);
   }
@@ -72,7 +73,7 @@ BoardState* IdleState::onClick(int x, int y)
 SelectedState::SelectedState(Board* board, Coordinates selectedGem)
   : BoardState(board)
   , m_selectedGem(selectedGem)
-{ std::cout << "BOARD SelectedState" << std::endl; }
+{ std::cout << "BOARD SelectedState " << coordsToString(m_selectedGem) << std::endl; }
 
 BoardState* SelectedState::onClick(int x, int y)
 {
@@ -82,19 +83,17 @@ BoardState* SelectedState::onClick(int x, int y)
   if ((abs(m_selectedGem.first - coords.first) == 1 && m_selectedGem.second == coords.second) ||
       (abs(m_selectedGem.second - coords.second) == 1 && m_selectedGem.first == coords.first)) {
     m_pBoard->swapGems(m_selectedGem, coords);
-    m_pBoard->clickGem(m_selectedGem.first, m_selectedGem.second);
+    m_pBoard->deselectGem(coords);
     return new GemsMovingState(m_pBoard);
   } else {
-      // TODO: FIXME:
-    std::cout <<  "deselecting gem" << std::endl;
-    m_pBoard->clickGem(m_selectedGem.first, m_selectedGem.second);
     return new IdleState(m_pBoard);
   }
 }
 
 void SelectedState::onExit()
 {
-  m_pBoard->clickGem(m_selectedGem.first, m_selectedGem.second);
+  std::cout << "-------\n Leaving SelectedState " << coordsToString(m_selectedGem) << std::endl;
+  m_pBoard->deselectGem(m_selectedGem);
 }
 
 GemsMovingState::GemsMovingState(Board *board)

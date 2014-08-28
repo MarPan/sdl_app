@@ -27,7 +27,7 @@ public:
                 Coordinates gemTwo);
 
   // @args Logical coords
-  void selectGem(int x, int y);
+  void deselectGem(Coordinates gem);
 
   // Drawing related stuff
   Coordinates getGemsOffset();
