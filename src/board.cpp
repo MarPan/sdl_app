@@ -216,3 +216,8 @@ Coordinates Board::getSelectedGem() const
 {
   return m_selectedGem->getCoordinates();
 }
+
+int Board::getPoints()
+{
+  return m_boardLogic->getPoints();
+}

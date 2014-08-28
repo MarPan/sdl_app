@@ -14,6 +14,7 @@ public:
   void update(float dt);
   void draw();
 
+  int pts;
 private:
   Board* m_pBoard;
 };

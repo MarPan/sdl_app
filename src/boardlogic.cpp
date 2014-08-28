@@ -2,11 +2,13 @@
 
 BoardLogic::BoardLogic(int x, int y)
   : m_logicBoard(x, std::vector<GemType>(y))
+  , m_points(0)
 {
 }
 
 void BoardLogic::newBoard(int x, int y, MoveInfo &moveInfo)
 {
+  m_points = 0;
   std::vector<std::vector<GemType>> newLogicBoard(x, std::vector<GemType>(y));
   m_logicBoard = newLogicBoard;
   for (int i = 0; i < x; i++) {
@@ -35,6 +37,7 @@ void BoardLogic::newBoard(int x, int y, MoveInfo &moveInfo)
       moveInfo.addCreation(Creation(i, j, m_logicBoard[i][j]));
     }
   }
+  resetPoints();
 }
 // moveInfo will be filled with annihilations of gems
 // that are in connections
@@ -120,9 +123,48 @@ void BoardLogic::removeGems(const std::vector<Coordinates>& toBeRemoved, MoveInf
   m_logicBoard = copy;
 }
 
+
+
+void BoardLogic::handleConnectionInRow(int row, int startCol, int length, MoveInfo &moveInfo)
+{
+  if (length == 3) {
+    for (int x = startCol; x > startCol - length; x--) {
+      moveInfo.addAnnihilation(Coordinates(x,row));
+    }
+    m_points += 3;
+  } else { // matched more than 3 - remove whole row!
+    for (int x = 0; x < m_logicBoard.size(); x++) {
+      moveInfo.addAnnihilation(Coordinates(x,row));
+    }
+    m_points += m_logicBoard.size();
+  }
+}
+
+void BoardLogic::handleConnectionInColumn(int column, int startRow, int length, MoveInfo &moveInfo)
+{
+  if (length == 3) {
+    for (int y = startRow; y > startRow - length; y--) {
+      moveInfo.addAnnihilation(Coordinates(column, y));
+    }
+    m_points += 3;
+  } else { // matched more than 3 - remove whole column!
+    for (int y = 0; y < m_logicBoard[column].size(); y++) {
+      moveInfo.addAnnihilation(Coordinates(column,y));
+    }
+    m_points += m_logicBoard.size();
+  }
+}
+
+
 // scans the board. If finds connection, adds Annihilation to the moveInfo
 bool BoardLogic::findConnections(const std::vector<std::vector<GemType>>& logicBoard, MoveInfo& moveInfo)
 {
+  // I don't have an easy way to spot combined connections, like
+  // *
+  // * * *
+  // *
+  // all I can do is to analyze coords of created annihilations later on
+
   int minLength = 3;
 
   // search in cols
@@ -135,17 +177,13 @@ bool BoardLogic::findConnections(const std::vector<std::vector<GemType>>& logicB
         sameGems++;
         if (j+1 == logicBoard[i].size() - 1) { // if next gem is is the last gem
           if (sameGems >= minLength) {
-            for (int y = j + 1; y > j + 1 - sameGems; y--) {
-              moveInfo.addAnnihilation(Coordinates(i,y));
-            }
+            handleConnectionInColumn(i, j + 1, sameGems, moveInfo);
           }
           sameGems = 1;
         }
       } else {
         if (sameGems >= minLength) {
-          for (int y = j; y > j - sameGems; y--) {
-            moveInfo.addAnnihilation(Coordinates(i,y));
-          }
+          handleConnectionInColumn(i, j, sameGems, moveInfo);
         }
         sameGems = 1;
       } // else (next gem is different)
@@ -162,16 +200,12 @@ bool BoardLogic::findConnections(const std::vector<std::vector<GemType>>& logicB
         sameGems++;
         if (i+1 == logicBoard.size() - 1) {
           if (sameGems >= minLength) {
-            for (int x = i + 1; x > i + 1 - sameGems; x--) {
-              moveInfo.addAnnihilation(Coordinates(x,j));
-            }
+            handleConnectionInRow(j, i + 1, sameGems, moveInfo);
           }
         }
       } else {
         if (sameGems >= minLength) {
-          for (int x = i; x > i - sameGems; x--) {
-            moveInfo.addAnnihilation(Coordinates(x,j));
-          }
+          handleConnectionInRow(j, i, sameGems, moveInfo);
         }
         sameGems = 1;
       } // else (next gem is different)
@@ -186,4 +220,14 @@ bool BoardLogic::findConnections(const std::vector<std::vector<GemType>>& logicB
 void BoardLogic::updateBoard(MoveInfo& moveInfo)
 {
  // std::cout << "BoardLogic tick!" << std::endl;
+}
+
+int BoardLogic::getPoints()
+{
+  return m_points;
+}
+
+void BoardLogic::resetPoints()
+{
+  m_points = 0;
 }

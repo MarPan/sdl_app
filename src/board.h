@@ -39,6 +39,7 @@ public:
   void setSelectedGem(Coordinates coords);
   Coordinates getSelectedGem() const;
   void gemFinishedMoving(GemController *gem);
+  int getPoints();
 
   void print() {
     std::cout<<"BOARD: ";
