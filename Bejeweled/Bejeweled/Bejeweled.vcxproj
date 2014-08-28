@@ -37,10 +37,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)\..\..\Libraries\SDL2_image-2.0.0\include;$(ProjectDir)\..\..\\Libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\..\..\Libraries\SDL2_image-2.0.0\include;$(ProjectDir)\..\..\Libraries\SDL2-2.0.3\include;$(ProjectDir)\..\..\Libraries\SDL2_ttf-2.0.12\include;$(ProjectDir)\..\..\Libraries\SDL2_mixer-2.0.0\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(ProjectDir)\..\..\Libraries\SDL2_image-2.0.0\lib\x86;$(ProjectDir)\..\..\Libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)\..\..\Libraries\SDL2_image-2.0.0\lib\x86;$(ProjectDir)\..\..\Libraries\SDL2-2.0.3\lib\x86;$(ProjectDir)\..\..\Libraries\SDL2_ttf-2.0.12\lib\x86;$(ProjectDir)\..\..\Libraries\SDL2_mixer-2.0.0\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -50,7 +50,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
