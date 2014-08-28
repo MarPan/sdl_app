@@ -1,6 +1,7 @@
 #include <iostream>
 #include "gemcontroller.h"
 #include "board.h"
+#include "soundmanager.h"
 
 GemController::GemController(int x, int y, Board* board)
   : m_gem(new Object())

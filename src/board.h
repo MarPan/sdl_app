@@ -61,8 +61,11 @@ private:
   std::map<GemType, std::string> m_gemRegistry;
   std::vector<Coordinates> m_gemsToBeRemoved;
   BoardLogic *m_boardLogic;
-
   std::vector<GemController*> m_gemsInMotion;
+
+  std::string m_invalidMoveSfx;
+  std::string m_gemsRemovedSfx;
+  std::string m_gemFellSfx;
 
   void parseMoveInfo(const MoveInfo& moveInfo);
 };

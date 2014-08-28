@@ -1,5 +1,6 @@
 #include <ctime>
 #include <iostream>
+#include <algorithm>
 #include "board.h"
 #include "gemcontroller.h"
 #include "texturemanager.h"
@@ -13,6 +14,9 @@ Board::Board(int rows, int cols)
   , m_gemWidth(42)
   , m_gems(rows, std::vector<GemController*>(cols))
   , m_gemsOffset(Coordinates(345,125))
+  , m_invalidMoveSfx("break.ogg")
+  , m_gemsRemovedSfx("match1.ogg")
+  , m_gemFellSfx("fall.ogg")
 {
   setState(new BoardStates::IdleState(this));
   m_boardLogic = new BoardLogic(rows, cols);
@@ -49,13 +53,14 @@ Board::Board(int rows, int cols)
       }
     }
 
-  theTextureManager.load(m_backgroundPath, m_backgroundPath);
-  theSoundManager.load("break.ogg", "break.ogg", SoundType::SFX);
-  theSoundManager.load("click.ogg", "click.ogg", SoundType::SFX);
-
   MoveInfo moveInfo;
   m_boardLogic->newBoard(m_size.first, m_size.second, moveInfo);
   parseMoveInfo(moveInfo);
+
+  theTextureManager.load(m_backgroundPath, m_backgroundPath);
+  theSoundManager.load(m_gemsRemovedSfx, m_gemsRemovedSfx, SoundType::SFX);
+  theSoundManager.load(m_invalidMoveSfx, m_invalidMoveSfx, SoundType::SFX);
+  theSoundManager.load(m_gemFellSfx, m_gemFellSfx, SoundType::SFX);
 }
 
 void Board::setState(const state_type& state)
@@ -88,7 +93,7 @@ void Board::gemFinishedMoving(GemController *gem)
   if (gem->isRemoved()) {
     m_gemsToBeRemoved.push_back(gem->getCoordinates());
   } else {
-    theSoundManager.playSound("click.ogg", 0);
+    theSoundManager.playSound(m_gemFellSfx, 0);
   }
 
   for (size_t i = 0; i < m_gemsInMotion.size(); i++) {
@@ -99,7 +104,7 @@ void Board::gemFinishedMoving(GemController *gem)
   }
 
   if (m_gemsInMotion.empty()) {
-    std::cout << "All gems finished moving" << std::endl;
+    // std::cout << "All gems finished moving" << std::endl;
     setState(new BoardStates::IdleState(this));
     MoveInfo moveInfo;
     if (m_gemsToBeRemoved.size()) {
@@ -114,9 +119,9 @@ void Board::gemFinishedMoving(GemController *gem)
 
 void Board::parseMoveInfo(const MoveInfo& moveInfo)
 {
-  // std::cout<<"\n\n\n\n";
+  // INVALID SWAPS
   for (auto& is : moveInfo.getInvalidSwaps()) {
-    theSoundManager.playSound("break.ogg", 0);
+    theSoundManager.playSound(m_invalidMoveSfx, 0);
     // set multiple destinations for both gems
     // and this is why I should make my own Coordinates class instead of std::pair
     m_gems[is.first.first][is.first.second]->addMoveTo(is.second);
@@ -129,12 +134,16 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
     m_gemsInMotion.push_back(m_gems[is.second.first][is.second.second]);
   }
 
+
+  // RELOCATIONS
   for (auto& r : moveInfo.getRelocations()) {
     m_gems[r.first.first][r.first.second]->addMoveTo(r.second);
     m_gemsInMotion.push_back(m_gems[r.first.first][r.first.second]);
     std::swap(m_gems[r.first.first][r.first.second], m_gems[r.second.first][r.second.second]);
   }
 
+
+  // SWAPS
   for (auto& r : moveInfo.getSwaps()) {
     m_gems[r.first.first][r.first.second]->addMoveTo(r.second);
     m_gems[r.second.first][r.second.second]->addMoveTo(r.first);
@@ -143,14 +152,20 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
     std::swap(m_gems[r.first.first][r.first.second], m_gems[r.second.first][r.second.second]);
   }
 
+
+  // ANNIHILATIONS
   for (auto& a : moveInfo.getAnnihilations()) {
     // only mark gem - it won't be rendered.
     // we will delete it when a new gem will be creatad on top of it.
+    theSoundManager.playSound(m_gemsRemovedSfx, 0);
     if (m_gems[a.first][a.second]->remove()) {
       m_gemsInMotion.push_back(m_gems[a.first][a.second]);
     }
   }
 
+
+  // CREATIONS
+  std::vector<std::vector<Creation>> newGemsInColumn(m_gems.size());
   for (auto& c : moveInfo.getCreations()) {
     if (m_gems[c.first][c.second]) {
       if (m_gems[c.first][c.second]->isRemoved() == false) {
@@ -158,14 +173,18 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
       }
       delete m_gems[c.first][c.second];
     }
-    m_gems[c.first][c.second] =
-          new GemController(c.first, -1, this); // create it over the board
-    m_gems[c.first][c.second]->setType(c.type);
-    m_gems[c.first][c.second]->addMoveTo(Coordinates(c.first, c.second)); // let it fall to its place
-    m_gemsInMotion.push_back(m_gems[c.first][c.second]);
+    newGemsInColumn[c.first].push_back(c);
   }
-  if (m_gemsInMotion.size()) {
-    //setState(new BoardStates::GemsMovingState(this));
+
+  for (int i = 0 ; i < newGemsInColumn.size(); i++) {
+    std::sort(newGemsInColumn[i].begin(), newGemsInColumn[i].end());
+    for (int j = 0; j < newGemsInColumn[i].size(); j++) {
+      Creation &c = newGemsInColumn[i][j];
+      m_gems[c.first][c.second] = new GemController(c.first, c.second - newGemsInColumn[i].size(), this);
+      m_gems[c.first][c.second]->setType(c.type);
+      m_gems[c.first][c.second]->addMoveTo(Coordinates(c.first, c.second)); // let it fall to its place
+      m_gemsInMotion.push_back(m_gems[c.first][c.second]);
+    }
   }
 }
 

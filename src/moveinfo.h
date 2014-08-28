@@ -16,6 +16,8 @@ struct Creation
   GemType type;
   int first;
   int second;
+  inline bool operator< (const Creation& rhs) const
+  { return first < rhs.first; }
 };
 
 struct MoveInfo
