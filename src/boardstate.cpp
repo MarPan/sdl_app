@@ -27,6 +27,14 @@ Coordinates BoardState::translateToTileCoords(int x, int y)
   return retVal;
 }
 
+void BoardState::onEnter()
+{
+  std::cout << "StateChagned\n";
+}
+
+void BoardState::onExit()
+{ }
+
 BoardState::~BoardState()
 { }
 
@@ -54,32 +62,39 @@ IdleState::IdleState(Board *board)
 BoardState* IdleState::onClick(int x, int y)
 {
   auto coords = translateToTileCoords(x,y);
-  if (coords.first != -1) {
+  if (coords.first > 0 && coords.second > 0) {
     if (m_pBoard->clickGem(coords.first, coords.second))
-      m_pBoard->setSelectedGem(coords);
-      //std::cout << "Selected: " << coords.first << " " << coords.second << std::endl;
-      return new SelectedState(m_pBoard);
+      return new SelectedState(m_pBoard, coords);
   }
   return nullptr;
 }
 
-SelectedState::SelectedState(Board* board)
+SelectedState::SelectedState(Board* board, Coordinates selectedGem)
   : BoardState(board)
+  , m_selectedGem(selectedGem)
 { std::cout << "BOARD SelectedState" << std::endl; }
 
 BoardState* SelectedState::onClick(int x, int y)
 {
   auto coords = translateToTileCoords(x,y);
-  auto prevCoords = m_pBoard->getSelectedGem();
   
   //std::cout << "Dest: " << coords.first << " " << coords.second << std::endl;
-  if ((abs(prevCoords.first - coords.first) == 1 && prevCoords.second == coords.second) ||
-      (abs(prevCoords.second - coords.second) == 1 && prevCoords.first == coords.first)) {
-    m_pBoard->swapGems(m_pBoard->getSelectedGem(), coords);
+  if ((abs(m_selectedGem.first - coords.first) == 1 && m_selectedGem.second == coords.second) ||
+      (abs(m_selectedGem.second - coords.second) == 1 && m_selectedGem.first == coords.first)) {
+    m_pBoard->swapGems(m_selectedGem, coords);
+    m_pBoard->clickGem(m_selectedGem.first, m_selectedGem.second);
+    return new GemsMovingState(m_pBoard);
   } else {
-    m_pBoard->clickGem(prevCoords.first, prevCoords.second);
+      // TODO: FIXME:
+    std::cout <<  "deselecting gem" << std::endl;
+    m_pBoard->clickGem(m_selectedGem.first, m_selectedGem.second);
+    return new IdleState(m_pBoard);
   }
-  return new IdleState(m_pBoard);
+}
+
+void SelectedState::onExit()
+{
+  m_pBoard->clickGem(m_selectedGem.first, m_selectedGem.second);
 }
 
 GemsMovingState::GemsMovingState(Board *board)

@@ -13,7 +13,6 @@ Board::Board(int rows, int cols)
   , m_gemWidth(42)
   , m_gems(rows, std::vector<GemController*>(cols))
   , m_gemsOffset(Coordinates(345,125))
-  , m_selectedGem(nullptr)
 {
   setState(new BoardStates::IdleState(this));
   m_boardLogic = new BoardLogic(rows, cols);
@@ -59,6 +58,16 @@ Board::Board(int rows, int cols)
   parseMoveInfo(moveInfo);
 }
 
+void Board::setState(const state_type& state)
+{
+  if (m_state) {
+    m_state->onExit();
+    delete m_state;
+  }
+  m_state = state;
+  m_state->onEnter();
+}
+
 Board::~Board()
 {
   for (size_t i = 0; i < m_gems.size(); i++)
@@ -76,12 +85,6 @@ bool Board::swapGems(Coordinates gemOne, Coordinates gemTwo)
 
 void Board::gemFinishedMoving(GemController *gem)
 {
-  if (gem == m_selectedGem) {
-  // if (gem->isSelected()) {
-    gem->onClicked();
-    m_selectedGem = nullptr; // maybe I shoud store a ptr
-  }
-
   if (gem->isRemoved()) {
     m_gemsToBeRemoved.push_back(gem->getCoordinates());
   } else {
@@ -162,7 +165,6 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
     m_gemsInMotion.push_back(m_gems[c.first][c.second]);
   }
   if (m_gemsInMotion.size()) {
-    std::cout << "setting GEMSMOVINGSTATE " << std::endl;
     setState(new BoardStates::GemsMovingState(this));
   }
 }
@@ -217,16 +219,6 @@ Coordinates Board::getSize()
 std::string Board::getGemPath(GemType gt)
 {
   return m_gemRegistry[gt];
-}
-
-void Board::setSelectedGem(Coordinates coords)
-{
-  m_selectedGem = m_gems[coords.first][coords.second];
-}
-
-Coordinates Board::getSelectedGem() const
-{
-  return m_selectedGem->getCoordinates();
 }
 
 int Board::getPoints()

@@ -36,10 +36,10 @@ public:
   std::string getGemPath(GemType);
   bool clickGem(int x, int y);
 
-  void setSelectedGem(Coordinates coords);
-  Coordinates getSelectedGem() const;
   void gemFinishedMoving(GemController *gem);
   int getPoints();
+
+  inline void setState(const state_type& state);
 
   void print() {
     std::cout<<"BOARD: ";
@@ -59,7 +59,6 @@ private:
   std::vector<std::vector<GemController*>> m_gems;
   Coordinates m_gemsOffset;
   std::map<GemType, std::string> m_gemRegistry;
-  GemController* m_selectedGem;
   std::vector<Coordinates> m_gemsToBeRemoved;
   BoardLogic *m_boardLogic;
 
