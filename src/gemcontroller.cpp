@@ -106,9 +106,13 @@ Board* GemController::getBoard()
   return m_pBoard;
 }
 
-void GemController::remove()
-{  
-  setRotation(180, 1440);
+bool GemController::remove()
+{
+  if (!m_gem->isRotating()) {
+    setRotation(180, 1440);
+    return true; // successfully removed
+  }
+  return false; // cannot remove already removed gem
   // we should set m_removed only after rotation finishes
 }
 

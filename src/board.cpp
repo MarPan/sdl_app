@@ -18,6 +18,7 @@ Board::Board(int rows, int cols)
   m_boardLogic = new BoardLogic(rows, cols);
 
   std::srand(std::time(0));
+  std::srand(200);
 
   for (int i = 0; i < GT_COUNT; i++) {
     std::string path;
@@ -103,7 +104,7 @@ void Board::gemFinishedMoving(GemController *gem)
 
 void Board::parseMoveInfo(const MoveInfo& moveInfo)
 {
-  std::cout<<"\n\n\n\n";
+  // std::cout<<"\n\n\n\n";
   for (auto& is : moveInfo.getInvalidSwaps()) {
     // set multiple destinations for both gems
     // and this is why I should make my own Coordinates class instead of std::pair
@@ -116,9 +117,6 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
     m_gemsInMotion.push_back(m_gems[is.first.first][is.first.second]);
     m_gemsInMotion.push_back(m_gems[is.second.first][is.second.second]);
   }
-
-  printf("BEFORE\n");
-  print();
 
   for (auto& r : moveInfo.getRelocations()) {
     m_gems[r.first.first][r.first.second]->addMoveTo(r.second);
@@ -133,15 +131,13 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
     m_gemsInMotion.push_back(m_gems[r.second.first][r.second.second]);
     std::swap(m_gems[r.first.first][r.first.second], m_gems[r.second.first][r.second.second]);
   }
- printf("AFTER\n");
-  print();
-
 
   for (auto& a : moveInfo.getAnnihilations()) {
     // only mark gem - it won't be rendered.
     // we will delete it when a new gem will be creatad on top of it.
-    m_gems[a.first][a.second]->remove();
-    m_gemsInMotion.push_back(m_gems[a.first][a.second]);
+    if (m_gems[a.first][a.second]->remove()) {
+      m_gemsInMotion.push_back(m_gems[a.first][a.second]);
+    }
   }
 
   for (auto& c : moveInfo.getCreations()) {

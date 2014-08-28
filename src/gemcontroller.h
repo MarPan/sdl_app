@@ -31,7 +31,7 @@ public:
   bool onClicked();
   bool isSelected();
 
-  void remove();
+  bool remove();
   void setType(GemType type);
   GemType getType() { return m_type; }
   Board* getBoard();
