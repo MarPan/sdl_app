@@ -4,6 +4,7 @@
 #include "gemcontroller.h"
 #include "texturemanager.h"
 #include "boardlogic.h"
+#include "soundmanager.h"
 
 Board::Board(int rows, int cols)
   : Object()
@@ -50,6 +51,9 @@ Board::Board(int rows, int cols)
     }
 
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
+  theSoundManager.load("sounds/Pop.ogg", "sounds/Pop.ogg", SoundType::MUSIC);
+  theSoundManager.load("sounds/click1.wav", "sounds/click1.wav", SoundType::SFX);
+
   MoveInfo moveInfo;
   m_boardLogic->newBoard(m_size.first, m_size.second, moveInfo);
   parseMoveInfo(moveInfo);
@@ -80,6 +84,8 @@ void Board::gemFinishedMoving(GemController *gem)
 
   if (gem->isRemoved()) {
     m_gemsToBeRemoved.push_back(gem->getCoordinates());
+  } else {
+    theSoundManager.playSound("sounds/click1.wav", 0);
   }
 
   for (size_t i = 0; i < m_gemsInMotion.size(); i++) {
@@ -91,6 +97,7 @@ void Board::gemFinishedMoving(GemController *gem)
 
   if (m_gemsInMotion.empty()) {
     std::cout << "All gems finished moving" << std::endl;
+    setState(new BoardStates::IdleState(this));
     MoveInfo moveInfo;
     if (m_gemsToBeRemoved.size()) {
       m_boardLogic->removeGems(m_gemsToBeRemoved, moveInfo);
@@ -106,6 +113,7 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
 {
   // std::cout<<"\n\n\n\n";
   for (auto& is : moveInfo.getInvalidSwaps()) {
+    theSoundManager.playMusic("sounds/Pop.ogg", 0);
     // set multiple destinations for both gems
     // and this is why I should make my own Coordinates class instead of std::pair
     m_gems[is.first.first][is.first.second]->addMoveTo(is.second);
@@ -152,6 +160,10 @@ void Board::parseMoveInfo(const MoveInfo& moveInfo)
     m_gems[c.first][c.second]->setType(c.type);
     m_gems[c.first][c.second]->addMoveTo(Coordinates(c.first, c.second)); // let it fall to its place
     m_gemsInMotion.push_back(m_gems[c.first][c.second]);
+  }
+  if (m_gemsInMotion.size()) {
+    std::cout << "setting GEMSMOVINGSTATE " << std::endl;
+    setState(new BoardStates::GemsMovingState(this));
   }
 }
 

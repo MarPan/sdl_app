@@ -26,7 +26,6 @@ void GemController::setCoords(Coordinates coords)
 
 void GemController::addMoveTo(Coordinates coords)
 {
-  std::cout << "From (" << m_logicalCoords.first << "," << m_logicalCoords.second << ") to " << "(" << coords.first << "," << coords.second << ")\n";;
   m_logicalCoords = coords;
   Coordinates destination = computePosition(coords);
   m_gem->addDestination(destination);
