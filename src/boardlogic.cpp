@@ -120,5 +120,4 @@ bool BoardLogic::findConnections(const std::vector<std::vector<GemType>>& logicB
 
 void BoardLogic::updateBoard(MoveInfo& moveInfo)
 {
-  std::cout << "BoardLogic tick!" << std::endl;
 }

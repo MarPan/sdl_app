@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include "playtimestate.h"
 
 PlayTimeState::PlayTimeState()
@@ -13,9 +15,8 @@ void PlayTimeState::update(float dt)
 
 void PlayTimeState::input(SDL_Event &event)
 {
-  std::string timeStr = static_cast<char*>(event.user.data1);
-  std::cout << "SDL_UserEvent arrived with time " << timeStr << std::endl;
-  m_pBoard->setTime(timeStr);
+  int timeStr = event.user.code;
+  m_pBoard->setTime(getStringTime(timeStr));
 }
 
 void PlayTimeState::draw()
@@ -26,4 +27,12 @@ void PlayTimeState::draw()
 void PlayTimeState::onClick(int x, int y)
 {
   m_pBoard->onClick(x, y);
+}
+
+std::string PlayTimeState::getStringTime(int time)
+{
+    std::stringstream timeText;
+    timeText.str( "" );
+    timeText << std::setw(2) << std::setfill('0') << time/60 << ":" << std::setw(2) << std::setfill('0') << time%60;
+    return timeText.str();
 }

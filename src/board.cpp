@@ -85,7 +85,6 @@ void Board::gemFinishedMoving(GemController *gem)
   }
 
   if (m_gemsInMotion.empty()) {
-    std::cout << "All gems finished moving" << std::endl;
     MoveInfo moveInfo;
     m_boardLogic->updateBoard(moveInfo);
     parseMoveInfo(moveInfo);
@@ -136,8 +135,7 @@ void Board::update(float dt)
       if (m_gems[i][j])
         m_gems[i][j]->update(dt);
 
-  SDL_Color textColor = { 0, 0, 255 };
-  //std::cout << "action_man" + m_Time;
+  SDL_Color textColor = { 0, 0, 255, 255 };
   theTextureManager.loadTextWithFont("Action-Man/Action_Man.ttf", "action_man" + m_Time, m_Time, textColor, 56);
 }
 

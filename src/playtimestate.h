@@ -17,6 +17,8 @@ public:
 
 private:
   Board* m_pBoard;
+
+  std::string getStringTime(int time);
 };
 
 #endif // PLAYTIMESTATE_H

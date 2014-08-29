@@ -101,9 +101,9 @@ void Game::input()
             //SDL_ShowSimpleMessageBox(0, "Mouse", "Some other button was pressed!", m_pWindow);
             break;
       }
-    case SDL_USEREVENT:
+      break;
+    case SDL_USEREVENT:        
         getState()->input(event);
-        std::cout << "SDL_UserEvent arrived " << std::endl;
     }
   }
 }

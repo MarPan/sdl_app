@@ -38,10 +38,9 @@ bool TextureManager::load(std::string fileName, std::string id)
 bool TextureManager::loadTextWithFont(std::string fontName, std::string id, std::string txt, SDL_Color txtColor, int fontSize)
 {
   fontName = resourcePath  + fontName;
-  std::cout << fontName << std::endl;
+  //std::cout << fontName << std::endl;
   if (m_textureMap.count(id))
   {
-    std::cout << "Failed to load " << fontName <<". Id exist."<<std::endl;
     return false;
   }
 
@@ -69,11 +68,6 @@ bool TextureManager::loadTextWithFont(std::string fontName, std::string id, std:
     return true;
   }
   return false;
-}
-
-void TextureManager::drawFont(std::string id, int x, int y)
-{
-    //draw(id, x, y, m_textureMap[id]->w, m_textureMap[id]->h);
 }
 
 std::pair<int,int> TextureManager::getSize(std::string id)
