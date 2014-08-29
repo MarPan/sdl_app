@@ -86,7 +86,6 @@
     <ClCompile Include="..\..\src\statemachine.cpp" />
     <ClCompile Include="..\..\src\texturemanager.cpp" />
     <ClCompile Include="..\..\src\utilities.cpp" />
-    <ClCompile Include="..\..\src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\board.h" />
@@ -106,7 +105,6 @@
     <ClInclude Include="..\..\src\statemachine.h" />
     <ClInclude Include="..\..\src\texturemanager.h" />
     <ClInclude Include="..\..\src\utilities.h" />
-    <ClInclude Include="..\..\src\world.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\sdl_app.pro" />

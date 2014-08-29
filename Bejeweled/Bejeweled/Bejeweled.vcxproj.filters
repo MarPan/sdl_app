@@ -1,34 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\src\gemstate.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\main.cpp">
       <Filter>sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\state.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\statemachine.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\texturemanager.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\utilities.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\world.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\boardlogic.cpp" />
-    <ClCompile Include="..\..\src\gemcontroller.cpp" />
-    <ClCompile Include="..\..\src\moveinfo.cpp" />
-    <ClCompile Include="..\..\src\soundmanager.cpp" />
     <ClCompile Include="..\..\src\board.cpp">
       <Filter>Board</Filter>
     </ClCompile>
@@ -44,21 +19,38 @@
     <ClCompile Include="..\..\src\playtimestate.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\boardlogic.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\moveinfo.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gemstate.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gemcontroller.cpp">
+      <Filter>Gem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\state.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\statemachine.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\texturemanager.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\utilities.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\soundmanager.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\gemstate.h" />
-    <ClInclude Include="..\..\src\multiplatformSDL.h" />
-    <ClInclude Include="..\..\src\object.h" />
-    <ClInclude Include="..\..\src\state.h" />
-    <ClInclude Include="..\..\src\statemachine.h" />
-    <ClInclude Include="..\..\src\texturemanager.h" />
-    <ClInclude Include="..\..\src\utilities.h" />
-    <ClInclude Include="..\..\src\world.h" />
-    <ClInclude Include="..\..\src\boardlogic.h" />
-    <ClInclude Include="..\..\src\gemcontroller.h" />
-    <ClInclude Include="..\..\src\moveinfo.h" />
-    <ClInclude Include="..\..\src\notifier.h" />
-    <ClInclude Include="..\..\src\soundmanager.h" />
     <ClInclude Include="..\..\src\board.h">
       <Filter>Board</Filter>
     </ClInclude>
@@ -74,6 +66,42 @@
     <ClInclude Include="..\..\src\playtimestate.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\boardlogic.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\moveinfo.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\gemcontroller.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\gemstate.h">
+      <Filter>Gem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\multiplatformSDL.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\notifier.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\soundmanager.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\state.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\statemachine.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\texturemanager.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\utilities.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\sdl_app.pro" />
@@ -87,6 +115,15 @@
     </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{3f6fd2f9-1412-4c8c-bcd6-194fdf41e8e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logic">
+      <UniqueIdentifier>{c0789f25-4380-461b-9f96-fa530f0b5a89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gem">
+      <UniqueIdentifier>{4daf77fc-6c27-4d89-b823-3f36b494b8dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{991485f6-d86a-44ec-83cc-c0ddfb906f49}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

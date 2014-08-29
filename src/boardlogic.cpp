@@ -46,9 +46,6 @@ void BoardLogic::findConnections(MoveInfo &moveInfo)
   findConnections(m_logicBoard, moveInfo);
 }
 
-void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
-{
-
 //  void print() {
 //    std::cout<<"LOGIC: ";
 //    for (int j = 0; j < 8; j++)
@@ -60,6 +57,8 @@ void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
 //      }
 //  }
 
+void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
+{
   if (isMovePossible(src, dst)) {
     moveInfo.addSwap(Swap(src, dst));
     std::swap(m_logicBoard[src.first][src.second], m_logicBoard[dst.first][dst.second]);
@@ -73,7 +72,10 @@ bool BoardLogic::isMovePossible(Coordinates src, Coordinates dst)
   auto copy = m_logicBoard;
   std::swap(copy[src.first][src.second], copy[dst.first][dst.second]);
   MoveInfo moveInfo;
-  return findConnections(copy, moveInfo);
+  int points = m_points;
+  bool retVal =  findConnections(copy, moveInfo);
+  m_points = points;
+  return retVal;
 }
 
 void BoardLogic::removeGems(const std::vector<Coordinates>& toBeRemoved, MoveInfo& moveInfo)
@@ -91,7 +93,6 @@ void BoardLogic::removeGems(const std::vector<Coordinates>& toBeRemoved, MoveInf
 
   // easier: for each column, starting from the bottomn, I count invalid gems
   // when I find real gem, I move it down by invalidGemsCount
-  // GENIALNE
 
   std::vector<std::vector<GemType>> copy = m_logicBoard;
   for (int i = 0; i < m_logicBoard.size(); i++) {
