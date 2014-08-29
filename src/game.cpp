@@ -7,8 +7,7 @@
 
 Game::Game()
   : _windowSize(std::pair<int, int>(755, 600)),
-    _exit(false),
-    _world(new World())
+    _exit(false)
 {
 
 }

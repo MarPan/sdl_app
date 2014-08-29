@@ -111,6 +111,6 @@ void TextureManager::draw(std::string id, const SDL_Rect& rect, double angle)
 TextureManager::~TextureManager()
 {
   for (auto& mapPair : m_textureMap) {
-    delete mapPair.second;
+    SDL_DestroyTexture(mapPair.second);
   }
 }

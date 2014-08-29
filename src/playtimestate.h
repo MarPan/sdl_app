@@ -22,7 +22,7 @@ private:
   std::pair<int,int> m_pointsTexSize;
   std::string m_fontName;
   std::pair<int,int> m_bgSize;
-  SDL_Color m_textColor = {0, 0 ,0, 255};
+  SDL_Color m_textColor;
 };
 
 #endif // PLAYTIMESTATE_H

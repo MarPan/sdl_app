@@ -7,6 +7,10 @@ PlayTimeState::PlayTimeState()
   : m_backgroundPath("BackGround.jpg")
   , m_fontName("Jersey M54.ttf")
 {
+  m_textColor.r = 0;
+  m_textColor.g = 0;
+  m_textColor.b = 0;
+  m_textColor.a = 255;
   m_pBoard = new Board(8, 8);  
   theTextureManager.load(m_backgroundPath, m_backgroundPath);
   m_bgSize = theTextureManager.getSize(m_backgroundPath);

@@ -154,7 +154,7 @@ void Object::addDestination(Coordinates destination)
 
 bool Object::isMoving()
 {
-  return m_destinations.size();
+  return !m_destinations.empty();
 }
 
 bool Object::isRotating()

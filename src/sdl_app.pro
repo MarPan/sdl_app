@@ -10,7 +10,6 @@ SOURCES += \
             object.cpp \
             texturemanager.cpp \
             utilities.cpp \
-            world.cpp \
     state.cpp \
     statemachine.cpp \
     gamestate.cpp \
@@ -29,7 +28,6 @@ HEADERS += \
             object.h \
             texturemanager.h \
             utilities.h \
-            world.h \
     state.h \
     statemachine.h \
     gamestate.h \

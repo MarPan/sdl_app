@@ -1,7 +1,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "world.h"
 #include "statemachine.h"
 #include "multiplatformSDL.h"
 
@@ -29,7 +28,6 @@ private:
 private:
   std::pair<int, int> _windowSize;
   bool _exit;
-  World *_world;
   int _lastTime;
   SDL_Window* m_pWindow;                     // holds window properties
   SDL_Renderer* m_pRenderer;                 // holds rendering surface properties

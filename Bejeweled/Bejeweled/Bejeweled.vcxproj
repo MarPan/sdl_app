@@ -19,12 +19,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -37,10 +39,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)\..\..\Libraries\SDL2_image-2.0.0\include;$(ProjectDir)\..\..\\Libraries\SDL2-2.0.3\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\..\..\\Libraries\SDL2_mixer-2.0.0\include;$(ProjectDir)\..\..\Libraries\SDL2_image-2.0.0\include;$(ProjectDir)\..\..\\Libraries\SDL2-2.0.3\include;$(ProjectDir)\..\..\\Libraries\SDL2_ttf-2.0.12\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(ProjectDir)\..\..\Libraries\SDL2_image-2.0.0\lib\x86;$(ProjectDir)\..\..\Libraries\SDL2-2.0.3\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)\..\..\Libraries\SDL2_mixer-2.0.0\lib\x86;$(ProjectDir)\..\..\Libraries\SDL2_image-2.0.0\lib\x86;$(ProjectDir)\..\..\Libraries\SDL2-2.0.3\lib\x86;$(ProjectDir)\..\..\Libraries\SDL2_ttf-2.0.12\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -50,7 +52,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2_image.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -69,14 +71,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\board.cpp" />
+    <ClCompile Include="..\..\src\boardlogic.cpp" />
     <ClCompile Include="..\..\src\boardstate.cpp" />
     <ClCompile Include="..\..\src\game.cpp" />
     <ClCompile Include="..\..\src\gamestate.cpp" />
-    <ClCompile Include="..\..\src\gem.cpp" />
+    <ClCompile Include="..\..\src\gemcontroller.cpp" />
     <ClCompile Include="..\..\src\gemstate.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\moveinfo.cpp" />
     <ClCompile Include="..\..\src\object.cpp" />
     <ClCompile Include="..\..\src\playtimestate.cpp" />
+    <ClCompile Include="..\..\src\soundmanager.cpp" />
     <ClCompile Include="..\..\src\state.cpp" />
     <ClCompile Include="..\..\src\statemachine.cpp" />
     <ClCompile Include="..\..\src\texturemanager.cpp" />
@@ -85,14 +90,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\board.h" />
+    <ClInclude Include="..\..\src\boardlogic.h" />
     <ClInclude Include="..\..\src\boardstate.h" />
     <ClInclude Include="..\..\src\game.h" />
     <ClInclude Include="..\..\src\gamestate.h" />
-    <ClInclude Include="..\..\src\gem.h" />
+    <ClInclude Include="..\..\src\gemcontroller.h" />
     <ClInclude Include="..\..\src\gemstate.h" />
+    <ClInclude Include="..\..\src\moveinfo.h" />
     <ClInclude Include="..\..\src\multiplatformSDL.h" />
+    <ClInclude Include="..\..\src\notifier.h" />
     <ClInclude Include="..\..\src\object.h" />
     <ClInclude Include="..\..\src\playtimestate.h" />
+    <ClInclude Include="..\..\src\soundmanager.h" />
     <ClInclude Include="..\..\src\state.h" />
     <ClInclude Include="..\..\src\statemachine.h" />
     <ClInclude Include="..\..\src\texturemanager.h" />

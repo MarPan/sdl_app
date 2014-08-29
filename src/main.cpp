@@ -4,14 +4,6 @@
 #include "object.h"
 #include "game.h"
 
-class XXX {
-public:
-  void foo() {
-    std::cout << x << "!" << std::endl;
-  }
-  int x = 34;
-};
-
 int main(int argc, char *argv[])
 {
   theGame.init();
