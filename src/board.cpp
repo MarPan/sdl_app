@@ -13,15 +13,16 @@ Board::Board(int rows, int cols)
   , m_gemWidth(42)
   , m_gems(rows, std::vector<GemController*>(cols))
   , m_gemsOffset(Coordinates(345,125))
-  , m_invalidMoveSfx("break.ogg")
+  , m_Time("00:00")
   , m_gemsRemovedSfx("match1.ogg")
   , m_gemFellSfx("fall.ogg")
+  , m_invalidMoveSfx("break.ogg")
 {
   setState(new BoardStates::IdleState(this));
   m_boardLogic = new BoardLogic(rows, cols);
 
   std::srand(std::time(0));
-  std::srand(200);
+  //std::srand(200);
 
   for (int i = 0; i < GT_COUNT; i++) {
     std::string path;
@@ -199,7 +200,7 @@ void Board::draw()
   for (size_t i = 0; i < m_gems.size(); i++)
     for (size_t j = 0; j < m_gems[i].size(); j++)      
       if (m_gems[i][j])
-        m_gems[i][j]->draw();
+        m_gems[i][j]->draw();  
 }
 
 bool Board::clickGem(int x, int y)
@@ -245,7 +246,7 @@ std::string Board::getGemPath(GemType gt)
   return m_gemRegistry[gt];
 }
 
-int Board::getPoints()
+int Board::getPoints() const
 {
   return m_boardLogic->getPoints();
 }

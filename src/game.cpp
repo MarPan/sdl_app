@@ -2,8 +2,9 @@
 #include "utilities.h"
 #include "game.h"
 #include "board.h"
-#include "texturemanager.h"
+#include "gameoverstate.h"
 #include "playtimestate.h"
+#include "clock.h"
 
 Game::Game()
   : _windowSize(std::pair<int, int>(755, 600)),
@@ -24,15 +25,16 @@ void Game::init()
   if( SDL_Init( SDL_INIT_EVERYTHING ) < 0 ) {
     printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
   }
-  SDL_ShowCursor(1);      // show cursor
 
   //initialize TTF
-  if (TTF_Init() < 0) {
-      printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+  if( TTF_Init() < 0 )
+  {
+      printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
   }
+  SDL_ShowCursor(1);      // show cursor
 
   // Create window and renderer
-  m_pWindow = SDL_CreateWindow("Pong",
+  m_pWindow = SDL_CreateWindow("SDL_app",
           SDL_WINDOWPOS_UNDEFINED,        // centered window
           SDL_WINDOWPOS_UNDEFINED,        // centered window
           _windowSize.first,
@@ -54,6 +56,7 @@ void Game::init()
   _lastTime = SDL_GetTicks();
 
   setState(new PlayTimeState());
+//  setState(new GameOverState(200));
 }
 
 void Game::run(void)
@@ -61,14 +64,12 @@ void Game::run(void)
   printf("STARTING LOOP:\n");
   while (_exit == false) {
     float deltaTime = (float)(SDL_GetTicks() - _lastTime) / 1000;
-//      printf("%f\n", deltaTime);
-
     input();
     update(deltaTime);
     draw();
 
     _lastTime = SDL_GetTicks();
-     SDL_Delay(10);
+    SDL_Delay(10);
   }
   printf("THE END\n");
 }
@@ -77,24 +78,17 @@ void Game::input()
 {
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
-    // Clicking 'x' or pressing F4
-    case SDL_QUIT:
-      printf("GOT SDL_QUIT\n");
-     _exit = true;
-     break;
-    case SDL_MOUSEBUTTONDOWN:
-      switch (event.button.button) {
-        case SDL_BUTTON_LEFT:
-            //SDL_ShowSimpleMessageBox(0, "Mouse", "Left button was pressed!", m_pWindow);
-            getState()->onClick(event.button.x, event.button.y); // !!
-            break;
-        case SDL_BUTTON_RIGHT:
-            //SDL_ShowSimpleMessageBox(0, "Mouse", "Right button was pressed!", m_pWindow);
-            break;
-        default:
-            //SDL_ShowSimpleMessageBox(0, "Mouse", "Some other button was pressed!", m_pWindow);
-            break;
-      }
+      case SDL_QUIT:
+        printf("GOT SDL_QUIT\n");
+       _exit = true;
+       break;
+      case SDL_MOUSEBUTTONDOWN:
+      case SDL_USEREVENT:
+         GameState* state = getState()->input(event);
+         if (state != nullptr) {
+           setState(state);
+         }
+         break;
     }
   }
 }
@@ -107,7 +101,6 @@ void Game::update(float deltaTime)
 void Game::draw()
 {
   SDL_RenderClear(m_pRenderer);
-//  theTextureManager.draw("board", 0, 0, _windowSize.first, _windowSize.second);
   getState()->draw();
   SDL_RenderPresent(m_pRenderer);
 }

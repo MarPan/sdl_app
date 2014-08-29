@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\src\main.cpp">
-      <Filter>sources</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\board.cpp">
       <Filter>Board</Filter>
     </ClCompile>
@@ -48,6 +45,16 @@
     </ClCompile>
     <ClCompile Include="..\..\src\soundmanager.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\clock.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\timer.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\gameoverstate.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -102,14 +109,20 @@
     <ClInclude Include="..\..\src\utilities.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\clock.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\timer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\gameoverstate.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\sdl_app.pro" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="sources">
-      <UniqueIdentifier>{6d37ee99-3da4-48f9-a8bd-746fea037277}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Board">
       <UniqueIdentifier>{f43a19b5-ed92-48d8-b873-f5e559ddb152}</UniqueIdentifier>
     </Filter>

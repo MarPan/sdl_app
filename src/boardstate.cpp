@@ -29,7 +29,6 @@ Coordinates BoardState::translateToTileCoords(int x, int y)
 
 void BoardState::onEnter()
 {
-  std::cout << "StateChagned\n";
 }
 
 void BoardState::onExit()
@@ -40,7 +39,6 @@ BoardState::~BoardState()
 
 BoardState* BoardState::onClick(int x, int y)
 {
-  std::cout << x << " " << y << std::endl;
   return nullptr;
 }
 
@@ -57,7 +55,6 @@ void BoardState::draw()
 IdleState::IdleState(Board *board)
   : BoardState(board)
 {
-  std::cout << "BOARD IdleState" << std::endl;
 }
 
 BoardState* IdleState::onClick(int x, int y)
@@ -73,7 +70,7 @@ BoardState* IdleState::onClick(int x, int y)
 SelectedState::SelectedState(Board* board, Coordinates selectedGem)
   : BoardState(board)
   , m_selectedGem(selectedGem)
-{ std::cout << "BOARD SelectedState " << coordsToString(m_selectedGem) << std::endl; }
+{ }
 
 BoardState* SelectedState::onClick(int x, int y)
 {
@@ -92,13 +89,12 @@ BoardState* SelectedState::onClick(int x, int y)
 
 void SelectedState::onExit()
 {
-  std::cout << "-------\n Leaving SelectedState " << coordsToString(m_selectedGem) << std::endl;
   m_pBoard->deselectGem(m_selectedGem);
 }
 
 GemsMovingState::GemsMovingState(Board *board)
   : BoardState(board)
-{ std::cout << "BOARD GemsMovingState" << std::endl; }
+{ }
 
 
 }

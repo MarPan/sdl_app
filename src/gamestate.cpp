@@ -8,11 +8,6 @@ GameState::GameState()
 GameState::~GameState()
 { }
 
-void GameState::onClick(int x, int y)
-{
-  //std::cout << "Gamestate::onClick base method undefined (" << x << ", " << y << ")"  << std::endl;
-}
-
 void GameState::update(float dt)
 {
   //std::cout << "Gamestate::update base method undefined" << std::endl;
@@ -20,5 +15,11 @@ void GameState::update(float dt)
 
 void GameState::draw()
 {
+  //std::cout << "Gamestate::draw base method undefined" << std::endl;
+}
+
+GameState* GameState::input(SDL_Event& event)
+{
+  return nullptr;
   //std::cout << "Gamestate::draw base method undefined" << std::endl;
 }

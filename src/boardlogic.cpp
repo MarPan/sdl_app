@@ -218,11 +218,6 @@ bool BoardLogic::findConnections(const std::vector<std::vector<GemType>>& logicB
   return false;
 }
 
-void BoardLogic::updateBoard(MoveInfo& moveInfo)
-{
- // std::cout << "BoardLogic tick!" << std::endl;
-}
-
 int BoardLogic::getPoints()
 {
   return m_points;
