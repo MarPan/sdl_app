@@ -2,37 +2,41 @@
 #include <iostream>
 #include "gemstate.h"
 #include "texturemanager.h"
-#include "gem.h"
+#include "gemcontroller.h"
 #include "board.h"
 
 namespace GemStates {
 
-GemState::GemState(Gem *gem)
+GemState::GemState(Object *gem)
   : m_gem(gem)
 { }
 
 void GemState::draw()
 {
-  theTextureManager.draw(m_gem->getTexId(),
-                         m_gem->getPosition().first,
-                         m_gem->getPosition().second,
-                         m_gem->getSize().first,
-                         m_gem->getSize().second);
+  m_gem->draw();
+}
+
+void GemState::update(float dt)
+{
+  m_gem->update(dt);
 }
 
 GemState *GemState::onClicked()
 {
+  return nullptr;
+}
+
+bool GemState::isSelected()
+{
   return false;
 }
 
-
-GemSelectedState::GemSelectedState(Gem *gem) 
+GemSelectedState::GemSelectedState(Object *gem)
   : GemState(gem) 
   , m_circleName("leafcircle.png")
 {
   theTextureManager.load(m_circleName, m_circleName);
   m_circle.setTexId(m_circleName);
-  m_circle.setSize(theTextureManager.getSize(m_circleName));
   auto gemOrigin = m_gem->getPosition();
   auto gemSize =  m_gem->getSize();
   gemSize.first /= 2;
@@ -40,19 +44,15 @@ GemSelectedState::GemSelectedState(Gem *gem)
   gemOrigin.first += gemSize.first;
   gemOrigin.second += gemSize.second;
   // now gemOrigin is the middle of a gem
-  gemOrigin.first -= m_circle.getSize().first/2;
-  gemOrigin.second -= m_circle.getSize().second/2;
+  gemOrigin.first -= m_circle.getSize().first / 2;
+  gemOrigin.second -= m_circle.getSize().second / 2;
   m_circle.setPosition(gemOrigin);
 }
 
 void GemSelectedState::draw()
 {
   GemState::draw();
-  theTextureManager.draw(m_circleName,
-                         m_circle.getPosition().first,
-                         m_circle.getPosition().second,
-                         m_circle.getSize().first,
-                         m_circle.getSize().second);
+  m_circle.draw();
 }
 
 GemState* GemSelectedState::onClicked()
@@ -60,7 +60,12 @@ GemState* GemSelectedState::onClicked()
   return new GemStates::GemIdleState(m_gem);
 }
 
-GemIdleState::GemIdleState(Gem *gem)
+bool GemSelectedState::isSelected()
+{
+  return true;
+}
+
+GemIdleState::GemIdleState(Object *gem)
   : GemState(gem) 
 {}
 

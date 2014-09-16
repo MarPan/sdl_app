@@ -1,17 +1,20 @@
 #ifndef TEXTUREMANAGER_H
 #define TEXTUREMANAGER_H
 
-#include "multiplatformSDL.h"
 #include <map>
+#include "multiplatformSDL.h"
 
 #define theTextureManager TextureManager::getInstance()
 
 class TextureManager
 {
 public:
+  ~TextureManager();
   bool load(std::string fileName, std::string id);
-  void draw(std::string id, int x, int y, int width, int height);
-  void draw(std::string id, const SDL_Rect &rect);
+  bool loadText(std::string fontName, std::string text, SDL_Color txtColor, int fontSize);
+  void draw(std::string id, int x, int y, int width, int height, double angle = 0);
+  void draw(std::string id, const SDL_Rect &rect, double angle);
+  void drawFont(std::string id, int x, int y);
   std::pair<int,int> getSize(std::string id);
 
   static TextureManager& getInstance();

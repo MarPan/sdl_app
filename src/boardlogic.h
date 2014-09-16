@@ -1,38 +1,34 @@
-#ifndef BOARD_LOGIC_HPP
-#define BOARD_LOGIC_HPP
+#ifndef BOARDLOGIC_H
+#define BOARDLOGIC_H
 
 #include <vector>
-#include <cstddef>
-#include "gem.h"
+#include "gemcontroller.h"
 #include "moveinfo.h"
 
 class BoardLogic
 {
-
 public:
-  std::shared_ptr<MoveInfo> resetBoard(int rows, int cols);
-  std::shared_ptr<MoveInfo> makeMove(int srcRow, int srcCol, int dstX, int dstY);
-  std::shared_ptr<MoveInfo> makeMove(const std::pair<int,int>& src, const std::pair<int,int>& dst);
-  std::shared_ptr<MoveInfo> updateBoard();
-  std::shared_ptr<MoveInfo> dumpBoardState() const;
+  BoardLogic(int x, int y);
 
-  bool isMoveValid(int srcRow, int srcCol, int dstRow, int dstCol);
-  bool isMoveValid(const std::pair<int,int>& src, const std::pair<int,int>& dst);
-  bool hasConnections() const;
+  // these will fill the MoveInfo
+  void newBoard(int x, int y, MoveInfo &moveInfo);
+  void swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo);
 
-protected:
-  void createBoard(int rows, int cols);
-  void fillBoard();
-  bool hasConnections(const std::vector<std::vector<Gem::GemType>>& board) const;
-  Gem::GemType setNewGem(const std::pair<int,int>& coords);
-  std::shared_ptr<MoveInfo> getBoardChanges();
+  void findConnections(MoveInfo &moveInfo);
+  // removing gems will result in other falling down.
+  void removeGems(const std::vector<Coordinates> &toBeRemoved, MoveInfo& moveInfo);
+
+  int getPoints();
+  void resetPoints();
 
 private:
-  std::vector<std::vector<Gem::GemType>> m_board;
-  size_t m_cols;
-  size_t m_rows;
+  bool isMovePossible(Coordinates src, Coordinates dst);
+  bool findConnections(const std::vector<std::vector<GemType>>& logicBoard, MoveInfo& moveInfo);
+  void handleConnectionInRow(int row, int startCol, int length, MoveInfo &moveInfo);
+  void handleConnectionInColumn(int column, int startRow, int length, MoveInfo &moveInfo);
 
-  enum { MIN_CONNECTION_SIZE = 3 };
+  std::vector<std::vector<GemType>> m_logicBoard;
+  int m_points;
 };
 
-#endif // BOARD_LOGIC_HPP
+#endif // BOARDLOGIC_H

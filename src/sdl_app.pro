@@ -1,33 +1,36 @@
 TEMPLATE = app
-CONFIG += console
+#CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
             board.cpp \
             game.cpp \
-            gem.cpp \
             main.cpp \
             object.cpp \
             texturemanager.cpp \
             utilities.cpp \
-            world.cpp \
     state.cpp \
     statemachine.cpp \
     gamestate.cpp \
     playtimestate.cpp \
     boardstate.cpp \
     gemstate.cpp \
+    gemcontroller.cpp \
+    boardlogic.cpp \
+    moveinfo.cpp \
+    timer.cpp \
+    clock.cpp \
+    soundmanager.cpp \
+    gameoverstate.cpp
 
 
 HEADERS += \
             board.h \
             game.h \
-            gem.h \
             object.h \
             texturemanager.h \
             utilities.h \
-            world.h \
     state.h \
     statemachine.h \
     gamestate.h \
@@ -35,17 +38,30 @@ HEADERS += \
     boardstate.h \
     multiplatformSDL.h \
     gemstate.h \
+    gemcontroller.h \
+    boardlogic.h \
+    notifier.h \
+    moveinfo.h \
+    timer.h \
+    clock.h \
+    soundmanager.h \
+    gameoverstate.h
 
-INCLUDEPATH += ../SDL2-bin/include
-INCLUDEPATH += ../SDL2_image-bin/x86_64-w64-mingw32/include
+INCLUDEPATH += ../Libraries/SDL2-2.0.3/include
+INCLUDEPATH += ../Libraries/SDL2_image-2.0.0/include
+INCLUDEPATH += ../Libraries/SDL2_ttf-2.0.12/include
+INCLUDEPATH += ../Libraries/SDL2_mixer-2.0.0/include
 
 DEFINES += SDL_MAIN_HANDLED
 
 LIBS += \
-        -L../SDL2_image-bin/i686-w64-mingw32/lib \
-        #-L../SDL2_image-bin/x86_64-w64-mingw32/lib \
-        -L../SDL2-bin/lib/x86 \
-        -lSDL2 -lSDL2_image #-lSDL2_ttf -lSDL2_mixer
+        -L../Libraries/SDL2_image-2.0.0/lib/x86 \
+        -L../Libraries/SDL2-2.0.3/lib/x86 \
+        -L../Libraries/SDL2_ttf-2.0.12/lib/x86 \
+        -L../Libraries/SDL2_mixer-2.0.0/lib/x86 \
+        -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
+
+DESTDIR = ../Bejeweled/Debug/
 
 unix {
     LIBS += `sdl2-config --libs`

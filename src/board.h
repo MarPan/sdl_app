@@ -6,8 +6,8 @@
 #include "object.h"
 #include "statemachine.h"
 #include "boardstate.h"
-#include "boardlogic.h"
-#include "gem.h"
+#include "gemcontroller.h"
+#include "moveinfo.h"
 
 class Gem;
 class BoardLogic;
@@ -23,40 +23,40 @@ public:
   void draw();
   void onClick(int x, int y);
 
-  void fillBoard();
-  std::pair<int,int> func();
-  bool swapGems(std::pair<int,int> gemOne,
-                std::pair<int,int> gemTwo);
-
-  // @args Logical coords
-  void selectGem(int x, int y);
+  bool swapGems(Coordinates gemOne,
+                Coordinates gemTwo);
 
   // Drawing related stuff
-  std::pair<int,int> getGemsOffset();
+  Coordinates getGemsOffset();
   int getTileWidth();
-  std::pair<int,int> getSize();
-  std::string getGemPath(Gem::GemType);
-  Gem *getGem(int x, int y);
-  BoardLogic* getLogic();  // actually after all those changes, I could use a controller, e.g.
-  // BoardController, which has both Board(View?) and BoardLogic
-  // every update it would poll logic with updateBoard
-  // and send the result to BoardView::updateBoard
-  // ...naming is not fortunate here
+  Coordinates getSize();
+  std::string getGemPath(GemType);
 
-  void setSelectedGem(std::pair<int,int> coords);
-  std::pair<int,int> getSelectedGem() const;
-  void updateBoard(std::shared_ptr<MoveInfo> moveInfo);
+  // @args Logical coords
+  void deselectGem(Coordinates gem);
+  bool clickGem(int x, int y);
 
+  int getPoints() const;
+  void gemFinishedMoving(GemController *gem);
 
 private:
-  int m_gemWidth;  //< in pixels
-  std::vector<std::vector<Gem*>> m_gems;  //< graphic objects
-  std::string m_backgroundPath;  
-  std::pair<int,int> m_gemsOffset;  //< draw topleft gem here
-  std::pair<int,int> m_size;  //< in rows and columns
-  std::map<Gem::GemType, std::string> m_gemRegistry;  //< every gemType has an image resource
-  std::pair<int,int> m_selectedGem;
-  BoardLogic* m_boardLogic;
+  Coordinates m_size;
+  int m_gemWidth;
+  std::vector<std::vector<GemController*>> m_gems;
+  Coordinates m_gemsOffset;
+  std::map<GemType, std::string> m_gemRegistry;
+  std::vector<Coordinates> m_gemsToBeRemoved;
+  BoardLogic *m_boardLogic;
+  std::string m_Time;
+
+  std::vector<GemController*> m_gemsInMotion;
+
+  std::string m_invalidMoveSfx;
+  std::string m_gemsRemovedSfx;
+  std::string m_gemFellSfx;
+
+  void parseMoveInfo(const MoveInfo& moveInfo);
+  inline void setState(const state_type& state) override;
 };
 
 #endif // BOARD_H

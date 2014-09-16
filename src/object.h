@@ -1,38 +1,54 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <utility>
-#include <string>
+#include <deque>
+#include "utilities.h"
+#include "notifier.h"
 #include "multiplatformSDL.h"
 
-class Object
+enum class ObjectEvent {
+  DESTINATION_REACHED,
+  ROTATION_FINISHED
+};
+
+class Object : public Notifier<ObjectEvent>
 {
 public:
   Object();
 
-  virtual ~Object() { }
+  virtual ~Object();
   virtual void update(float dt);
   virtual void draw();
   void print(std::string str);
 
-  std::pair<int,int> getPosition();
-  std::pair<int,int> getSize();  
+  Coordinates getPosition();
+  Coordinates getSize();  
   std::string getTexId();
-  void setSize(std::pair<int,int> size);
-  void setOffset(int offX, int offY);
+  void setSize(Coordinates size);
   void setTexId(std::string texId);
-  void setPosition(std::pair<int,int> position);
+  void setPosition(Coordinates position);
+  void setDestination(Coordinates position); //< clears destinations and sets a new one
+  void addDestination(Coordinates position);
+  void setRotation(double angle, double speed);
 
-  // temporary - i will make it nice later
-  std::pair<int,int> m_movementDestination;
+  bool isMoving();
+  bool isRotating();
 
 protected:
-  std::pair<int,int> m_position;
-  std::pair<float, float> m_speed;  // speed in pixels per second
-  std::pair<int, int> m_size;
-  std::pair<int, int> m_offset;
+  Coordinates m_position;
+  std::pair<float, float> m_speed;  //< speed in pixels per second
+  std::deque<Coordinates> m_destinations;  //< object will be moved towards this point
+
+  Coordinates m_size;
   std::string m_texId;
 
+  double m_angle;
+  double m_rotationSpeed;  // in degrees per second, so 360 means one turnaround per second
+  double m_rotationToDo;
+  short int m_rotationDirection; // -1 or 1
+
+  void move(float dt);
+  void rotate(float dt);
 };
 
 #endif // OBJECT_H

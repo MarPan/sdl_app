@@ -1,218 +1,229 @@
 #include "boardlogic.h"
-#include <ctime>
-#include <iostream>
 
-std::shared_ptr<MoveInfo> BoardLogic::resetBoard(int rows, int cols)
+BoardLogic::BoardLogic(int x, int y)
+  : m_logicBoard(x, std::vector<GemType>(y))
+  , m_points(0)
 {
-  createBoard(rows, cols);
-
-  do {
-    fillBoard();
-  } while (hasConnections());
-
-  return dumpBoardState();
 }
 
-void BoardLogic::createBoard(int rows, int cols)
+void BoardLogic::newBoard(int x, int y, MoveInfo &moveInfo)
 {
-  m_cols = static_cast< size_t >(cols);
-  m_rows = static_cast< size_t >(rows);
-
-  m_board = std::vector<std::vector<Gem::GemType>>(m_rows, std::vector<Gem::GemType>(m_cols));
-}
-
-std::shared_ptr<MoveInfo> BoardLogic::makeMove(int srcRow, int srcCol, int dstRow, int dstCol)
-{
-  std::shared_ptr<MoveInfo> moveInfo(new MoveInfo);
-
-  if (isMoveValid(srcRow, srcCol, dstRow, dstCol))  {
-    std::swap(m_board[srcRow][srcCol], m_board[dstRow][dstCol]);
-    moveInfo->addSwap(MoveInfo::Swap(std::pair<int,int>(srcRow, srcCol), std::pair<int,int>(dstRow, dstCol)));
-  } else {
-    moveInfo->addInvalidSwap(MoveInfo::InvalidSwap(std::pair<int,int>(srcRow, srcCol), std::pair<int,int>(dstRow, dstCol)));
-  }
-
-  return moveInfo;
-}
-
-std::shared_ptr<MoveInfo> BoardLogic::makeMove(const std::pair<int,int>& from, const std::pair<int,int>& to)
-{
-  return makeMove(from.first, from.second, to.first, to.second);
-}
-
-std::shared_ptr<MoveInfo> BoardLogic::updateBoard()
-{
-  return getBoardChanges();
-}
-
-std::shared_ptr<MoveInfo> BoardLogic::dumpBoardState() const
-{
-  std::shared_ptr<MoveInfo> moveInfo(new MoveInfo);
-  for (size_t i = 0; i < m_rows; ++i) {
-    for (size_t j = 0; j < m_cols; ++j) {
-      moveInfo->addNewGem(MoveInfo::NewGem(m_board[i][j], std::pair<int,int>(i, j)));
+  m_points = 0;
+  std::vector<std::vector<GemType>> newLogicBoard(x, std::vector<GemType>(y));
+  m_logicBoard = newLogicBoard;
+  for (int i = 0; i < x; i++) {
+    for (int j = 0; j < y; j++) {
+      GemType type = GemType(rand() % GT_COUNT);
+      //moveInfo.addCreation(Creation(i, j, type));
+      m_logicBoard[i][j] = type;
     }
   }
 
-  return moveInfo;
+  std::vector<Coordinates> gemsToBeRemoved;
+  do {
+    MoveInfo annihilations;
+    gemsToBeRemoved.clear();
+    findConnections(m_logicBoard, annihilations);
+    for (Coordinates coords : annihilations.getAnnihilations()) {
+      gemsToBeRemoved.push_back(coords);
+    }
+    removeGems(gemsToBeRemoved, annihilations);
+    std::cout << gemsToBeRemoved.size() << std::endl;
+  }
+  while (gemsToBeRemoved.empty() == false);
+
+  for (int i = 0; i < x; i++) {
+    for (int j = 0; j < y; j++) {
+      moveInfo.addCreation(Creation(i, j, m_logicBoard[i][j]));
+    }
+  }
+  resetPoints();
+}
+// moveInfo will be filled with annihilations of gems
+// that are in connections
+void BoardLogic::findConnections(MoveInfo &moveInfo)
+{
+  findConnections(m_logicBoard, moveInfo);
 }
 
-bool BoardLogic::isMoveValid(int srcRow, int srcCol, int dstRow, int dstCol)
+//  void print() {
+//    std::cout<<"LOGIC: ";
+//    for (int j = 0; j < 8; j++)
+//      {
+//        std::cout<<"\n";
+//        for (int i = 0; i < 8; i++)
+//          {
+//            std::cout<<m_logicBoard[i][j]<<" "; }
+//      }
+//  }
+
+void BoardLogic::swapGems(Coordinates src, Coordinates dst, MoveInfo& moveInfo)
 {
-  bool retVal = false;
-  std::swap(m_board[srcRow][srcCol], m_board[dstRow][dstCol]);
-  retVal = hasConnections(m_board);
-  std::swap(m_board[srcRow][srcCol], m_board[dstRow][dstCol]);
+  if (isMovePossible(src, dst)) {
+    moveInfo.addSwap(Swap(src, dst));
+    std::swap(m_logicBoard[src.first][src.second], m_logicBoard[dst.first][dst.second]);
+  } else {
+    moveInfo.addInvalidSwap(InvalidSwap(src, dst));
+  }
+}
+
+bool BoardLogic::isMovePossible(Coordinates src, Coordinates dst)
+{
+  auto copy = m_logicBoard;
+  std::swap(copy[src.first][src.second], copy[dst.first][dst.second]);
+  MoveInfo moveInfo;
+  int points = m_points;
+  bool retVal =  findConnections(copy, moveInfo);
+  m_points = points;
   return retVal;
 }
 
-bool BoardLogic::isMoveValid(const std::pair<int,int>& from, const std::pair<int,int>& to)
+void BoardLogic::removeGems(const std::vector<Coordinates>& toBeRemoved, MoveInfo& moveInfo)
 {
-  return isMoveValid(from.first, from.second, to.first, to.second);
-}
+  std::vector<int> emptyGemsCount(m_logicBoard.size());
+  for (int i = 0; i < emptyGemsCount.size(); i++) {
+    emptyGemsCount[i] = false;
+  }
 
-bool BoardLogic::hasConnections() const
-{
-  return hasConnections(m_board);
-}
+  // set the gems to -1 or sth
+  for (int i = 0; i < toBeRemoved.size(); i++) {
+    m_logicBoard[toBeRemoved[i].first][toBeRemoved[i].second] = GT_INVALID;
+    emptyGemsCount[toBeRemoved[i].first]++;
+  }
 
-bool BoardLogic::hasConnections(const std::vector<std::vector<Gem::GemType>>& board) const
-{
-  // search for connections in rows
-  for (size_t i = 0; i < m_rows; ++i) {
-    int subsequent = 1;
-    for (size_t j = 1; j < m_cols; ++j) {
-      if (board[i][j - 1] == board[i][j]) {
-        subsequent += 1;
-        if (subsequent >= MIN_CONNECTION_SIZE) {
-          return true;
-        }
-      } else {
-        subsequent = 1;
+  // easier: for each column, starting from the bottomn, I count invalid gems
+  // when I find real gem, I move it down by invalidGemsCount
+
+  std::vector<std::vector<GemType>> copy = m_logicBoard;
+  for (int i = 0; i < m_logicBoard.size(); i++) {
+    if (emptyGemsCount[i] == 0) {
+      continue;
+    }
+    int emptyCount = 0;
+    for (int j = m_logicBoard[i].size() - 1; j >= 0 ; j--) {
+      if (m_logicBoard[i][j] == GT_INVALID) {
+        emptyCount++;
+      } else if (emptyCount != 0) {
+        moveInfo.addRelocation(Relocation(Coordinates(i,j), Coordinates(i,j+emptyCount)));
+        std::swap(copy[i][j], copy[i][j+emptyCount]);
       }
     }
   }
 
-  // search for connections in cols
-  for (size_t j = 0; j < m_cols; ++j) {
-    int subsequent = 1;
-    for (size_t i = 1; i < m_rows; ++i) {
-      if (board[i - 1][j] == board[i][j]) {
-        subsequent += 1;
-        if (subsequent >= MIN_CONNECTION_SIZE) {
-          return true;
-        }
-      } else {
-        subsequent = 1;
+  // create new gems for the ones removed
+  for (int i = 0; i < m_logicBoard.size(); i++) {
+    for (int j = 0; j < m_logicBoard[i].size(); j++) {
+      if (copy[i][j] == GT_INVALID) {
+        GemType type = GemType(rand() % GT_COUNT);
+        moveInfo.addCreation(Creation(i, j, type));
+        copy[i][j] = type;
       }
     }
   }
 
+  m_logicBoard = copy;
+}
+
+
+
+void BoardLogic::handleConnectionInRow(int row, int startCol, int length, MoveInfo &moveInfo)
+{
+  if (length == 3) {
+    for (int x = startCol; x > startCol - length; x--) {
+      moveInfo.addAnnihilation(Coordinates(x,row));
+    }
+    m_points += 3;
+  } else { // matched more than 3 - remove whole row!
+    for (int x = 0; x < m_logicBoard.size(); x++) {
+      moveInfo.addAnnihilation(Coordinates(x,row));
+    }
+    m_points += m_logicBoard.size();
+  }
+}
+
+void BoardLogic::handleConnectionInColumn(int column, int startRow, int length, MoveInfo &moveInfo)
+{
+  if (length == 3) {
+    for (int y = startRow; y > startRow - length; y--) {
+      moveInfo.addAnnihilation(Coordinates(column, y));
+    }
+    m_points += 3;
+  } else { // matched more than 3 - remove whole column!
+    for (int y = 0; y < m_logicBoard[column].size(); y++) {
+      moveInfo.addAnnihilation(Coordinates(column,y));
+    }
+    m_points += m_logicBoard.size();
+  }
+}
+
+
+// scans the board. If finds connection, adds Annihilation to the moveInfo
+bool BoardLogic::findConnections(const std::vector<std::vector<GemType>>& logicBoard, MoveInfo& moveInfo)
+{
+  // I don't have an easy way to spot combined connections, like
+  // *
+  // * * *
+  // *
+  // all I can do is to analyze coords of created annihilations later on
+
+  int minLength = 3;
+
+  // search in cols
+  int sameGems = 1;
+
+  for (int i = 0; i < logicBoard.size(); i++) {
+    sameGems = 1;
+    for (int j = 0; j < logicBoard[i].size() - 1; j++) {
+      if (logicBoard[i][j] == logicBoard[i][j+1]) {
+        sameGems++;
+        if (j+1 == logicBoard[i].size() - 1) { // if next gem is is the last gem
+          if (sameGems >= minLength) {
+            handleConnectionInColumn(i, j + 1, sameGems, moveInfo);
+          }
+          sameGems = 1;
+        }
+      } else {
+        if (sameGems >= minLength) {
+          handleConnectionInColumn(i, j, sameGems, moveInfo);
+        }
+        sameGems = 1;
+      } // else (next gem is different)
+    } // for col
+  } // for row
+
+  // search in rows
+  sameGems = 1;
+
+  for (int j = 0; j < logicBoard.size(); j++) {
+    sameGems = 1;
+    for (int i = 0; i < logicBoard[j].size() - 1; i++) {
+      if (logicBoard[i][j] == logicBoard[i+1][j]) {
+        sameGems++;
+        if (i+1 == logicBoard.size() - 1) {
+          if (sameGems >= minLength) {
+            handleConnectionInRow(j, i + 1, sameGems, moveInfo);
+          }
+        }
+      } else {
+        if (sameGems >= minLength) {
+          handleConnectionInRow(j, i, sameGems, moveInfo);
+        }
+        sameGems = 1;
+      } // else (next gem is different)
+    } // for col
+  } // for row
+  if (moveInfo.getAnnihilations().size()) {
+    return true;
+  }
   return false;
 }
 
-void BoardLogic::fillBoard()
+int BoardLogic::getPoints()
 {
-  for (size_t i = 0; i < m_rows; ++i) {
-    for (size_t j = 0; j < m_cols; ++j)  {
-      setNewGem(std::pair<int,int>(i, j));
-    }
-  }
+  return m_points;
 }
 
-
-// This looks for connections and creates MoveInfo object defining
-// what is supposed to happen next
-std::shared_ptr<MoveInfo> BoardLogic::getBoardChanges()
+void BoardLogic::resetPoints()
 {
-  std::shared_ptr<MoveInfo> moveInfo(new MoveInfo);
-
-  for (int i = 0; i < m_rows; ++i) {
-    for (int j = 1; j < m_cols; ++j) {
-      if (m_board[i][j - 1] == m_board[i][j]) {
-        int subsequent = 2;
-        for (size_t k = j + 1; k < m_cols && m_board[i][k] == m_board[i][k - 1]; ++k) {
-          ++subsequent;
-        }
-
-        if (subsequent >= MIN_CONNECTION_SIZE) {
-          MoveInfo::Connection connection;
-          for (size_t k = j - 1; k < j - 1 + subsequent; ++k) {
-            connection.addGem(std::pair<int,int>(i, k), m_board[i][k]);
-          }
-          moveInfo->addConnection(connection);
-        }
-
-        j += subsequent - 2;
-      }
-    }
-  }
-
-  for (int j = 0; j < m_cols; ++j) {
-    for (int i = 1; i < m_rows; ++i) {
-      if (m_board[i - 1][j] == m_board[i][j]) {
-        int subsequent = 2;
-        for (size_t k = i + 1; k < m_rows && m_board[k][j] == m_board[k - 1][j]; ++k) {
-          ++subsequent;
-        }
-
-        if (subsequent >= MIN_CONNECTION_SIZE) {
-          MoveInfo::Connection connection;
-          for (size_t k = i - 1; k < i - 1 + subsequent; ++k) {
-            connection.addGem(std::pair<int,int>(k, j), m_board[k][j]);
-          }
-          moveInfo->addConnection(connection);
-        }
-
-        i += subsequent - 2;
-      }
-    }
-  }
-
-  // a simple board representation showing which tiles are not filled with gems
-  std::vector<std::vector<bool>> filled(m_rows, std::vector<bool>(m_cols, true));
-
-  for each (auto connection in moveInfo->getConnections()) {
-    size_t length = connection.getSize();
-    for (int i = 0; i < length; ++i) {
-      auto coords = connection[i].coords;
-      filled[coords.first][coords.second] = false;  // every gem from connection disappears
-    }
-  }
-  
-  // lastly, we swap empty places with whatever is above them
-  // if nothing is above them: create new gems at the top
-  for (int j = 0; j < m_cols; ++j) {
-    for (int i = m_rows - 1; i >= 0; --i) {
-      if (!filled[i][j]) {
-        int zeros = 0;
-        while (i >= 0 && !filled[i][j]) {
-          ++zeros;
-          --i;
-        }
-        for (int k = i + zeros; k > i; --k) {
-          if (k - zeros >= 0) {
-            std::swap(filled[k][j], filled[k - zeros][j]);
-            std::swap(m_board[k][j], m_board[k - zeros][j]);
-            moveInfo->addRelocation(MoveInfo::Relocation(std::pair<int,int>(k - zeros, j), std::pair<int,int>(k, j)));
-          } else {
-            filled[k][j] = true;
-            Gem::GemType newGemType = setNewGem(std::pair<int,int>(k, j));
-            moveInfo->addNewGem(MoveInfo::NewGem(newGemType, std::pair<int,int>(k, j)));
-          }
-        }
-        i += 2;
-      }
-    }
-  }
-
-  return moveInfo;
+  m_points = 0;
 }
-
-Gem::GemType BoardLogic::setNewGem(const std::pair<int,int>& coords)
-{
-  Gem::GemType newGemType = Gem::GemType(rand() % Gem::GT_COUNT);
-  m_board[coords.first][coords.second] = newGemType;
-  return newGemType;
-}
-

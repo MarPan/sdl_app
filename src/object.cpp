@@ -1,15 +1,21 @@
-#include <SDL_render.h>
 #include <iostream>
 #include <cmath>
+#include "multiplatformSDL.h"
 #include "texturemanager.h"
 #include "object.h"
 #include "game.h"
 
 Object::Object()
-  : m_size(std::pair<int,int>(0,0))
-  , m_movementDestination(-1,-1)
-  , m_speed(1,1)
+  : m_speed(450,450)
+  , m_angle(0)
+  , m_rotationSpeed(0)
+  , m_rotationToDo(0)
+  , m_rotationDirection(1)
 { }
+
+Object::~Object()
+{
+}
 
 void Object::print(std::string str = "")
 {
@@ -19,66 +25,101 @@ void Object::print(std::string str = "")
 
 void Object::update(float dt)
 {
-  if (m_movementDestination.first == m_position.first && 
-      m_movementDestination.second == m_position.second) {
-    //std::cout << "END THIS MADNESS" << std::endl;
+  move(dt);
+  rotate(dt);
+}
+
+void Object::rotate(float dt)
+{
+  if (m_rotationSpeed == 0 || m_rotationToDo == 0) {
     return;
   }
-  
-  int xRoad = m_movementDestination.first - m_position.first;
-  int yRoad = m_movementDestination.second - m_position.second;
 
-  if (xRoad < 0)
-    xRoad = -1;
-  else 
-    xRoad = 1;
-
-  if (yRoad < 0)
-    yRoad = -1;
-  else 
-    yRoad = 1;
-
-  std::cout << m_movementDestination.first << " " << m_position.first << " " << std::endl;
-
-  if (m_movementDestination.first != m_position.first) {
-    m_position.first += std::ceil(m_speed.first * dt * xRoad);
+  double rotationInThisFrame = m_rotationSpeed * dt;
+  if (rotationInThisFrame > m_rotationToDo) {
+    m_angle += m_rotationToDo * m_rotationDirection;
+    m_rotationToDo = 0;
+    notify(ObjectEvent::ROTATION_FINISHED);
+  } else {
+    m_rotationToDo -= rotationInThisFrame;
+    m_angle += rotationInThisFrame * m_rotationDirection;
   }
-  if (m_movementDestination.second != m_position.second) {
-    m_position.second += std::ceil(m_speed.second * dt * yRoad);
+}
+
+void Object::move(float dt)
+{
+  if (m_destinations.empty()) {
+    return;
+  }
+
+  Coordinates& destination = m_destinations.front();
+
+  if (destination == m_position) {
+    m_destinations.pop_front();
+    if (m_destinations.empty()) {
+      notify(ObjectEvent::DESTINATION_REACHED);
+    }
+    return;
+  }
+
+  int hDir = 0, vDir = 0;
+  if (destination.first - m_position.first > 0) {
+    hDir = 1;
+  } else if (destination.first - m_position.first < 0) {
+    hDir = -1;
+  }
+
+  if (destination.second - m_position.second > 0) {
+    vDir = 1;
+  } else if (destination.second - m_position.second < 0) {
+    vDir = -1;
+  }
+
+  // not ideal, since I will have a set minimal speed 1 pixel per frame
+  // maybe I should store an offset as a float
+  int thisXMovement = std::ceil(m_speed.first * dt) * hDir;
+  int thisYMovement = std::ceil(m_speed.second * dt) * vDir;
+
+  if (abs(m_position.first - destination.first) < thisXMovement) {
+    m_position.first = destination.first;
+  } else {
+    m_position.first += thisXMovement;
+  }
+  if (abs(m_position.second - destination.second) < thisYMovement) {
+    m_position.second = destination.second;
+  } else {
+    m_position.second += thisYMovement;
   }
 }
 
 void Object::draw()
 {
   theTextureManager.draw(m_texId,
-                         m_position.first + m_offset.first,
-                         m_position.second + m_offset.second,
+                         m_position.first,
+                         m_position.second,
                          getSize().first,
-                         getSize().second
-                        );
+                         getSize().second,
+                         m_angle
+                         );
 }
 
-void Object::setSize(std::pair<int,int> size)
+void Object::setSize(Coordinates size)
 {
   m_size = size;
-}
-
-void Object::setOffset(int offX, int offY)
-{
-  m_offset = std::pair<int, int>(offX, offY);
 }
 
 void Object::setTexId(std::string texId)
 {
   m_texId = texId;
+  setSize(theTextureManager.getSize(texId));
 }
 
-std::pair<int,int> Object::getPosition()
+Coordinates Object::getPosition()
 {
   return m_position;
 }
 
-std::pair<int,int> Object::getSize()
+Coordinates Object::getSize()
 {
   return m_size;
 }
@@ -88,8 +129,35 @@ std::string Object::getTexId()
   return m_texId;
 }
 
-void Object::setPosition(std::pair<int,int> position)
+void Object::setRotation(double angle, double speed)
+{
+  m_rotationSpeed = speed;
+  m_rotationToDo = angle;
+}
+
+void Object::setPosition(Coordinates position)
 {
   m_position = position;
-  m_movementDestination = position;
+  m_destinations.clear();
+}
+
+void Object::setDestination(Coordinates destination)
+{
+  m_destinations.clear();
+  addDestination(destination);
+}
+
+void Object::addDestination(Coordinates destination)
+{
+  m_destinations.push_back(destination);
+}
+
+bool Object::isMoving()
+{
+  return !m_destinations.empty();
+}
+
+bool Object::isRotating()
+{
+  return m_rotationToDo;
 }

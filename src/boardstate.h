@@ -1,8 +1,8 @@
 #ifndef BOARDSTATE_H
 #define BOARDSTATE_H
 
-#include <utility>
-
+#include "utilities.h"
+class GemController;
 class Board;
 
 namespace BoardStates {
@@ -13,11 +13,14 @@ public:
   BoardState(Board *board);
   virtual ~BoardState();
 
-  virtual BoardState* onClick(int x, int y) = 0;
+  virtual BoardState* onClick( int x, int y);
   virtual void update(float dt);
-  virtual void draw();  
+  virtual void draw();
+  virtual void onEnter();
+  virtual void onExit();
+
 protected:
-  std::pair<int,int> translateToTileCoords(int x, int y);
+  Coordinates translateToTileCoords(int x, int y);
   Board *m_pBoard;
 };
 
@@ -31,9 +34,19 @@ public:
 class SelectedState : public BoardState
 {
 public:
-  SelectedState(Board *board);
+  SelectedState(Board *board, Coordinates selectedGem);
   BoardState* onClick(int x, int y);
+  void onExit();
+private:
+  Coordinates m_selectedGem;
 };
+
+class GemsMovingState : public BoardState
+{
+public:
+  GemsMovingState(Board *board);
+};
+
 
 }
 
